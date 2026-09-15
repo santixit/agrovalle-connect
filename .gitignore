@@ -1,0 +1,22 @@
+# Maven
+target/
+.mvn/wrapper/maven-wrapper.jar
+
+# IDEs
+.idea/
+*.iml
+.project
+.classpath
+.settings/
+.vscode/
+
+# Node and Husky
+node_modules/
+
+# Operating system and secrets
+.DS_Store
+Thumbs.db
+.env
+*.log
+*.pem
+
