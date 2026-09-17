@@ -2,7 +2,7 @@
 
 ![Java 17](https://img.shields.io/badge/Java-17-ED8B00?logo=openjdk&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.4-6DB33F?logo=springboot&logoColor=white)
-![Build](https://img.shields.io/badge/build-configured-blue)
+![CI](https://github.com/santixit/agrovalle-connect/actions/workflows/ci.yml/badge.svg)
 
 Plataforma web empresarial para conectar directamente la oferta agricola de las fincas del Valle del Cauca con la demanda comercial urbana de Cali y sus alrededores.
 
@@ -47,7 +47,7 @@ mvn clean verify
 npm install
 ```
 
-Husky ejecuta `mvn test` y `mvn checkstyle:check` antes de cada commit. Si un equipo no puede instalar Husky, debe correr `mvn clean verify` antes de abrir el Pull Request.
+Husky ejecuta `mvn test` y `mvn checkstyle:check` antes de cada commit. El pipeline de CI ejecuta `mvn clean verify`, publica el reporte JaCoCo y exige una cobertura de lineas minima del 60 %. Si un equipo no puede instalar Husky, debe correr `mvn clean verify` antes de abrir el Pull Request.
 
 ## Normas de colaboracion
 
