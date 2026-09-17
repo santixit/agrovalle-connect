@@ -1,13 +1,3 @@
 package co.edu.uniajc.agrovalle_connect;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-@SpringBootApplication
-public class AgrovalleConnectApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(AgrovalleConnectApplication.class, args);
-	}
-
-}
+// The duplicate Spring Boot entry point was removed; the canonical application is in co.edu.uniajc.agrovalle.
