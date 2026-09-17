@@ -1,13 +1,3 @@
 package co.edu.uniajc.agrovalle_connect;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-
-@SpringBootTest
-class AgrovalleConnectApplicationTests {
-
-	@Test
-	void contextLoads() {
-	}
-
-}
+// Duplicate Spring Boot test removed; canonical tests are in co.edu.uniajc.agrovalle.
