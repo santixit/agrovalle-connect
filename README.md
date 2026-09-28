@@ -14,10 +14,10 @@ Para **productores del Valle**, que **necesitan vender directo**, AgroValle Conn
 
 | Integrante | Rol Scrum / responsabilidad | Estado |
 |---|---|---|
-| Danny Alexander Gomez | Por confirmar con el equipo | Pendiente |
-| Michelle Guerrero Arboleda | Por confirmar con el equipo | Pendiente |
-| Starlin Gomez Asprilla | Por confirmar con el equipo | Pendiente |
-| Raul Santiago Carrillo | Por confirmar con el equipo | Pendiente |
+| Danny Alexander Gomez | Scrum Master / facilitación del equipo | Asignado |
+| Michelle Guerrero Arboleda | Product Owner / gestión del Product Backlog | Asignado |
+| Starlin Gomez Asprilla | Developer / pruebas y calidad | Asignado |
+| Raul Santiago Carrillo | Developer / desarrollo backend | Asignado |
 
 ## Sprint 0
 
