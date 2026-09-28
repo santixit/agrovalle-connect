@@ -5,17 +5,66 @@ on:
     branches: [main, "feature/**"]
   pull_request:
     branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   quality:
+    name: Build, tests, Checkstyle and JaCoCo
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: agrovalle_connect
+          POSTGRES_USER: agrovalle
+          POSTGRES_PASSWORD: agrovalle
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U agrovalle -d agrovalle_connect"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+    env:
+      SPRING_PROFILES_ACTIVE: ci
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Configure Java 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: "17"
           cache: maven
       - name: Build, tests and Checkstyle
-        run: mvn --batch-mode clean verify
+        run: mvn --batch-mode --no-transfer-progress clean verify
+      - name: Save JaCoCo coverage report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: jacoco-coverage-report
+          path: target/site/jacoco/
+          if-no-files-found: ignore
+
+  deploy-staging:
+    name: Deploy to staging
+    needs: quality
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Trigger staging deployment
+        env:
+          STAGING_DEPLOY_HOOK: ${{ secrets.STAGING_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$STAGING_DEPLOY_HOOK" ]; then
+            echo "STAGING_DEPLOY_HOOK is not configured; staging deployment was skipped."
+            exit 0
+          fi
+          curl --fail --silent --show-error --request POST "$STAGING_DEPLOY_HOOK"
