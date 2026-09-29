@@ -51,6 +51,10 @@ summary { cursor: pointer; color: var(--green); font-weight: 700; }
 .card p { margin: .35rem 0; }
 .actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .75rem; }
 .actions button { flex: 1 1 135px; }
+.product-action-form { display: grid; grid-template-columns: minmax(180px, 1fr) auto; gap: .75rem; align-items: end; margin-top: .85rem; padding-top: .85rem; border-top: 1px solid var(--line); }
+.product-action-form label { min-width: 0; }
+.product-action-form textarea { min-height: 5rem; resize: vertical; }
+.product-action-form .status { grid-column: 1 / -1; }
 .status { min-height: 1.5rem; margin-bottom: 0; color: var(--green); }
 .muted { color: var(--muted); font-size: .92rem; }
 .hint { color: var(--muted); font-size: .8rem; font-weight: 400; }
@@ -62,4 +66,5 @@ footer { text-align: center; color: var(--muted); padding: 1.5rem 1rem; }
   .hero { padding-top: 1.5rem; }
   main { padding: .8rem; }
   section { border-radius: 13px; }
+  .product-action-form { grid-template-columns: 1fr; }
 }

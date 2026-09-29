@@ -14,6 +14,7 @@
       <p class="tagline">Cosechas del Valle del Cauca, directo del campo a los comercios de la región.</p>
       <nav aria-label="Navegación principal">
         <a href="#catalogo-seccion">Explorar cosechas</a>
+        <a id="carrito-link" href="#carrito-seccion" hidden>Mi carrito <span id="carrito-count">0</span></a>
         <a href="#precios-seccion">Precios regionales</a>
         <a href="#acceso-seccion">Mi cuenta</a>
       </nav>
@@ -80,17 +81,20 @@
         <button>Buscar</button>
         <button type="button" id="limpiar" class="secondary">Ver todo</button>
       </form>
-      <div id="carrito-panel" hidden>
-        <h3>Carrito de compra</h3>
-        <div id="carrito-lineas" class="row"></div>
-        <div class="actions">
-          <button type="button" id="confirmar-carrito">Confirmar carrito</button>
-          <button type="button" id="vaciar-carrito" class="secondary">Vaciar carrito</button>
-        </div>
-        <p id="carrito-status" class="status" role="status"></p>
-      </div>
       <p id="catalog-status" class="muted" role="status"></p>
       <div id="catalogo" class="row"></div>
+    </section>
+
+    <section id="carrito-seccion" hidden aria-labelledby="carrito-titulo">
+      <h2 id="carrito-titulo">Mi carrito de compra</h2>
+      <p class="section-intro">Revisa cantidades antes de enviar tus reservas a los agricultores.</p>
+      <div id="carrito-lineas" class="row"></div>
+      <p id="carrito-vacio" class="empty-state">Tu carrito está vacío. Agrega una cosecha desde el catálogo.</p>
+      <div class="actions">
+        <button type="button" id="confirmar-carrito">Enviar reservas</button>
+        <button type="button" id="vaciar-carrito" class="secondary">Vaciar carrito</button>
+      </div>
+      <p id="carrito-status" class="status" role="status"></p>
     </section>
 
     <section id="precios-seccion">
@@ -110,6 +114,7 @@
         <button id="ver-notificaciones" class="secondary">Ver notificaciones</button>
         <button id="ver-pedidos" class="secondary">Ver mis reservas/pedidos</button>
       </div>
+      <p id="actividad-status" class="status" role="status"></p>
       <div id="actividad" class="row"></div>
     </section>
 
@@ -129,7 +134,11 @@
     let token = null;
     let rol = null;
     let vistaActividad = null;
-    const carrito = new Map();
+    let carrito;
+    try {
+      carrito = new Map(JSON.parse(sessionStorage.getItem('agrovalle-carrito') || '[]')
+        .map(([id, item]) => [Number(id), item]));
+    } catch { carrito = new Map(); }
     const byId = (id) => document.getElementById(id);
     const formData = (form) => Object.fromEntries(new FormData(form).entries());
     const tell = (id, text) => { byId(id).textContent = text; };
@@ -165,7 +174,8 @@
       byId('cuenta-panel').hidden = !token;
       byId('agricultor-panel').hidden = rol !== 'AGRICULTOR';
       byId('admin-panel').hidden = rol !== 'ADMIN';
-      byId('carrito-panel').hidden = rol !== 'COMPRADOR';
+      byId('carrito-seccion').hidden = rol !== 'COMPRADOR';
+      byId('carrito-link').hidden = rol !== 'COMPRADOR';
       renderCarrito();
       if (rol === 'AGRICULTOR') cargarFincas();
     }
@@ -261,28 +271,84 @@
       actions.append(detail);
       if (token && rol === 'COMPRADOR') {
         const reserve = document.createElement('button'); reserve.textContent = 'Reservar';
-        reserve.onclick = async () => { const quantity = Number(prompt('Cantidad a reservar en kg:')); if (!quantity) return;
-          try { await request('/reservas', { method: 'POST', body: JSON.stringify({ productoId: producto.id, cantidad_kg: quantity }) }); tell('catalog-status', 'Reserva creada. El agricultor debe confirmarla.'); await buscar(); }
-          catch (error) { tell('catalog-status', error.message); } };
+        reserve.onclick = () => mostrarFormularioAccion(article, producto, 'reserve');
         const add = document.createElement('button'); add.className = 'secondary';
         add.textContent = 'Agregar al carrito';
-        add.onclick = () => {
-          const quantity = Number(prompt('Cantidad a agregar en kg:'));
-          if (!Number.isFinite(quantity) || quantity <= 0) return;
-          const current = carrito.get(producto.id);
-          carrito.set(producto.id, { productoId: producto.id, nombre: producto.nombre,
-            cantidadKg: (current?.cantidadKg ?? 0) + quantity });
-          renderCarrito(); tell('carrito-status', 'Oferta agregada al carrito.');
-        };
+        add.onclick = () => mostrarFormularioAccion(article, producto, 'cart');
         const favorite = document.createElement('button'); favorite.className = 'secondary'; favorite.textContent = 'Guardar favorito';
         favorite.onclick = async () => { try { await request(`/favoritos/${producto.id}`, { method: 'POST' }); tell('catalog-status', 'Oferta guardada en favoritos.'); } catch (error) { tell('catalog-status', error.message); } };
         const contact = document.createElement('button'); contact.className = 'secondary'; contact.textContent = 'Contactar';
-        contact.onclick = async () => { const mensaje = prompt('Escribe tu mensaje para el agricultor:'); if (!mensaje?.trim()) return;
-          try { await request('/contactos', { method: 'POST', body: JSON.stringify({ productoId: producto.id, mensaje }) }); tell('catalog-status', 'Contacto registrado y notificación enviada al agricultor.'); }
-          catch (error) { tell('catalog-status', error.message); } };
+        contact.onclick = () => mostrarFormularioAccion(article, producto, 'contact');
         actions.append(reserve, add, favorite, contact);
       }
       article.append(actions); return article;
+    }
+    function mostrarFormularioAccion(article, producto, tipo) {
+      article.querySelector('.product-action-form')?.remove();
+      const form = document.createElement('form'); form.className = 'product-action-form';
+      const feedback = document.createElement('p'); feedback.className = 'status'; feedback.setAttribute('role', 'status');
+      if (tipo === 'contact') {
+        const label = document.createElement('label'); label.textContent = 'Mensaje para el agricultor';
+        const message = document.createElement('textarea'); message.name = 'mensaje'; message.maxLength = 1000;
+        message.required = true; message.placeholder = 'Cuéntale qué información necesitas…';
+        label.append(message);
+        const submit = document.createElement('button'); submit.textContent = 'Enviar mensaje';
+        form.append(label, submit);
+      } else {
+        const label = document.createElement('label');
+        label.textContent = tipo === 'reserve' ? 'Cantidad a reservar (kg)' : 'Cantidad para agregar (kg)';
+        const quantity = document.createElement('input'); quantity.name = 'cantidad'; quantity.type = 'number';
+        quantity.min = '0.01'; quantity.step = '0.01'; quantity.required = true;
+        if (producto.cantidad_disponible_kg != null) {
+          const enCarrito = tipo === 'cart' ? carrito.get(producto.id)?.cantidadKg ?? 0 : 0;
+          quantity.max = Math.max(0, producto.cantidad_disponible_kg - enCarrito);
+        }
+        label.append(quantity);
+        const submit = document.createElement('button'); submit.textContent = tipo === 'reserve'
+          ? 'Confirmar reserva' : 'Agregar';
+        form.append(label, submit);
+      }
+      form.append(feedback);
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const submit = form.querySelector('button'); submit.disabled = true;
+        try {
+          if (tipo === 'contact') {
+            await request('/contactos', { method: 'POST', body: JSON.stringify({
+              productoId: producto.id, mensaje: form.elements.namedItem('mensaje').value.trim()
+            }) });
+            feedback.textContent = 'Mensaje enviado. El agricultor recibirá una notificación en su cuenta.';
+            form.reset();
+          } else {
+            const quantity = Number(form.elements.namedItem('cantidad').value);
+            if (tipo === 'reserve') {
+              await request('/reservas', { method: 'POST', body: JSON.stringify({
+                productoId: producto.id, cantidad_kg: quantity
+              }) });
+              feedback.textContent = 'Reserva creada. Ya aparece en “Mi actividad” y el agricultor debe confirmarla.';
+              form.reset();
+              await buscar();
+              await cargarPedidos();
+              tell('catalog-status', 'Reserva creada. El agricultor debe confirmarla.');
+              byId('cuenta-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+              const current = carrito.get(producto.id);
+              carrito.set(producto.id, { productoId: producto.id, nombre: producto.nombre,
+                cantidadKg: (current?.cantidadKg ?? 0) + quantity });
+              renderCarrito();
+              tell('carrito-status', `${producto.nombre} se agregó al carrito.`);
+              byId('carrito-seccion').scrollIntoView({ behavior: 'smooth', block: 'start' });
+              form.reset();
+            }
+          }
+        } catch (error) {
+          feedback.textContent = error.message;
+        } finally {
+          submit.disabled = false;
+        }
+      });
+      article.append(form);
+      form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
     async function buscar() {
       const values = formData(byId('buscar-form'));
@@ -309,6 +375,9 @@
         card.append(detail, remove); return card;
       });
       byId('carrito-lineas').replaceChildren(...lineas);
+      sessionStorage.setItem('agrovalle-carrito', JSON.stringify([...carrito.entries()]));
+      byId('carrito-vacio').hidden = carrito.size > 0;
+      byId('carrito-count').textContent = String(carrito.size);
       byId('confirmar-carrito').disabled = carrito.size === 0;
       byId('vaciar-carrito').disabled = carrito.size === 0;
     }
@@ -326,6 +395,7 @@
         carrito.clear(); renderCarrito();
         tell('carrito-status', `Compra confirmada en ${result.pedidos.length} pedido(s), uno por agricultor.`);
         await buscar(); await cargarPedidos();
+        byId('cuenta-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
       } catch (error) { tell('carrito-status', error.message); }
     });
     byId('buscar-form').addEventListener('submit', (event) => { event.preventDefault(); buscar(); });
@@ -339,14 +409,14 @@
     byId('ver-favoritos').addEventListener('click', async () => {
       vistaActividad = 'favoritos';
       try { const items = await request('/favoritos'); byId('actividad').replaceChildren(...items.map((f) => { const p = document.createElement('p'); p.textContent = `${f.nombre} · ${f.categoria} · ${f.municipio}`; return p; })); }
-      catch (error) { tell('auth-status', error.message); }
+      catch (error) { tell('actividad-status', error.message); }
     });
     byId('ver-notificaciones').addEventListener('click', async () => {
       vistaActividad = 'notificaciones';
       try { const items = await request('/notificaciones/mias'); byId('actividad').replaceChildren(...items.map((n) => { const p = document.createElement('p'); p.textContent = n.mensaje; return p; })); }
-      catch (error) { tell('auth-status', error.message); }
+      catch (error) { tell('actividad-status', error.message); }
     });
-    byId('ver-pedidos').addEventListener('click', async () => {
+    async function cargarPedidos() {
       vistaActividad = 'pedidos';
       try {
         const path = rol === 'AGRICULTOR' ? '/reservas/pendientes' : '/reservas/mias';
@@ -360,11 +430,11 @@
           const actions = document.createElement('div'); actions.className = 'actions';
           if (rol === 'AGRICULTOR' && order.estado === 'PENDIENTE') {
             const button = document.createElement('button'); button.textContent = 'Confirmar reserva';
-            button.onclick = async () => { try { await request(`/reservas/${order.id}/confirmar`, { method: 'POST' }); tell('auth-status', 'Reserva confirmada.'); await cargarPedidos(); } catch (error) { tell('auth-status', error.message); } };
+            button.onclick = async () => { try { await request(`/reservas/${order.id}/confirmar`, { method: 'POST' }); tell('actividad-status', 'Reserva confirmada.'); await cargarPedidos(); } catch (error) { tell('actividad-status', error.message); } };
             actions.append(button);
           } else if (rol === 'AGRICULTOR' && order.estado === 'CONFIRMADO') {
             const button = document.createElement('button'); button.textContent = 'Iniciar preparación';
-            button.onclick = async () => { try { await request(`/reservas/${order.id}/preparar`, { method: 'POST' }); tell('auth-status', 'Preparación iniciada.'); await cargarPedidos(); } catch (error) { tell('auth-status', error.message); } };
+            button.onclick = async () => { try { await request(`/reservas/${order.id}/preparar`, { method: 'POST' }); tell('actividad-status', 'Preparación iniciada.'); await cargarPedidos(); } catch (error) { tell('actividad-status', error.message); } };
             actions.append(button);
           } else if (rol === 'AGRICULTOR' && order.estado === 'PREPARANDO') {
             const button = document.createElement('button'); button.textContent = 'Programar despacho';
@@ -373,29 +443,30 @@
               const fecha = prompt('Fecha (AAAA-MM-DD):', today); if (!fecha) return;
               const franjaHoraria = prompt('Franja horaria:'); if (!franjaHoraria) return;
               const ruta = prompt('Ruta (opcional):') || '';
-              try { await request('/despachos', { method: 'POST', body: JSON.stringify({ pedidoId: order.id, fecha_programada: fecha, franjaHoraria, ruta }) }); tell('auth-status', 'Despacho programado.'); await cargarPedidos(); } catch (error) { tell('auth-status', error.message); }
+              try { await request('/despachos', { method: 'POST', body: JSON.stringify({ pedidoId: order.id, fecha_programada: fecha, franjaHoraria, ruta }) }); tell('actividad-status', 'Despacho programado.'); await cargarPedidos(); } catch (error) { tell('actividad-status', error.message); }
             };
             actions.append(button);
           } else if (rol === 'AGRICULTOR' && order.estado === 'EN_DESPACHO') {
             const button = document.createElement('button'); button.textContent = 'Marcar salida a ruta';
-            button.onclick = async () => { try { await request(`/despachos/${order.id}/en-ruta`, { method: 'PATCH' }); tell('auth-status', 'Salida a ruta registrada.'); await cargarPedidos(); } catch (error) { tell('auth-status', error.message); } };
+            button.onclick = async () => { try { await request(`/despachos/${order.id}/en-ruta`, { method: 'PATCH' }); tell('actividad-status', 'Salida a ruta registrada.'); await cargarPedidos(); } catch (error) { tell('actividad-status', error.message); } };
             actions.append(button);
           } else if (rol === 'AGRICULTOR' && order.estado === 'EN_RUTA') {
             const button = document.createElement('button'); button.textContent = 'Marcar entrega completada';
-            button.onclick = async () => { try { await request(`/despachos/${order.id}/entregado`, { method: 'PATCH' }); tell('auth-status', 'Entrega registrada y precio agregado a las estadísticas.'); await cargarPedidos(); } catch (error) { tell('auth-status', error.message); } };
+            button.onclick = async () => { try { await request(`/despachos/${order.id}/entregado`, { method: 'PATCH' }); tell('actividad-status', 'Entrega registrada y precio agregado a las estadísticas.'); await cargarPedidos(); } catch (error) { tell('actividad-status', error.message); } };
             actions.append(button);
           } else if (rol === 'COMPRADOR') {
             const button = document.createElement('button'); button.className = 'secondary'; button.textContent = 'Ver trazabilidad';
-            button.onclick = async () => { try { const events = await request(`/reservas/${order.id}/trazabilidad`); description.textContent += ` · ${events.map((event) => event.estado).join(' → ')}`; } catch (error) { tell('auth-status', error.message); } };
+            button.onclick = async () => { try { const events = await request(`/reservas/${order.id}/trazabilidad`); description.textContent += ` · ${events.map((event) => event.estado).join(' → ')}`; } catch (error) { tell('actividad-status', error.message); } };
             actions.append(button);
           }
           card.append(actions); return card;
         });
         byId('actividad').replaceChildren(...cards);
-        if (orders.length === 0) tell('auth-status', 'Aún no hay reservas/pedidos.');
-      } catch (error) { tell('auth-status', error.message); }
-    });
-    async function cargarPedidos() { byId('ver-pedidos').click(); }
+        if (orders.length === 0) tell('actividad-status', 'Aún no hay reservas o pedidos. Cuando hagas una reserva aparecerá aquí.');
+        else tell('actividad-status', `${orders.length} pedido(s) encontrado(s).`);
+      } catch (error) { tell('actividad-status', error.message); }
+    }
+    byId('ver-pedidos').addEventListener('click', cargarPedidos);
     window.setInterval(() => {
       if (token && rol === 'COMPRADOR' && vistaActividad === 'pedidos') cargarPedidos();
     }, 15000);
