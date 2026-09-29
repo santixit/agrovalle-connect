@@ -188,6 +188,7 @@
         rol = JSON.parse(atob(token.split('.')[1])).scope;
         form.reset();
         actualizarPaneles();
+        await buscar();
         tell('auth-status', `Sesión iniciada como ${rol}.`);
       } catch (error) { tell('auth-status', error.message); }
     });
