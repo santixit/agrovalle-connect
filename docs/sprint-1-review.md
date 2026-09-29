@@ -41,15 +41,14 @@ Resultados que se esperan según los contratos documentados: HU-01 devuelve `201
 
 ## Calidad y trazabilidad
 
-- Validación inicial del primer corte en el commit `c2a0fd5`: 11 pruebas aprobadas y 95,00% de cobertura de líneas (304/320), ejecutada bajo JDK 26 con compilación `--release 17` y H2; no demuestra ejecución sobre PostgreSQL.
-- Validación local complementaria del alcance integrador en la rama `feature/full-integrator-phase1` (2026-09-29): `mvnw.cmd --batch-mode --no-transfer-progress clean verify` exitoso con Eclipse Temurin JDK 17.0.20.1, 30 pruebas aprobadas (20 de integración de API, 9 unitarias y 1 de persistencia), Checkstyle con 0 violaciones y JaCoCo 90,11% (820/910 líneas; mínimo 60%). Se usó perfil local H2; esta ejecución no demuestra persistencia en PostgreSQL ni reemplaza el run remoto de GitHub Actions.
-- Ejecución de GitHub Actions con Java 17 y PostgreSQL 16 para el commit revisado: **adjuntar enlace al run y confirmar el resultado actual**.
-- Pull Request de implementación: **adjuntar enlace y comprobar que la evidencia de aprobación corresponde a una revisión anterior al merge**.
-- Resultado de Checkstyle y pruebas en el incremento revisado: **confirmar en el run actual; no inferirlo de este borrador**.
-
-En la revisión anterior del repositorio no se encontró una aprobación registrada en PR #23 antes de su merge. El equipo debe comprobar el historial del PR: si la aprobación ocurrió después, no satisface el requisito de aprobación previa. No debe presentarse una revisión posterior como si hubiera ocurrido antes; conviene documentar el hecho y aplicar la regla correctamente en los próximos PR.
-
-El repositorio no conserva en este borrador el enlace a un run actual de GitHub Actions. Antes de entregar, el equipo debe añadir el run que corresponde al commit demostrado y confirmar allí el resultado de la suite sobre PostgreSQL.
+- Validación inicial del primer corte en el commit `c2a0fd5`: 11 pruebas aprobadas y 95,00% de cobertura de líneas (304/320), ejecutada con H2; no demuestra ejecución sobre PostgreSQL.
+- Validación local complementaria de `feature/full-integrator-phase1` (2026-09-29): `mvnw.cmd clean verify` terminó correctamente con Eclipse Temurin JDK 17.0.20.1: 30 pruebas aprobadas, 0 fallas, Checkstyle con 0 violaciones y JaCoCo 90,11% (820/910 líneas; umbral 60%). Se ejecutó el perfil local H2.
+- La conexión de la aplicación con PostgreSQL 18 en la base local `agrovalle conect` se autenticó y Flyway aplicó las migraciones V1–V4. Esta comprobación confirma la creación del esquema; no equivale a una demostración funcional de los endpoints ni a las pruebas completas sobre PostgreSQL.
+- GitHub Actions ejecutó correctamente el workflow con Java 17 y PostgreSQL 16 en el commit `366b8c0` de `main`: [run de CI](https://github.com/santixit/agrovalle-connect/actions/runs/36497630535). Ese run corresponde al `main` publicado; la rama `feature/full-integrator-phase1` todavía requiere su propio run remoto.
+- [PR #23](https://github.com/santixit/agrovalle-connect/pull/23) se fusionó el 2026-09-28. GitHub registra la aprobación de `DannyGomez02` el 2026-09-29, después de la fusión; no cumple el requisito de aprobación previa.
+- [PR #24](https://github.com/santixit/agrovalle-connect/pull/24) recibió aprobación de `DannyGomez02` antes de fusionarse el 2026-09-29 y reporta dos comprobaciones exitosas. Ese PR modificó documentación; no valida por sí solo la implementación completa del integrador.
+- GitHub registró un despliegue a staging asociado al incremento del PR #23. Antes de presentar staging como verificado, el equipo debe comprobar la URL publicada y ejecutar una consulta real contra la aplicación.
+- La demostración con Postman, evidencia de fila persistida en PostgreSQL, resultado del Product Owner, Daily Scrums y retrospectiva siguen pendientes de evidencia real del equipo.
 
 ## Acuerdos de la revisión
 
