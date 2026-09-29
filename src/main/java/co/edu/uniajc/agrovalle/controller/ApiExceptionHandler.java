@@ -15,6 +15,7 @@ import co.edu.uniajc.agrovalle.service.RangoFechasInvalidoException;
 import co.edu.uniajc.agrovalle.service.TransicionPedidoInvalidaException;
 import jakarta.validation.ConstraintViolationException;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -97,7 +98,14 @@ public class ApiExceptionHandler {
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<Map<String, String>> datosInvalidos(
       MethodArgumentNotValidException exception) {
-    return ResponseEntity.badRequest().body(Map.of("error", "Los datos enviados no son validos"));
+    String details = exception.getBindingResult().getFieldErrors().stream()
+        .map(error -> error.getDefaultMessage())
+        .filter(message -> message != null && !message.isBlank())
+        .distinct()
+        .collect(Collectors.joining(". "));
+    String message = details.isBlank() ? "Los datos enviados no son válidos"
+        : "Revisa los datos: " + details;
+    return ResponseEntity.badRequest().body(Map.of("error", message));
   }
 
   @ExceptionHandler(ConstraintViolationException.class)

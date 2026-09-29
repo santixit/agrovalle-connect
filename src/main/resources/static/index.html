@@ -5,49 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Conecta cosechas del Valle del Cauca con comercios de Cali.">
   <title>AgroValle Connect</title>
-  <style>
-    :root { color-scheme: light; --green: #236b45; --pale: #edf5ef; --ink: #183127; }
-    * { box-sizing: border-box; }
-    body { margin: 0; background: #f6f8f6; color: var(--ink); font: 16px/1.5 system-ui, sans-serif; }
-    header { padding: 1rem max(1rem, calc((100vw - 1100px)/2)); background: var(--green); color: white; }
-    header h1 { margin: 0; font-size: 1.5rem; }
-    header p { margin: .2rem 0 0; }
-    main { max-width: 1100px; padding: 1.2rem; margin: auto; display: grid; gap: 1rem; }
-    section { background: white; border: 1px solid #d8e3db; border-radius: 12px; padding: 1rem; }
-    h2 { margin: 0 0 .7rem; font-size: 1.15rem; }
-    form, .filters { display: flex; flex-wrap: wrap; gap: .65rem; align-items: end; }
-    label { display: grid; gap: .2rem; font-size: .9rem; flex: 1 1 170px; }
-    input, select, textarea, button { font: inherit; padding: .55rem .65rem; border: 1px solid #b9c9bd; border-radius: 7px; }
-    textarea { min-height: 5rem; }
-    button { cursor: pointer; color: white; background: var(--green); border-color: var(--green); font-weight: 600; }
-    button.secondary { background: white; color: var(--green); }
-    .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: .8rem; }
-    .card { border: 1px solid #d8e3db; background: var(--pale); border-radius: 10px; padding: .85rem; }
-    .card h3 { margin: 0 0 .3rem; }
-    .actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .7rem; }
-    .status { min-height: 1.5rem; color: var(--green); }
-    .muted { color: #53665a; font-size: .9rem; }
-    [hidden] { display: none !important; }
-    footer { text-align: center; color: #53665a; padding: 1rem; }
-  </style>
+  <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
   <header>
-    <h1>AgroValle Connect</h1>
-    <p>Productos del Valle del Cauca, directamente de sus agricultores.</p>
+    <div class="hero">
+      <h1 class="brand">AgroValle Connect</h1>
+      <p class="tagline">Cosechas del Valle del Cauca, directo del campo a los comercios de la región.</p>
+      <nav aria-label="Navegación principal">
+        <a href="#catalogo-seccion">Explorar cosechas</a>
+        <a href="#precios-seccion">Precios regionales</a>
+        <a href="#acceso-seccion">Mi cuenta</a>
+      </nav>
+    </div>
   </header>
   <main>
-    <section aria-labelledby="acceso-titulo">
+    <section id="acceso-seccion" aria-labelledby="acceso-titulo">
       <h2 id="acceso-titulo">Acceso</h2>
-      <form id="login-form">
-        <label>Correo<input name="correo" type="email" required autocomplete="username"></label>
-        <label>Contraseña<input name="contrasena" type="password" required autocomplete="current-password"></label>
-        <button>Iniciar sesión</button>
-        <button type="button" id="salir" class="secondary" hidden>Cerrar sesión</button>
+      <p class="section-intro">Ingresa para publicar, reservar y seguir tus pedidos.</p>
+      <form id="login-form" class="form-grid">
+        <div id="login-fields" class="form-grid">
+          <label>Correo<input name="correo" type="email" required autocomplete="username"></label>
+          <label>Contraseña<input name="contrasena" type="password" required autocomplete="current-password"></label>
+          <button>Iniciar sesión</button>
+        </div>
       </form>
-      <details>
+      <button type="button" id="salir" class="secondary" hidden>Cerrar sesión</button>
+      <details id="registro-details">
         <summary>Crear cuenta</summary>
-        <form id="registro-form">
+        <form id="registro-form" class="form-grid">
           <label>Tipo de cuenta<select name="tipo"><option value="AGRICULTOR">Agricultor</option><option value="COMPRADOR">Comprador</option></select></label>
           <label>Nombre<input name="nombre" maxlength="120" required></label>
           <label>Correo<input name="correo" type="email" maxlength="254" required></label>
@@ -64,28 +50,30 @@
 
     <section id="agricultor-panel" hidden>
       <h2>Mi finca y nueva oferta</h2>
-      <form id="finca-form">
+      <p class="section-intro">Registra tu finca y publica una cosecha disponible.</p>
+      <form id="finca-form" class="form-grid">
         <label>Nombre de finca<input name="nombre" maxlength="120" required></label>
         <label>Municipio<input name="municipio" maxlength="80" required></label>
         <label>Dirección o vereda<input name="direccion" maxlength="200" required></label>
         <button>Registrar finca</button>
       </form>
       <p id="farm-status" class="status" role="status"></p>
-      <form id="producto-form">
+      <form id="producto-form" class="form-grid">
         <label>Producto<input name="nombre" maxlength="120" required></label>
         <label>Categoría<input name="categoria" maxlength="80" required></label>
         <label>Municipio<input name="municipio" maxlength="80" required></label>
         <label>Finca<select name="fincaId" id="finca-select"><option value="">Sin finca asociada</option></select></label>
         <label>Cantidad (kg)<input name="cantidadKg" type="number" min="0.01" step="0.01" required></label>
         <label>Precio por kg (COP)<input name="precioPorKg" type="number" min="0.01" step="0.01" required></label>
-        <label>Fecha de cosecha<input name="fecha_cosecha" type="date" required></label>
+        <label>Fecha de cosecha<input name="fecha_cosecha" type="date" required><span class="hint">Debe ser hoy o una fecha futura.</span></label>
         <button>Publicar oferta</button>
       </form>
       <p id="product-status" class="status" role="status"></p>
     </section>
 
-    <section aria-labelledby="catalogo-titulo">
+    <section id="catalogo-seccion" aria-labelledby="catalogo-titulo">
       <h2 id="catalogo-titulo">Catálogo de cosechas</h2>
+      <p class="section-intro">Busca ofertas activas por municipio y categoría.</p>
       <form id="buscar-form" class="filters">
         <label>Municipio<input name="municipio" maxlength="80" placeholder="Ej. Dagua"></label>
         <label>Categoría<input name="categoria" maxlength="80" placeholder="Ej. Frutas"></label>
@@ -105,8 +93,9 @@
       <div id="catalogo" class="row"></div>
     </section>
 
-    <section>
+    <section id="precios-seccion">
       <h2>Precios regionales</h2>
+      <p class="section-intro">Consulta promedios recientes de ventas completadas.</p>
       <form id="precios-form">
         <label>Categoría<input name="categoria" maxlength="80" required placeholder="Ej. Frutas"></label>
         <button>Consultar promedio</button>
@@ -144,6 +133,22 @@
     const byId = (id) => document.getElementById(id);
     const formData = (form) => Object.fromEntries(new FormData(form).entries());
     const tell = (id, text) => { byId(id).textContent = text; };
+    const todayInBogota = () => {
+      const parts = new Intl.DateTimeFormat('en', {
+        timeZone: 'America/Bogota', year: 'numeric', month: '2-digit', day: '2-digit'
+      }).formatToParts(new Date());
+      const date = Object.fromEntries(parts.map(({ type, value }) => [type, value]));
+      return `${date.year}-${date.month}-${date.day}`;
+    };
+    const harvestDate = byId('producto-form').elements.namedItem('fecha_cosecha');
+    const setHarvestDateMinimum = () => {
+      harvestDate.min = todayInBogota();
+      if (!harvestDate.value || harvestDate.value < harvestDate.min) harvestDate.value = harvestDate.min;
+    };
+    setHarvestDateMinimum();
+    const formatCop = (value) => new Intl.NumberFormat('es-CO', {
+      style: 'currency', currency: 'COP', maximumFractionDigits: 0
+    }).format(value);
     async function request(path, options = {}) {
       const headers = { ...(options.body ? { 'Content-Type': 'application/json' } : {}),
         ...(token ? { Authorization: `Bearer ${token}` } : {}), ...options.headers };
@@ -154,6 +159,8 @@
       return body;
     }
     function actualizarPaneles() {
+      byId('login-fields').hidden = Boolean(token);
+      byId('registro-details').hidden = Boolean(token);
       byId('salir').hidden = !token;
       byId('cuenta-panel').hidden = !token;
       byId('agricultor-panel').hidden = rol !== 'AGRICULTOR';
@@ -164,30 +171,44 @@
     }
     byId('login-form').addEventListener('submit', async (event) => {
       event.preventDefault();
+      const form = event.currentTarget;
       try {
-        const result = await request('/auth/login', { method: 'POST', body: JSON.stringify(formData(event.currentTarget)) });
+        const result = await request('/auth/login', { method: 'POST', body: JSON.stringify(formData(form)) });
         token = result.accessToken;
         rol = JSON.parse(atob(token.split('.')[1])).scope;
+        form.reset();
         actualizarPaneles();
         tell('auth-status', `Sesión iniciada como ${rol}.`);
       } catch (error) { tell('auth-status', error.message); }
     });
     byId('salir').addEventListener('click', () => { token = null; rol = null; vistaActividad = null; carrito.clear(); actualizarPaneles(); tell('auth-status', 'Sesión cerrada.'); });
-    byId('registro-form').addEventListener('change', (event) => {
-      if (event.target.name !== 'tipo') return;
-      document.querySelectorAll('[data-farmer]').forEach((field) => { field.hidden = event.target.value !== 'AGRICULTOR'; field.querySelector('input').required = !field.hidden; });
-      document.querySelectorAll('[data-buyer]').forEach((field) => { field.hidden = event.target.value !== 'COMPRADOR'; });
+    const registroForm = byId('registro-form');
+    function actualizarCamposRegistro(tipo) {
+      document.querySelectorAll('[data-farmer]').forEach((field) => {
+        field.hidden = tipo !== 'AGRICULTOR';
+        field.querySelector('input').required = !field.hidden;
+      });
+      document.querySelectorAll('[data-buyer]').forEach((field) => {
+        field.hidden = tipo !== 'COMPRADOR';
+      });
+    }
+    actualizarCamposRegistro(registroForm.elements.namedItem('tipo').value);
+    registroForm.addEventListener('change', (event) => {
+      if (event.target.name === 'tipo') actualizarCamposRegistro(event.target.value);
     });
     byId('registro-form').addEventListener('submit', async (event) => {
       event.preventDefault();
-      const data = formData(event.currentTarget);
+      const form = event.currentTarget;
+      const data = formData(form);
       const type = data.tipo;
       delete data.tipo;
       const path = type === 'AGRICULTOR' ? '/auth/register' : '/auth/register/comprador';
       try {
         await request(path, { method: 'POST', body: JSON.stringify(data) });
         tell('auth-status', 'Cuenta creada. Ya puedes iniciar sesión.');
-        event.currentTarget.reset();
+        form.reset();
+        actualizarCamposRegistro(form.elements.namedItem('tipo').value);
+        byId('registro-details').open = false;
       } catch (error) { tell('auth-status', error.message); }
     });
     async function cargarFincas() {
@@ -200,28 +221,43 @@
     }
     byId('finca-form').addEventListener('submit', async (event) => {
       event.preventDefault();
-      try { await request('/fincas', { method: 'POST', body: JSON.stringify(formData(event.currentTarget)) });
-        tell('farm-status', 'Finca registrada.'); await cargarFincas(); event.currentTarget.reset();
+      const form = event.currentTarget;
+      try { await request('/fincas', { method: 'POST', body: JSON.stringify(formData(form)) });
+        tell('farm-status', 'Finca registrada correctamente.'); form.reset(); await cargarFincas();
       } catch (error) { tell('farm-status', error.message); }
     });
     byId('producto-form').addEventListener('submit', async (event) => {
       event.preventDefault();
-      const data = formData(event.currentTarget);
+      const form = event.currentTarget;
+      const data = formData(form);
       data.cantidadKg = Number(data.cantidadKg); data.precioPorKg = Number(data.precioPorKg);
       data.fincaId = data.fincaId ? Number(data.fincaId) : null;
       try { await request('/productos', { method: 'POST', body: JSON.stringify(data) });
-        tell('product-status', 'Oferta publicada.'); event.currentTarget.reset(); await buscar();
+        tell('product-status', 'Oferta publicada correctamente.'); form.reset(); setHarvestDateMinimum(); await buscar();
       } catch (error) { tell('product-status', error.message); }
     });
     function tarjeta(producto) {
       const article = document.createElement('article'); article.className = 'card';
       const title = document.createElement('h3'); title.textContent = producto.nombre;
       const info = document.createElement('p'); info.textContent = `${producto.categoria} · ${producto.municipio}`;
-      const amount = document.createElement('p'); amount.textContent = producto.cantidad_kg == null ? 'Disponibilidad por confirmar' : `${producto.cantidad_disponible_kg ?? producto.cantidad_kg} kg · $${producto.precio_por_kg ?? '—'} COP/kg`;
-      article.append(title, info, amount);
+      const amount = document.createElement('p');
+      amount.textContent = producto.cantidad_kg == null ? 'Disponibilidad por confirmar'
+        : `${producto.cantidad_disponible_kg ?? producto.cantidad_kg} kg disponibles · ${formatCop(producto.precio_por_kg)}/kg`;
+      const detailPanel = document.createElement('p'); detailPanel.className = 'muted'; detailPanel.hidden = true;
+      article.append(title, info, amount, detailPanel);
       const actions = document.createElement('div'); actions.className = 'actions';
       const detail = document.createElement('button'); detail.className = 'secondary'; detail.textContent = 'Ver detalle';
-      detail.onclick = async () => { try { const d = await request(`/productos/${producto.id}`); alert(`${d.nombre}\n${d.categoria} · ${d.municipio}\n${d.cantidad_disponible_kg ?? '—'} kg\nAgricultor: ${d.agricultor ?? '—'}\nFinca: ${d.finca ?? '—'}`); } catch (error) { tell('catalog-status', error.message); } };
+      detail.setAttribute('aria-expanded', 'false');
+      detail.onclick = async () => {
+        if (!detailPanel.hidden) {
+          detailPanel.hidden = true; detail.textContent = 'Ver detalle'; detail.setAttribute('aria-expanded', 'false'); return;
+        }
+        try {
+          const d = await request(`/productos/${producto.id}`);
+          detailPanel.textContent = `Agricultor: ${d.agricultor ?? 'No informado'} · Finca: ${d.finca ?? 'No asociada'}`;
+          detailPanel.hidden = false; detail.textContent = 'Ocultar detalle'; detail.setAttribute('aria-expanded', 'true');
+        } catch (error) { tell('catalog-status', error.message); }
+      };
       actions.append(detail);
       if (token && rol === 'COMPRADOR') {
         const reserve = document.createElement('button'); reserve.textContent = 'Reservar';
@@ -252,7 +288,13 @@
       const values = formData(byId('buscar-form'));
       const params = new URLSearchParams(Object.entries(values).filter(([, value]) => value.trim()));
       try { const products = await request(`/productos${params.size ? `?${params}` : ''}`);
-        byId('catalogo').replaceChildren(...products.map(tarjeta));
+        if (products.length === 0) {
+          const empty = document.createElement('p'); empty.className = 'empty-state';
+          empty.textContent = 'No encontramos cosechas con esos filtros. Prueba con otro municipio o categoría.';
+          byId('catalogo').replaceChildren(empty);
+        } else {
+          byId('catalogo').replaceChildren(...products.map(tarjeta));
+        }
         tell('catalog-status', `${products.length} oferta(s) encontrada(s).`);
       } catch (error) { tell('catalog-status', error.message); }
     }
@@ -291,7 +333,7 @@
     byId('precios-form').addEventListener('submit', async (event) => {
       event.preventDefault();
       try { const p = await request(`/precios/regionales?categoria=${encodeURIComponent(formData(event.currentTarget).categoria)}`);
-        tell('precio-status', p.transaccionesAnalizadas ? `Promedio: $${p.promedioPorKg} ${p.moneda}/kg, a partir de ${p.transaccionesAnalizadas} transacción(es).` : 'Aún no hay transacciones completadas para calcular un promedio.');
+        tell('precio-status', p.transaccionesAnalizadas ? `Promedio: ${formatCop(p.promedioPorKg)}/kg, a partir de ${p.transaccionesAnalizadas} transacción(es).` : 'Aún no hay transacciones completadas para calcular un promedio.');
       } catch (error) { tell('precio-status', error.message); }
     });
     byId('ver-favoritos').addEventListener('click', async () => {

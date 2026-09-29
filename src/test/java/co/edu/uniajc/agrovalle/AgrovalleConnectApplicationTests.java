@@ -2,6 +2,7 @@ package co.edu.uniajc.agrovalle;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -256,6 +257,28 @@ class AgrovalleConnectApplicationTests {
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.cantidad_kg").value(35))
         .andExpect(jsonPath("$.precio_por_kg").value(4200));
+  }
+
+  @Test
+  void explicaPorQueNoAceptaLaFechaPasadaDeUnaCosecha() throws Exception {
+    mockMvc.perform(post("/api/v1/auth/register").contentType(MediaType.APPLICATION_JSON)
+            .content("""
+                {"nombre":"Rosa Díaz","cedula":"998877","ubicacion_valle":"Dagua",
+                 "correo":"rosa@example.com","contrasena":"ClaveSegura2026"}
+                """))
+        .andExpect(status().isCreated());
+    String tokenAgricultor = token("rosa@example.com", "ClaveSegura2026");
+
+    mockMvc.perform(post("/api/v1/productos")
+            .header("Authorization", "Bearer " + tokenAgricultor)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("""
+                {"nombre":"Mango","categoria":"Frutas","municipio":"Dagua",
+                 "cantidadKg":35,"precioPorKg":4200,"fecha_cosecha":"%s"}
+                """.formatted(LocalDate.now().minusDays(1))))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.error")
+            .value(containsString("La fecha de cosecha debe ser hoy o posterior")));
   }
 
   @Test
