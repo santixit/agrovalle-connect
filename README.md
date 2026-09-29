@@ -10,6 +10,7 @@ Para pequeños y medianos productores del Valle del Cauca que necesitan vender s
 
 - Repositorio: [santixit/agrovalle-connect](https://github.com/santixit/agrovalle-connect)
 - Tablero Kanban: [Agrovalle-Kamba](https://github.com/users/santixit/projects/3/views/1)
+- Aplicación publicada en staging: [AgroValle Connect](https://agrovalle-connect-staging.onrender.com/)
 ## Integrantes y roles
 
 | Integrante | Rol Scrum / responsabilidad |
