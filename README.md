@@ -55,35 +55,37 @@ El backend se organiza en `controller → service → repository → domain`, co
 
 ## Preparar el entorno
 
-Requisitos: JDK 17, Git y Docker Compose, o un PostgreSQL 16+ local. Para iniciar la base incluida:
-
-```bash
-docker compose up -d db
-```
-
-Configura el secreto JWT como variable local fuera del repositorio. Debe ser Base64 de al menos 32 bytes. Ejemplo PowerShell:
+Requisitos: JDK 17, Git y Docker Compose, o un PostgreSQL 16+ local. Para iniciar PostgreSQL incluido con Docker Compose y la configuración predeterminada del proyecto:
 
 ```powershell
-$env:JWT_SECRET = [Convert]::ToBase64String([Security.Cryptography.RandomNumberGenerator]::GetBytes(32))
+docker compose up -d db
+.\scripts\run-local.ps1
 ```
 
-La conexión de desarrollo predeterminada apunta a `localhost:5432` con la base `agrovalle_connect` y el usuario de desarrollo definido en `docker-compose.yml`. Para PostgreSQL local, configura antes de iniciar:
+El script solicita la contraseña sin guardarla en el repositorio y genera un secreto JWT temporal para esa ejecución. Para usar otra instancia PostgreSQL local, pasa su URL y usuario. Ejemplo con una base cuyo nombre contiene un espacio:
+
+```powershell
+.\scripts\run-local.ps1 -DbUrl 'jdbc:postgresql://localhost:5432/agrovalle%20conect' -DbUsername 'postgres'
+```
+
+Si prefieres iniciar Spring Boot manualmente, define la conexión y genera un secreto Base64 válido en PowerShell:
 
 ```powershell
 $env:DB_URL = 'jdbc:postgresql://localhost:5432/agrovalle_connect'
 $env:DB_USERNAME = 'agrovalle'
-$env:DB_PASSWORD = 'tu-clave-local'
-```
-
-Luego ejecuta:
-
-```powershell
-.\mvnw.cmd clean verify
+$env:DB_PASSWORD = Read-Host 'Contraseña de PostgreSQL'
+$bytes = New-Object byte[] 32
+$rng = [System.Security.Cryptography.RandomNumberGenerator]::Create()
+try {
+  $rng.GetBytes($bytes)
+  $env:JWT_SECRET = [Convert]::ToBase64String($bytes)
+} finally {
+  $rng.Dispose()
+}
 .\mvnw.cmd spring-boot:run
 ```
 
-Abre `http://localhost:8080/`. Las migraciones Flyway crean y validan el esquema al iniciar. En producción, el secreto JWT y las credenciales de la base se deben administrar como secretos del proveedor; no se deben copiar al repositorio.
-
+Abre `http://localhost:8080/`. Las migraciones Flyway crean y validan el esquema al iniciar. Detén la aplicación con `Ctrl+C`. En producción, el secreto JWT y las credenciales de la base se deben administrar como secretos del proveedor; no se deben copiar al repositorio.
 ## Pruebas y calidad
 
 ```powershell
