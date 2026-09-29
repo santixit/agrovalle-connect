@@ -1,5 +1,7 @@
 package co.edu.uniajc.agrovalle;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -10,6 +12,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import co.edu.uniajc.agrovalle.domain.Producto;
 import co.edu.uniajc.agrovalle.domain.TransaccionPrecio;
+import co.edu.uniajc.agrovalle.domain.Agricultor;
+import co.edu.uniajc.agrovalle.domain.Comprador;
 import co.edu.uniajc.agrovalle.domain.RolUsuario;
 import co.edu.uniajc.agrovalle.domain.Usuario;
 import co.edu.uniajc.agrovalle.repository.AgricultorRepository;
@@ -25,6 +29,7 @@ import co.edu.uniajc.agrovalle.repository.DespachoRepository;
 import co.edu.uniajc.agrovalle.repository.FavoritoRepository;
 import co.edu.uniajc.agrovalle.repository.FincaRepository;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -357,6 +362,90 @@ class AgrovalleConnectApplicationTests {
             .contentType(MediaType.APPLICATION_JSON)
             .content("{\"productoId\":" + productoId + ",\"cantidad_kg\":20}"))
         .andExpect(status().isConflict());
+  }
+
+  @Test
+  void carritoConsolidaLineasYGeneraUnPedidoPorAgricultor() throws Exception {
+    Agricultor agricultorUno = crearAgricultor("uno@example.com", "111111");
+    Agricultor agricultorDos = crearAgricultor("dos@example.com", "222222");
+    crearComprador("carrito@example.com");
+    String tokenComprador = token("carrito@example.com", "ClaveSegura2026");
+    Producto mango = productoRepository.save(new Producto(agricultorUno, null, "Mango",
+        "Frutas", "Dagua", new BigDecimal("10"), new BigDecimal("4000"),
+        LocalDate.now()));
+    Producto platano = productoRepository.save(new Producto(agricultorUno, null, "Platano",
+        "Frutas", "Dagua", new BigDecimal("10"), new BigDecimal("3000"),
+        LocalDate.now()));
+    Producto cafe = productoRepository.save(new Producto(agricultorDos, null, "Cafe",
+        "Granos", "Palmira", new BigDecimal("10"), new BigDecimal("8000"),
+        LocalDate.now()));
+
+    mockMvc.perform(post("/api/v1/reservas/carrito")
+            .header("Authorization", "Bearer " + tokenComprador)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("""
+                {"items":[
+                  {"productoId":%d,"cantidad_kg":1},
+                  {"productoId":%d,"cantidad_kg":2},
+                  {"productoId":%d,"cantidad_kg":4},
+                  {"productoId":%d,"cantidad_kg":3}
+                ]}
+                """.formatted(mango.getId(), mango.getId(), platano.getId(), cafe.getId())))
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("$.pedidos", hasSize(2)))
+        .andExpect(jsonPath("$.pedidos[0].productos", hasSize(2)))
+        .andExpect(jsonPath("$.pedidos[1].productos", hasSize(1)));
+
+    assertEquals(new BigDecimal("7.00"), productoRepository.findById(mango.getId())
+        .orElseThrow().getCantidadKg());
+    assertEquals(new BigDecimal("6.00"), productoRepository.findById(platano.getId())
+        .orElseThrow().getCantidadKg());
+    assertEquals(new BigDecimal("7.00"), productoRepository.findById(cafe.getId())
+        .orElseThrow().getCantidadKg());
+    assertEquals(2, pedidoRepository.buscarDelComprador(
+        usuarioRepository.findByCorreoIgnoreCase("carrito@example.com").orElseThrow().getId())
+        .size());
+  }
+
+  @Test
+  void carritoNoDescuentaInventarioSiUnaLineaNoTieneStock() throws Exception {
+    Agricultor agricultor = crearAgricultor("stock@example.com", "333333");
+    crearComprador("stockbuyer@example.com");
+    String tokenComprador = token("stockbuyer@example.com", "ClaveSegura2026");
+    Producto disponible = productoRepository.save(new Producto(agricultor, null, "Yuca",
+        "Tuberculos", "Dagua", new BigDecimal("10"), new BigDecimal("2000"),
+        LocalDate.now()));
+    Producto limitado = productoRepository.save(new Producto(agricultor, null, "Lulo",
+        "Frutas", "Dagua", BigDecimal.ONE, new BigDecimal("5000"),
+        LocalDate.now()));
+
+    mockMvc.perform(post("/api/v1/reservas/carrito")
+            .header("Authorization", "Bearer " + tokenComprador)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("""
+                {"items":[
+                  {"productoId":%d,"cantidad_kg":2},
+                  {"productoId":%d,"cantidad_kg":2}
+                ]}
+                """.formatted(disponible.getId(), limitado.getId())))
+        .andExpect(status().isConflict());
+
+    assertEquals(new BigDecimal("10.00"), productoRepository.findById(disponible.getId())
+        .orElseThrow().getCantidadKg());
+    assertTrue(pedidoRepository.findAll().isEmpty());
+  }
+
+  private Agricultor crearAgricultor(String correo, String cedula) {
+    Usuario usuario = usuarioRepository.save(new Usuario(correo,
+        passwordEncoder.encode("ClaveSegura2026"), RolUsuario.AGRICULTOR));
+    return agricultorRepository.save(new Agricultor(usuario, "Agricultor de prueba", cedula,
+        "Dagua"));
+  }
+
+  private Comprador crearComprador(String correo) {
+    Usuario usuario = usuarioRepository.save(new Usuario(correo,
+        passwordEncoder.encode("ClaveSegura2026"), RolUsuario.COMPRADOR));
+    return compradorRepository.save(new Comprador(usuario, "Comercio de prueba", null, null));
   }
 
   @Test

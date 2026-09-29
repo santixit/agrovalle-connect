@@ -42,7 +42,7 @@ El backend se organiza en `controller → service → repository → domain`, co
 | HU-05 | Contacto del comprador y aviso al agricultor | Implementada |
 | HU-06 | Registro de finca y asociación a oferta | Implementada |
 | HU-07 | Registro de comprador | Expuesto como alta de cuenta para habilitar compras y contactos |
-| HU-08 | Reserva y reducción segura de inventario | Implementada con bloqueo de fila y respuesta de conflicto si no hay stock |
+| HU-08 | Carrito, reservas y reducción segura de inventario | Implementada; consolida productos repetidos y crea un pedido por agricultor en una transacción con bloqueo de filas |
 | HU-09 | Cambio de estado de una oferta propia | Implementada para `AGRICULTOR` |
 | HU-10 | Detalle público de oferta | Implementada sin exponer cédula ni credenciales |
 | HU-11 | Notificación por contacto y cambios del pedido | Implementada mediante eventos transaccionales |
@@ -110,6 +110,7 @@ Los endpoints usan `/api/v1` y JSON. Los roles se asignan en JWT: `AGRICULTOR`, 
 | GET | `/precios/regionales?categoria=Frutas` | Público; últimas 50 ventas completadas de las últimas 24 horas |
 | POST | `/contactos` | Comprador |
 | POST | `/reservas` | Comprador |
+| POST | `/reservas/carrito` | Comprador; consolida los artículos y agrupa pedidos por agricultor |
 | POST | `/reservas/{id}/confirmar` | Agricultor dueño de las ofertas |
 | POST | `/despachos` | Agricultor dueño de la reserva confirmada |
 | PATCH | `/despachos/{pedidoId}/entregado` | Agricultor dueño; registra transacciones de precio |

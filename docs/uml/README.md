@@ -251,13 +251,13 @@ sequenceDiagram
   participant Regla as ReglasDisponibilidad
   participant DB as PostgreSQL
   participant Observer as NotificacionObserver
-  Comprador->>API: POST /api/v1/reservas con JWT
-  API->>Servicio: reservar(usuario, oferta, cantidad)
-  Servicio->>DB: bloquear oferta y leer stock
+  Comprador->>API: POST /api/v1/reservas/carrito con JWT
+  API->>Servicio: reservarCarrito(usuario, items)
+  Servicio->>DB: bloquear ofertas por ID y leer stock
   DB-->>Servicio: stock vigente
-  Servicio->>Regla: validar cantidad
-  Servicio->>DB: descontar stock y crear pedido/evento
-  DB-->>API: reserva creada
+  Servicio->>Regla: validar todas las cantidades
+  Servicio->>DB: agrupar por agricultor, descontar stock y crear pedidos/eventos
+  DB-->>API: carrito consolidado o rollback total
   Agricultor->>API: confirmar y programar despacho
   API->>DB: persistir estado y trazabilidad
   DB-->>Observer: evento después del commit

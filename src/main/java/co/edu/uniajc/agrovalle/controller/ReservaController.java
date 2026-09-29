@@ -2,9 +2,12 @@ package co.edu.uniajc.agrovalle.controller;
 
 import co.edu.uniajc.agrovalle.api.dto.ReservaRequest;
 import co.edu.uniajc.agrovalle.api.dto.ReservaResponse;
+import co.edu.uniajc.agrovalle.api.dto.ReservaCarritoRequest;
+import co.edu.uniajc.agrovalle.api.dto.CarritoReservaResponse;
 import co.edu.uniajc.agrovalle.service.ReservaService;
 import jakarta.validation.Valid;
 import java.net.URI;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,5 +31,13 @@ public class ReservaController {
     ReservaResponse response = reservaService.reservar(Long.valueOf(jwt.getSubject()), request);
     return ResponseEntity.created(URI.create("/api/v1/reservas/" + response.id()))
         .body(response);
+  }
+
+  @PostMapping("/carrito")
+  public ResponseEntity<CarritoReservaResponse> reservarCarrito(
+      @AuthenticationPrincipal Jwt jwt, @Valid @RequestBody ReservaCarritoRequest request) {
+    CarritoReservaResponse response = reservaService.reservarCarrito(
+        Long.valueOf(jwt.getSubject()), request);
+    return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
 }

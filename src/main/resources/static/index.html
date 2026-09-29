@@ -92,6 +92,15 @@
         <button>Buscar</button>
         <button type="button" id="limpiar" class="secondary">Ver todo</button>
       </form>
+      <div id="carrito-panel" hidden>
+        <h3>Carrito de compra</h3>
+        <div id="carrito-lineas" class="row"></div>
+        <div class="actions">
+          <button type="button" id="confirmar-carrito">Confirmar carrito</button>
+          <button type="button" id="vaciar-carrito" class="secondary">Vaciar carrito</button>
+        </div>
+        <p id="carrito-status" class="status" role="status"></p>
+      </div>
       <p id="catalog-status" class="muted" role="status"></p>
       <div id="catalogo" class="row"></div>
     </section>
@@ -130,6 +139,7 @@
     const api = '/api/v1';
     let token = null;
     let rol = null;
+    const carrito = new Map();
     const byId = (id) => document.getElementById(id);
     const formData = (form) => Object.fromEntries(new FormData(form).entries());
     const tell = (id, text) => { byId(id).textContent = text; };
@@ -147,6 +157,8 @@
       byId('cuenta-panel').hidden = !token;
       byId('agricultor-panel').hidden = rol !== 'AGRICULTOR';
       byId('admin-panel').hidden = rol !== 'ADMIN';
+      byId('carrito-panel').hidden = rol !== 'COMPRADOR';
+      renderCarrito();
       if (rol === 'AGRICULTOR') cargarFincas();
     }
     byId('login-form').addEventListener('submit', async (event) => {
@@ -159,7 +171,7 @@
         tell('auth-status', `Sesión iniciada como ${rol}.`);
       } catch (error) { tell('auth-status', error.message); }
     });
-    byId('salir').addEventListener('click', () => { token = null; rol = null; actualizarPaneles(); tell('auth-status', 'Sesión cerrada.'); });
+    byId('salir').addEventListener('click', () => { token = null; rol = null; carrito.clear(); actualizarPaneles(); tell('auth-status', 'Sesión cerrada.'); });
     byId('registro-form').addEventListener('change', (event) => {
       if (event.target.name !== 'tipo') return;
       document.querySelectorAll('[data-farmer]').forEach((field) => { field.hidden = event.target.value !== 'AGRICULTOR'; field.querySelector('input').required = !field.hidden; });
@@ -215,13 +227,23 @@
         reserve.onclick = async () => { const quantity = Number(prompt('Cantidad a reservar en kg:')); if (!quantity) return;
           try { await request('/reservas', { method: 'POST', body: JSON.stringify({ productoId: producto.id, cantidad_kg: quantity }) }); tell('catalog-status', 'Reserva creada. El agricultor debe confirmarla.'); await buscar(); }
           catch (error) { tell('catalog-status', error.message); } };
+        const add = document.createElement('button'); add.className = 'secondary';
+        add.textContent = 'Agregar al carrito';
+        add.onclick = () => {
+          const quantity = Number(prompt('Cantidad a agregar en kg:'));
+          if (!Number.isFinite(quantity) || quantity <= 0) return;
+          const current = carrito.get(producto.id);
+          carrito.set(producto.id, { productoId: producto.id, nombre: producto.nombre,
+            cantidadKg: (current?.cantidadKg ?? 0) + quantity });
+          renderCarrito(); tell('carrito-status', 'Oferta agregada al carrito.');
+        };
         const favorite = document.createElement('button'); favorite.className = 'secondary'; favorite.textContent = 'Guardar favorito';
         favorite.onclick = async () => { try { await request(`/favoritos/${producto.id}`, { method: 'POST' }); tell('catalog-status', 'Oferta guardada en favoritos.'); } catch (error) { tell('catalog-status', error.message); } };
         const contact = document.createElement('button'); contact.className = 'secondary'; contact.textContent = 'Contactar';
         contact.onclick = async () => { const mensaje = prompt('Escribe tu mensaje para el agricultor:'); if (!mensaje?.trim()) return;
           try { await request('/contactos', { method: 'POST', body: JSON.stringify({ productoId: producto.id, mensaje }) }); tell('catalog-status', 'Contacto registrado y notificación enviada al agricultor.'); }
           catch (error) { tell('catalog-status', error.message); } };
-        actions.append(reserve, favorite, contact);
+        actions.append(reserve, add, favorite, contact);
       }
       article.append(actions); return article;
     }
@@ -233,6 +255,36 @@
         tell('catalog-status', `${products.length} oferta(s) encontrada(s).`);
       } catch (error) { tell('catalog-status', error.message); }
     }
+    function renderCarrito() {
+      const lineas = [...carrito.values()].map((item) => {
+        const card = document.createElement('article'); card.className = 'card';
+        const detail = document.createElement('p');
+        detail.textContent = `${item.nombre} · ${item.cantidadKg} kg`;
+        const remove = document.createElement('button'); remove.className = 'secondary';
+        remove.textContent = 'Quitar';
+        remove.onclick = () => { carrito.delete(item.productoId); renderCarrito(); };
+        card.append(detail, remove); return card;
+      });
+      byId('carrito-lineas').replaceChildren(...lineas);
+      byId('confirmar-carrito').disabled = carrito.size === 0;
+      byId('vaciar-carrito').disabled = carrito.size === 0;
+    }
+    byId('vaciar-carrito').addEventListener('click', () => {
+      carrito.clear(); renderCarrito(); tell('carrito-status', 'Carrito vacío.');
+    });
+    byId('confirmar-carrito').addEventListener('click', async () => {
+      if (carrito.size === 0) return;
+      const items = [...carrito.values()].map(({ productoId, cantidadKg }) =>
+        ({ productoId, cantidad_kg: cantidadKg }));
+      try {
+        const result = await request('/reservas/carrito', {
+          method: 'POST', body: JSON.stringify({ items })
+        });
+        carrito.clear(); renderCarrito();
+        tell('carrito-status', `Compra confirmada en ${result.pedidos.length} pedido(s), uno por agricultor.`);
+        await buscar(); await cargarPedidos();
+      } catch (error) { tell('carrito-status', error.message); }
+    });
     byId('buscar-form').addEventListener('submit', (event) => { event.preventDefault(); buscar(); });
     byId('limpiar').addEventListener('click', () => { byId('buscar-form').reset(); buscar(); });
     byId('precios-form').addEventListener('submit', async (event) => {
