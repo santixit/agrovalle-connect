@@ -18,7 +18,13 @@ $jdkCandidates += $temporaryJdk
 foreach ($candidate in ($jdkCandidates | Select-Object -Unique)) {
   $javaExe = Join-Path $candidate 'bin\java.exe'
   if (Test-Path $javaExe) {
-    $versionOutput = (& $javaExe -version 2>&1 | Out-String)
+    $savedErrorActionPreference = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+      $versionOutput = (& $javaExe -version 2>&1 | Out-String)
+    } finally {
+      $ErrorActionPreference = $savedErrorActionPreference
+    }
     if ($versionOutput -match 'version "17(?:\.|"|\+)') {
       $java17Home = $candidate
       break
@@ -29,7 +35,13 @@ foreach ($candidate in ($jdkCandidates | Select-Object -Unique)) {
 if (-not $java17Home) {
   $javaCommand = Get-Command java -ErrorAction SilentlyContinue
   if ($javaCommand) {
-    $versionOutput = (& $javaCommand.Source -version 2>&1 | Out-String)
+    $savedErrorActionPreference = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+      $versionOutput = (& $javaCommand.Source -version 2>&1 | Out-String)
+    } finally {
+      $ErrorActionPreference = $savedErrorActionPreference
+    }
     if ($versionOutput -match 'version "17(?:\.|"|\+)') {
       $java17Home = Split-Path (Split-Path $javaCommand.Source -Parent) -Parent
     }
