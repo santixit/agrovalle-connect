@@ -1,24 +1,39 @@
 # Retrospectiva — Sprint 1
 
-> Plantilla Start-Stop-Continue. Registrar observaciones acordadas por el equipo despues del Sprint Review.
+> Completar después de la Sprint Review, en tercera persona y con observaciones que el equipo haya discutido y acordado. Las preguntas siguientes son disparadores de conversación, no conclusiones sobre el equipo. No marcar un punto como hallazgo si no refleja lo que realmente ocurrió.
 
-- Fecha: por completar
-- Participantes: por completar
+## Datos de la sesión
+
+- Fecha y duración: `Por completar`.
+- Integrantes y roles presentes: `Por completar con asistentes reales`.
+- Facilitador: `Por acordar`.
+- Sprint Goal revisado: registro inicial de agricultores y consulta filtrada del catálogo, con persistencia PostgreSQL y arquitectura REST.
 
 ## Start — empezar
 
-- Por acordar con el equipo.
+Registrar prácticas concretas que el equipo acordó empezar. Cada punto debe describir el cambio y su razón.
+
+- Observación y acción acordada: `Por acordar con el equipo`.
 
 ## Stop — dejar de hacer
 
-- Por acordar con el equipo.
+Registrar una práctica que el equipo acordó dejar de hacer y el efecto observado que motiva el cambio.
+
+- Observación y acción acordada: `Por acordar con el equipo`.
 
 ## Continue — continuar
 
-- Por acordar con el equipo.
+Registrar prácticas que el equipo observó útiles y acordó mantener.
+
+- Observación y acción acordada: `Por acordar con el equipo`.
 
 ## Acciones de mejora
 
-| Accion concreta | Responsable acordado | Fecha objetivo | Como se verificara |
+| Acción concreta y verificable | Responsable acordado | Fecha objetivo | Cómo se comprobará |
 |---|---|---|---|
-| Por acordar | Por asignar | Por acordar | Por definir |
+| `Por acordar durante la retrospectiva` | `Por asignar` | `Por acordar` | `Por definir` |
+
+## Revisión de acciones anteriores
+
+- Acciones previas del equipo, estado y evidencia: `Por completar; si no hubo acciones anteriores, indicarlo`.
+- Evidencia de la sesión: `Agregar enlace o captura real si se conservó`.

@@ -1,6 +1,6 @@
 # Modelo UML evolutivo
 
-Estos diagramas describen el incremento actual (registro y consulta de agricultores, filtro de productos) y la infraestructura prevista para el equipo. El alcance del modelo es evolutivo: pedidos, stock, autenticacion JWT, fincas y frontend aun no estan implementados en este incremento.
+Estos diagramas describen los endpoints del incremento inicial y el modelo relacional base del proyecto. La fase de arquitectura incluye entidades persistentes para cuentas, compradores, fincas, lotes, pedidos, despachos, trazabilidad, contactos, favoritos, notificaciones y transacciones. Tener una entidad no significa que su caso de uso REST ya este implementado; las funcionalidades se incorporaran progresivamente con sus servicios, validaciones y pruebas.
 
 ## Casos de uso
 
@@ -55,7 +55,10 @@ classDiagram
     +findById(id) Optional~Agricultor~
   }
   class ProductoRepository {
-    +buscarActivos(municipio, categoria) List~Producto~
+    +findByActivoTrue() List~Producto~
+    +findByActivoTrueAndMunicipioIgnoreCase(municipio) List~Producto~
+    +findByActivoTrueAndCategoriaIgnoreCase(categoria) List~Producto~
+    +findByActivoTrueAndMunicipioIgnoreCaseAndCategoriaIgnoreCase(municipio, categoria) List~Producto~
   }
   class Agricultor {
     -Long id
@@ -76,6 +79,103 @@ classDiagram
   ProductoController --> ProductoService
   ProductoService --> ProductoRepository
   ProductoRepository --> Producto
+```
+
+## Modelo de entidades persistentes
+
+El siguiente diagrama representa las entidades JPA incorporadas en la fase de arquitectura. El rol `ADMIN` se conserva en `Usuario`; no se crea una tabla de administradores sin atributos propios. `DetallePedido` captura cantidad y precio por unidad al momento de reservar.
+
+```mermaid
+classDiagram
+  class Usuario {
+    Long id
+    String correo
+    String passwordHash
+    RolUsuario rol
+    boolean activo
+  }
+  class Agricultor {
+    Long id
+    String nombre
+    String cedula
+    String municipio
+  }
+  class Comprador {
+    Long id
+    String nombre
+    String telefono
+    String tipoComercio
+  }
+  class Finca {
+    Long id
+    String nombre
+    String municipio
+    String direccion
+  }
+  class Producto {
+    Long id
+    String nombre
+    String categoria
+    String municipio
+    BigDecimal cantidadKg
+    BigDecimal precioPorKg
+    LocalDate fechaCosecha
+    EstadoProducto estado
+  }
+  class Pedido {
+    Long id
+    EstadoPedido estado
+  }
+  class DetallePedido {
+    Long id
+    BigDecimal cantidadKg
+    BigDecimal precioPorKg
+  }
+  class Despacho {
+    Long id
+    EstadoDespacho estado
+    LocalDate fechaProgramada
+  }
+  class EventoTrazabilidad {
+    Long id
+    EstadoPedido estado
+    String descripcion
+  }
+  class Contacto {
+    Long id
+    String mensaje
+    EstadoContacto estado
+  }
+  class Favorito {
+    Long id
+  }
+  class Notificacion {
+    Long id
+    TipoNotificacion tipo
+    boolean leida
+  }
+  class TransaccionPrecio {
+    Long id
+    BigDecimal cantidadKg
+    BigDecimal precioPorKg
+  }
+  Usuario "0..1" --> "0..1" Agricultor : cuenta
+  Usuario "1" --> "0..1" Comprador : cuenta
+  Agricultor "1" --> "0..*" Finca : posee
+  Agricultor "0..1" --> "0..*" Producto : publica
+  Finca "0..1" --> "0..*" Producto : publica
+  Comprador "1" --> "0..*" Pedido : realiza
+  Pedido "1" --> "1..*" DetallePedido : contiene
+  Producto "1" --> "0..*" DetallePedido : reservado
+  Pedido "1" --> "0..1" Despacho : coordina
+  Pedido "1" --> "0..*" EventoTrazabilidad : registra
+  Comprador "1" --> "0..*" Contacto : inicia
+  Agricultor "1" --> "0..*" Contacto : recibe
+  Producto "1" --> "0..*" Contacto : consulta
+  Comprador "1" --> "0..*" Favorito : guarda
+  Producto "1" --> "0..*" Favorito : marcado
+  Usuario "1" --> "0..*" Notificacion : recibe
+  Producto "1" --> "0..*" TransaccionPrecio : referencia
 ```
 
 ## Secuencia: registro
@@ -149,4 +249,4 @@ flowchart LR
 
 ## Pendientes de evolucion
 
-Agregar relaciones de fincas, agricultores y productos; modelar pedidos/stock, estados y notificaciones; y actualizar los diagramas despues de validar esos flujos con el equipo.
+Completar autenticacion/autorizacion y los casos de uso REST de publicacion, precios, contacto, fincas, pedidos y estados. Las entidades de pedidos, trazabilidad, notificaciones, favoritos y transacciones ya tienen migracion y mapeo JPA, pero sus servicios/controladores deben implementarse antes de presentar esos flujos como funcionales. Actualizar los diagramas cuando cambien contratos o reglas del dominio.
