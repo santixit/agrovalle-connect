@@ -139,6 +139,7 @@
     const api = '/api/v1';
     let token = null;
     let rol = null;
+    let vistaActividad = null;
     const carrito = new Map();
     const byId = (id) => document.getElementById(id);
     const formData = (form) => Object.fromEntries(new FormData(form).entries());
@@ -171,7 +172,7 @@
         tell('auth-status', `Sesión iniciada como ${rol}.`);
       } catch (error) { tell('auth-status', error.message); }
     });
-    byId('salir').addEventListener('click', () => { token = null; rol = null; carrito.clear(); actualizarPaneles(); tell('auth-status', 'Sesión cerrada.'); });
+    byId('salir').addEventListener('click', () => { token = null; rol = null; vistaActividad = null; carrito.clear(); actualizarPaneles(); tell('auth-status', 'Sesión cerrada.'); });
     byId('registro-form').addEventListener('change', (event) => {
       if (event.target.name !== 'tipo') return;
       document.querySelectorAll('[data-farmer]').forEach((field) => { field.hidden = event.target.value !== 'AGRICULTOR'; field.querySelector('input').required = !field.hidden; });
@@ -294,14 +295,17 @@
       } catch (error) { tell('precio-status', error.message); }
     });
     byId('ver-favoritos').addEventListener('click', async () => {
+      vistaActividad = 'favoritos';
       try { const items = await request('/favoritos'); byId('actividad').replaceChildren(...items.map((f) => { const p = document.createElement('p'); p.textContent = `${f.nombre} · ${f.categoria} · ${f.municipio}`; return p; })); }
       catch (error) { tell('auth-status', error.message); }
     });
     byId('ver-notificaciones').addEventListener('click', async () => {
+      vistaActividad = 'notificaciones';
       try { const items = await request('/notificaciones/mias'); byId('actividad').replaceChildren(...items.map((n) => { const p = document.createElement('p'); p.textContent = n.mensaje; return p; })); }
       catch (error) { tell('auth-status', error.message); }
     });
     byId('ver-pedidos').addEventListener('click', async () => {
+      vistaActividad = 'pedidos';
       try {
         const path = rol === 'AGRICULTOR' ? '/reservas/pendientes' : '/reservas/mias';
         const orders = await request(path);
@@ -317,6 +321,10 @@
             button.onclick = async () => { try { await request(`/reservas/${order.id}/confirmar`, { method: 'POST' }); tell('auth-status', 'Reserva confirmada.'); await cargarPedidos(); } catch (error) { tell('auth-status', error.message); } };
             actions.append(button);
           } else if (rol === 'AGRICULTOR' && order.estado === 'CONFIRMADO') {
+            const button = document.createElement('button'); button.textContent = 'Iniciar preparación';
+            button.onclick = async () => { try { await request(`/reservas/${order.id}/preparar`, { method: 'POST' }); tell('auth-status', 'Preparación iniciada.'); await cargarPedidos(); } catch (error) { tell('auth-status', error.message); } };
+            actions.append(button);
+          } else if (rol === 'AGRICULTOR' && order.estado === 'PREPARANDO') {
             const button = document.createElement('button'); button.textContent = 'Programar despacho';
             button.onclick = async () => {
               const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Bogota' }).format(new Date());
@@ -327,6 +335,10 @@
             };
             actions.append(button);
           } else if (rol === 'AGRICULTOR' && order.estado === 'EN_DESPACHO') {
+            const button = document.createElement('button'); button.textContent = 'Marcar salida a ruta';
+            button.onclick = async () => { try { await request(`/despachos/${order.id}/en-ruta`, { method: 'PATCH' }); tell('auth-status', 'Salida a ruta registrada.'); await cargarPedidos(); } catch (error) { tell('auth-status', error.message); } };
+            actions.append(button);
+          } else if (rol === 'AGRICULTOR' && order.estado === 'EN_RUTA') {
             const button = document.createElement('button'); button.textContent = 'Marcar entrega completada';
             button.onclick = async () => { try { await request(`/despachos/${order.id}/entregado`, { method: 'PATCH' }); tell('auth-status', 'Entrega registrada y precio agregado a las estadísticas.'); await cargarPedidos(); } catch (error) { tell('auth-status', error.message); } };
             actions.append(button);
@@ -342,6 +354,9 @@
       } catch (error) { tell('auth-status', error.message); }
     });
     async function cargarPedidos() { byId('ver-pedidos').click(); }
+    window.setInterval(() => {
+      if (token && rol === 'COMPRADOR' && vistaActividad === 'pedidos') cargarPedidos();
+    }, 15000);
     byId('reporte-form').addEventListener('submit', async (event) => {
       event.preventDefault();
       const { desde, hasta } = formData(event.currentTarget);

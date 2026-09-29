@@ -519,6 +519,9 @@ class AgrovalleConnectApplicationTests {
     mockMvc.perform(post("/api/v1/reservas/{id}/confirmar", pedidoId.longValue())
             .header("Authorization", "Bearer " + tokenAgricultor))
         .andExpect(status().isNoContent());
+    mockMvc.perform(post("/api/v1/reservas/{id}/preparar", pedidoId.longValue())
+            .header("Authorization", "Bearer " + tokenAgricultor))
+        .andExpect(status().isNoContent());
     mockMvc.perform(post("/api/v1/despachos").header("Authorization", "Bearer " + tokenAgricultor)
             .contentType(MediaType.APPLICATION_JSON)
             .content("""
@@ -528,15 +531,23 @@ class AgrovalleConnectApplicationTests {
         .andExpect(status().isCreated());
     mockMvc.perform(get("/api/v1/reservas/{id}/trazabilidad", pedidoId.longValue())
             .header("Authorization", "Bearer " + tokenComprador))
-        .andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(3)))
-        .andExpect(jsonPath("$[2].estado").value("EN_DESPACHO"));
+        .andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(4)))
+        .andExpect(jsonPath("$[2].estado").value("PREPARANDO"))
+        .andExpect(jsonPath("$[3].estado").value("EN_DESPACHO"));
+    mockMvc.perform(patch("/api/v1/despachos/{id}/en-ruta", pedidoId.longValue())
+            .header("Authorization", "Bearer " + tokenAgricultor))
+        .andExpect(status().isOk()).andExpect(jsonPath("$.estado").value("EN_RUTA"));
+    mockMvc.perform(get("/api/v1/reservas/{id}/trazabilidad", pedidoId.longValue())
+            .header("Authorization", "Bearer " + tokenComprador))
+        .andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(5)))
+        .andExpect(jsonPath("$[4].estado").value("EN_RUTA"));
     mockMvc.perform(patch("/api/v1/despachos/{id}/entregado", pedidoId.longValue())
             .header("Authorization", "Bearer " + tokenAgricultor))
         .andExpect(status().isOk()).andExpect(jsonPath("$.estado").value("ENTREGADO"));
     mockMvc.perform(get("/api/v1/reservas/{id}/trazabilidad", pedidoId.longValue())
             .header("Authorization", "Bearer " + tokenComprador))
-        .andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(4)))
-        .andExpect(jsonPath("$[3].estado").value("ENTREGADO"));
+        .andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(6)))
+        .andExpect(jsonPath("$[5].estado").value("ENTREGADO"));
     mockMvc.perform(get("/api/v1/precios/regionales").param("categoria", "Frutas"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.promedioPorKg").value(4200))

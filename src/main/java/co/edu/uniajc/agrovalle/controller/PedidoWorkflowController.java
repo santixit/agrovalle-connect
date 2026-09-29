@@ -24,4 +24,11 @@ public class PedidoWorkflowController {
     workflowService.confirmar(id, Long.valueOf(jwt.getSubject()));
     return ResponseEntity.noContent().build();
   }
+
+  @PostMapping("/{id}/preparar")
+  public ResponseEntity<Void> preparar(@PathVariable Long id,
+      @AuthenticationPrincipal Jwt jwt) {
+    workflowService.preparar(id, Long.valueOf(jwt.getSubject()));
+    return ResponseEntity.noContent().build();
+  }
 }

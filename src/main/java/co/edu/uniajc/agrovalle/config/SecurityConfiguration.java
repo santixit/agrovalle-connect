@@ -52,10 +52,12 @@ public class SecurityConfiguration {
             .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/reservas/pendientes")
                 .hasAuthority("SCOPE_AGRICULTOR")
             .requestMatchers(org.springframework.http.HttpMethod.POST,
-                "/api/v1/reservas/*/confirmar", "/api/v1/despachos")
+                "/api/v1/reservas/*/confirmar", "/api/v1/reservas/*/preparar",
+                "/api/v1/despachos")
                 .hasAuthority("SCOPE_AGRICULTOR")
             .requestMatchers(org.springframework.http.HttpMethod.PATCH,
-                "/api/v1/despachos/*/entregado").hasAuthority("SCOPE_AGRICULTOR")
+                "/api/v1/despachos/*/en-ruta", "/api/v1/despachos/*/entregado")
+                .hasAuthority("SCOPE_AGRICULTOR")
             .requestMatchers(org.springframework.http.HttpMethod.GET,
                 "/api/v1/reservas/*/trazabilidad").hasAuthority("SCOPE_COMPRADOR")
             .requestMatchers("/api/v1/favoritos/**").hasAuthority("SCOPE_COMPRADOR")

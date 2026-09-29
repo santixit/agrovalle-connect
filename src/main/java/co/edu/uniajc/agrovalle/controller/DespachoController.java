@@ -37,4 +37,11 @@ public class DespachoController {
     return ResponseEntity.ok(despachoService.marcarEntregado(
         Long.valueOf(jwt.getSubject()), pedidoId));
   }
+
+  @PatchMapping("/{pedidoId}/en-ruta")
+  public ResponseEntity<DespachoResponse> marcarEnRuta(@PathVariable Long pedidoId,
+      @AuthenticationPrincipal Jwt jwt) {
+    return ResponseEntity.ok(despachoService.marcarEnRuta(
+        Long.valueOf(jwt.getSubject()), pedidoId));
+  }
 }

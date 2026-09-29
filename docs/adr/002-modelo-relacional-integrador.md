@@ -11,7 +11,7 @@ AgroValle Connect requiere soportar perfiles de agricultores y compradores, finc
 ## Decisión
 
 - Mantener PostgreSQL como base de producción y Flyway como único mecanismo de evolución del esquema.
-- Conservar V1 y V2 sin cambios después de aplicadas; V3 agrega la fecha de creación de oferta requerida para el reporte administrativo.
+- Conservar V1, V2 y V3 sin cambios después de aplicadas; V3 agrega la fecha de creación de oferta para el reporte y V4 permite el estado logístico `EN_RUTA`.
 - Centralizar credenciales y roles (`AGRICULTOR`, `COMPRADOR`, `ADMIN`) en `usuarios`. El rol `ADMIN` no requiere una tabla de perfil aparte mientras no tenga atributos propios.
 - Asociar cuentas de agricultor de forma opcional durante la transición para conservar los perfiles creados antes de la autenticación. Los perfiles de comprador se vinculan a una cuenta.
 - Relacionar productos con una finca cuando esta exista. Las columnas de cantidad, precio y fecha de cosecha permiten construir una oferta sin romper filas históricas de catálogo.

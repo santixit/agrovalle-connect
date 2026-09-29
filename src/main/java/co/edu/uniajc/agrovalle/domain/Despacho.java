@@ -86,4 +86,11 @@ public class Despacho {
     }
     estado = EstadoDespacho.ENTREGADO;
   }
+
+  public void marcarEnRuta() {
+    if (estado != EstadoDespacho.PROGRAMADO) {
+      throw new IllegalStateException("Solo un despacho programado puede salir a ruta");
+    }
+    estado = EstadoDespacho.EN_RUTA;
+  }
 }

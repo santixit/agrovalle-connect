@@ -258,7 +258,8 @@ sequenceDiagram
   Servicio->>Regla: validar todas las cantidades
   Servicio->>DB: agrupar por agricultor, descontar stock y crear pedidos/eventos
   DB-->>API: carrito consolidado o rollback total
-  Agricultor->>API: confirmar y programar despacho
+  Agricultor->>API: confirmar, iniciar preparación y programar despacho
+  Agricultor->>API: marcar salida a ruta
   API->>DB: persistir estado y trazabilidad
   DB-->>Observer: evento después del commit
   Observer->>DB: persistir notificación

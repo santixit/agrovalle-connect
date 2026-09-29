@@ -68,4 +68,23 @@ public class DespachoService {
             detalle.getPrecioPorKg())));
     return DespachoResponse.from(despachoRepository.save(despacho));
   }
+
+  @Transactional
+  public DespachoResponse marcarEnRuta(Long usuarioAgricultorId, Long pedidoId) {
+    Pedido pedido = pedidoRepository.findById(pedidoId)
+        .orElseThrow(() -> new PedidoNoEncontradoException(pedidoId));
+    boolean propio = pedido.getDetalles().stream().allMatch(detalle ->
+        detalle.getProducto().getAgricultor() != null
+            && detalle.getProducto().getAgricultor().getUsuario() != null
+            && detalle.getProducto().getAgricultor().getUsuario().getId()
+                .equals(usuarioAgricultorId));
+    if (!propio) {
+      throw new TransicionPedidoInvalidaException();
+    }
+    Despacho despacho = despachoRepository.findByPedido_Id(pedidoId)
+        .orElseThrow(() -> new PedidoNoEncontradoException(pedidoId));
+    despacho.marcarEnRuta();
+    workflowService.salirARuta(pedido);
+    return DespachoResponse.from(despachoRepository.save(despacho));
+  }
 }

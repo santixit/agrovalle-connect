@@ -46,7 +46,7 @@ El backend se organiza en `controller → service → repository → domain`, co
 | HU-09 | Cambio de estado de una oferta propia | Implementada para `AGRICULTOR` |
 | HU-10 | Detalle público de oferta | Implementada sin exponer cédula ni credenciales |
 | HU-11 | Notificación por contacto y cambios del pedido | Implementada mediante eventos transaccionales |
-| HU-12 | Programación de despacho | Implementada para pedidos confirmados |
+| HU-12 | Preparación, programación y salida a ruta | Implementada con eventos visibles para seguimiento del pedido |
 | HU-13 | Consulta cronológica de trazabilidad | Implementada para el comprador dueño del pedido |
 | HU-14 | Favoritos del comprador | Implementada |
 | HU-15 | Reporte de actividad por fechas | Implementada y restringida a `ADMIN` |
@@ -112,7 +112,9 @@ Los endpoints usan `/api/v1` y JSON. Los roles se asignan en JWT: `AGRICULTOR`, 
 | POST | `/reservas` | Comprador |
 | POST | `/reservas/carrito` | Comprador; consolida los artículos y agrupa pedidos por agricultor |
 | POST | `/reservas/{id}/confirmar` | Agricultor dueño de las ofertas |
+| POST | `/reservas/{id}/preparar` | Agricultor dueño; registra inicio de alistamiento |
 | POST | `/despachos` | Agricultor dueño de la reserva confirmada |
+| PATCH | `/despachos/{pedidoId}/en-ruta` | Agricultor dueño; registra salida y notifica al comprador |
 | PATCH | `/despachos/{pedidoId}/entregado` | Agricultor dueño; registra transacciones de precio |
 | GET | `/reservas/{id}/trazabilidad` | Comprador propietario |
 | GET / POST / DELETE | `/favoritos` y `/favoritos/{productoId}` | Comprador |

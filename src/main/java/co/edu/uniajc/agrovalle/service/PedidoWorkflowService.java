@@ -27,30 +27,54 @@ public class PedidoWorkflowService {
   public void confirmar(Long pedidoId, Long usuarioAgricultorId) {
     Pedido pedido = pedidoRepository.findById(pedidoId)
         .orElseThrow(() -> new PedidoNoEncontradoException(pedidoId));
-    if (pedido.getEstado() != EstadoPedido.PENDIENTE || pedido.getDetalles().stream()
-        .anyMatch(detalle -> detalle.getProducto().getAgricultor() == null
-            || detalle.getProducto().getAgricultor().getUsuario() == null
-            || !detalle.getProducto().getAgricultor().getUsuario().getId()
-                .equals(usuarioAgricultorId))) {
+    if (pedido.getEstado() != EstadoPedido.PENDIENTE || !perteneceA(pedido, usuarioAgricultorId)) {
       throw new TransicionPedidoInvalidaException();
     }
     actualizar(pedido, EstadoPedido.CONFIRMADO, "Reserva confirmada por el agricultor");
   }
 
   @Transactional
+  public void preparar(Long pedidoId, Long usuarioAgricultorId) {
+    Pedido pedido = pedidoRepository.findById(pedidoId)
+        .orElseThrow(() -> new PedidoNoEncontradoException(pedidoId));
+    if (pedido.getEstado() != EstadoPedido.CONFIRMADO || !perteneceA(pedido, usuarioAgricultorId)) {
+      throw new TransicionPedidoInvalidaException();
+    }
+    actualizar(pedido, EstadoPedido.PREPARANDO, "Agricultor inició la preparación del pedido");
+  }
+
+  @Transactional
   public void enviarADespacho(Pedido pedido) {
-    if (pedido.getEstado() != EstadoPedido.CONFIRMADO) {
+    if (pedido.getEstado() != EstadoPedido.CONFIRMADO
+        && pedido.getEstado() != EstadoPedido.PREPARANDO) {
       throw new TransicionPedidoInvalidaException();
     }
     actualizar(pedido, EstadoPedido.EN_DESPACHO, "Despacho programado");
   }
 
   @Transactional
-  public void entregar(Pedido pedido) {
+  public void salirARuta(Pedido pedido) {
     if (pedido.getEstado() != EstadoPedido.EN_DESPACHO) {
       throw new TransicionPedidoInvalidaException();
     }
+    actualizar(pedido, EstadoPedido.EN_RUTA, "El despacho salió a ruta");
+  }
+
+  @Transactional
+  public void entregar(Pedido pedido) {
+    if (pedido.getEstado() != EstadoPedido.EN_DESPACHO
+        && pedido.getEstado() != EstadoPedido.EN_RUTA) {
+      throw new TransicionPedidoInvalidaException();
+    }
     actualizar(pedido, EstadoPedido.ENTREGADO, "Entrega completada");
+  }
+
+  private boolean perteneceA(Pedido pedido, Long usuarioAgricultorId) {
+    return pedido.getDetalles().stream().allMatch(detalle ->
+        detalle.getProducto().getAgricultor() != null
+            && detalle.getProducto().getAgricultor().getUsuario() != null
+            && detalle.getProducto().getAgricultor().getUsuario().getId()
+                .equals(usuarioAgricultorId));
   }
 
   private void actualizar(Pedido pedido, EstadoPedido estado, String descripcion) {
