@@ -1,2 +1,3 @@
 #!/usr/bin/env sh
-mvn test && mvn checkstyle:check
+./mvnw --batch-mode --no-transfer-progress test \
+  && ./mvnw --batch-mode --no-transfer-progress checkstyle:check

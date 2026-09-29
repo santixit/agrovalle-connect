@@ -1,6 +1,6 @@
 # Modelo UML evolutivo
 
-Estos diagramas describen el incremento actual (registro y consulta de agricultores, filtro de productos) y la infraestructura prevista para el equipo. El alcance del modelo es evolutivo: pedidos, stock, autenticacion JWT, fincas y frontend aun no estan implementados en este incremento.
+Estos diagramas describen el backend REST y la interfaz estática servida por Spring Boot. Los flujos representados están conectados con entidades, servicios, repositorios y pruebas de integración. Actualizar los diagramas junto con cambios del código.
 
 ## Casos de uso
 
@@ -8,12 +8,27 @@ Estos diagramas describen el incremento actual (registro y consulta de agriculto
 flowchart LR
   agricultor[Actor: Agricultor]
   comprador[Actor: Comerciante o restaurante]
+  admin[Actor: Administrador]
   registrar((Registrarse))
-  consultar((Consultar perfil))
-  filtrar((Filtrar catalogo))
+  login((Iniciar sesión))
+  publicar((Publicar cosecha))
+  reservar((Reservar inventario))
+  despachar((Programar despacho))
+  filtrar((Buscar catálogo))
+  contactar((Contactar agricultor))
+  favorito((Guardar oferta favorita))
+  reporte((Consultar actividad))
   agricultor --> registrar
-  agricultor --> consultar
+  agricultor --> login
+  agricultor --> publicar
+  agricultor --> despachar
+  agricultor --> contactar
   comprador --> filtrar
+  comprador --> login
+  comprador --> reservar
+  comprador --> contactar
+  comprador --> favorito
+  admin --> reporte
 ```
 
 ## Actividad: registro de agricultor
@@ -42,6 +57,9 @@ classDiagram
   }
   class ProductoController {
     +buscar(municipio, categoria) List~ProductoResponse~
+    +publicar(jwt, request) ProductoResponse
+    +consultarDetalle(id) OfertaDetalleResponse
+    +actualizarEstado(jwt, id, request) ProductoResponse
   }
   class AgricultorService {
     +registrar(request) AgricultorResponse
@@ -55,7 +73,10 @@ classDiagram
     +findById(id) Optional~Agricultor~
   }
   class ProductoRepository {
-    +buscarActivos(municipio, categoria) List~Producto~
+    +findByActivoTrue() List~Producto~
+    +findByActivoTrueAndMunicipioIgnoreCase(municipio) List~Producto~
+    +findByActivoTrueAndCategoriaIgnoreCase(categoria) List~Producto~
+    +findByActivoTrueAndMunicipioIgnoreCaseAndCategoriaIgnoreCase(municipio, categoria) List~Producto~
   }
   class Agricultor {
     -Long id
@@ -76,6 +97,110 @@ classDiagram
   ProductoController --> ProductoService
   ProductoService --> ProductoRepository
   ProductoRepository --> Producto
+  class UsuarioFactory
+  class NotificacionObserver
+  class ReglasDisponibilidad
+  class ReservaService
+  UsuarioFactory --> Usuario
+  ReservaService --> ReglasDisponibilidad
+  NotificacionObserver --> Notificacion
+```
+
+## Modelo de entidades persistentes
+
+El siguiente diagrama representa las entidades JPA incorporadas en la fase de arquitectura. El rol `ADMIN` se conserva en `Usuario`; no se crea una tabla de administradores sin atributos propios. `DetallePedido` captura cantidad y precio por unidad al momento de reservar.
+
+```mermaid
+classDiagram
+  class Usuario {
+    Long id
+    String correo
+    String passwordHash
+    RolUsuario rol
+    boolean activo
+  }
+  class Agricultor {
+    Long id
+    String nombre
+    String cedula
+    String municipio
+  }
+  class Comprador {
+    Long id
+    String nombre
+    String telefono
+    String tipoComercio
+  }
+  class Finca {
+    Long id
+    String nombre
+    String municipio
+    String direccion
+  }
+  class Producto {
+    Long id
+    String nombre
+    String categoria
+    String municipio
+    BigDecimal cantidadKg
+    BigDecimal precioPorKg
+    LocalDate fechaCosecha
+    EstadoProducto estado
+  }
+  class Pedido {
+    Long id
+    EstadoPedido estado
+  }
+  class DetallePedido {
+    Long id
+    BigDecimal cantidadKg
+    BigDecimal precioPorKg
+  }
+  class Despacho {
+    Long id
+    EstadoDespacho estado
+    LocalDate fechaProgramada
+  }
+  class EventoTrazabilidad {
+    Long id
+    EstadoPedido estado
+    String descripcion
+  }
+  class Contacto {
+    Long id
+    String mensaje
+    EstadoContacto estado
+  }
+  class Favorito {
+    Long id
+  }
+  class Notificacion {
+    Long id
+    TipoNotificacion tipo
+    boolean leida
+  }
+  class TransaccionPrecio {
+    Long id
+    BigDecimal cantidadKg
+    BigDecimal precioPorKg
+  }
+  Usuario "0..1" --> "0..1" Agricultor : cuenta
+  Usuario "1" --> "0..1" Comprador : cuenta
+  Agricultor "1" --> "0..*" Finca : posee
+  Agricultor "0..1" --> "0..*" Producto : publica
+  Finca "0..1" --> "0..*" Producto : publica
+  Comprador "1" --> "0..*" Pedido : realiza
+  Pedido "1" --> "1..*" DetallePedido : contiene
+  Producto "1" --> "0..*" DetallePedido : reservado
+  Pedido "1" --> "0..1" Despacho : coordina
+  Pedido "1" --> "0..*" EventoTrazabilidad : registra
+  Comprador "1" --> "0..*" Contacto : inicia
+  Agricultor "1" --> "0..*" Contacto : recibe
+  Producto "1" --> "0..*" Contacto : consulta
+  Comprador "1" --> "0..*" Favorito : guarda
+  Producto "1" --> "0..*" Favorito : marcado
+  Usuario "1" --> "0..*" Notificacion : recibe
+  Producto "1" --> "0..*" TransaccionPrecio : referencia
 ```
 
 ## Secuencia: registro
@@ -101,21 +226,50 @@ sequenceDiagram
   C-->>Agricultor: 201 Created
 ```
 
-## Comunicacion: filtro de catalogo
+## Diagrama de colaboracion (comunicacion UML): HU-04 filtro del catalogo
+
+Los nodos representan objetos participantes y los numeros de los mensajes indican el orden de la interaccion. La respuesta recorre los mismos enlaces en sentido inverso. Este diagrama complementa la secuencia de registro y muestra como colaboran la interfaz, las capas MVC, el repositorio y PostgreSQL para aplicar ambos filtros.
 
 ```mermaid
 flowchart LR
-  Cliente[Cliente HTTP] -->|1 buscar municipio y categoria| Controller[ProductoController]
-  Controller -->|2 delegar filtros| Service[ProductoService]
-  Service -->|3 consultar activos| Repository[ProductoRepository]
-  Repository -->|4 SELECT filtrado| DB[(PostgreSQL)]
-  DB -->|5 filas coincidentes| Repository
-  Repository -->|6 entidades| Service
-  Service -->|7 lista de DTO| Controller
-  Controller -->|8 HTTP 200 JSON| Cliente
+  comprador["comprador: Usuario"] -->|1. ingresar municipio y categoria| interfaz["interfaz: CatalogoWeb"]
+  interfaz -->|2. GET /api/v1/productos?municipio=Dagua&categoria=Frutas| controller["controller: ProductoController"]
+  controller -->|3. buscar(municipio, categoria)| service["service: ProductoService"]
+  service -->|4. consultar ofertas activas coincidentes| repository["repository: ProductoRepository"]
+  repository -->|5. SELECT de ofertas activas y filtros| db[("PostgreSQL")]
+  db -->|6. filas coincidentes| repository
+  repository -->|7. entidades Producto| service
+  service -->|8. lista de ProductoResponse| controller
+  controller -->|9. HTTP 200 y JSON| interfaz
+  interfaz -->|10. mostrar tarjetas coincidentes| comprador
 ```
 
-## Despliegue fisico (objetivo del primer corte)
+## Secuencia: reserva y despacho
+
+```mermaid
+sequenceDiagram
+  actor Comprador
+  actor Agricultor
+  participant API as ReservaController
+  participant Servicio as ReservaService
+  participant Regla as ReglasDisponibilidad
+  participant DB as PostgreSQL
+  participant Observer as NotificacionObserver
+  Comprador->>API: POST /api/v1/reservas/carrito con JWT
+  API->>Servicio: reservarCarrito(usuario, items)
+  Servicio->>DB: bloquear ofertas por ID y leer stock
+  DB-->>Servicio: stock vigente
+  Servicio->>Regla: validar todas las cantidades
+  Servicio->>DB: agrupar por agricultor, descontar stock y crear pedidos/eventos
+  DB-->>API: carrito consolidado o rollback total
+  Agricultor->>API: confirmar, iniciar preparación y programar despacho
+  Agricultor->>API: marcar salida a ruta
+  API->>DB: persistir estado y trazabilidad
+  DB-->>Observer: evento después del commit
+  Observer->>DB: persistir notificación
+```
+
+## Despliegue físico (objetivo del primer corte)
 
 ```mermaid
 flowchart LR
@@ -142,11 +296,12 @@ flowchart LR
 
 ## Patrones y decisiones
 
-- **Repository:** aplicado con Spring Data JPA para aislar el acceso a datos.
-- **Singleton:** los servicios y controladores de Spring usan el ciclo de vida singleton por defecto.
-- **Factory y Observer:** se reservan para cuando el dominio incorpore tipos diferenciados de pedidos/usuarios y eventos de cambio de estado. No se simulan en este Sprint porque esos flujos no existen todavia.
-- La separacion controller-service-repository-domain materializa MVC para la API; la interfaz web y las vistas se desarrollaran en un incremento posterior.
+- **Repository:** repositorios Spring Data JPA aíslan persistencia y consultas.
+- **Factory:** `UsuarioFactory` crea cuentas con hash BCrypt y un rol válido.
+- **Observer:** `NotificacionObserver` observa eventos transaccionales de contacto y pedido para persistir notificaciones.
+- **Singleton:** `ReglasDisponibilidad` es stateless y Spring lo administra como singleton para validar inventario.
+- La interfaz demostrativa vive en `src/main/resources/static/index.html` y consume los endpoints REST.
 
 ## Pendientes de evolucion
 
-Agregar relaciones de fincas, agricultores y productos; modelar pedidos/stock, estados y notificaciones; y actualizar los diagramas despues de validar esos flujos con el equipo.
+Pendientes de cierre: verificar el build bajo JDK 17 real y el job CI en PostgreSQL; revisar la UI ejecutándose en navegador; conciliar la historia HU-07 entre el `BACKLOG.md`, el PDF oficial y el alcance pegado; y configurar proveedor/secreto reales si se activa staging. Las ceremonias o aprobaciones del equipo requieren evidencia real.
