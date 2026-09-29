@@ -251,8 +251,8 @@ class AgrovalleConnectApplicationTests {
             .contentType(MediaType.APPLICATION_JSON)
             .content("""
                 {"nombre":"Mango","categoria":"Frutas","municipio":"Dagua",
-                 "cantidadKg":35,"precioPorKg":4200,"fecha_cosecha":"2026-09-29"}
-                """))
+                 "cantidadKg":35,"precioPorKg":4200,"fecha_cosecha":"%s"}
+                """.formatted(LocalDate.now().plusDays(1))))
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.cantidad_kg").value(35))
         .andExpect(jsonPath("$.precio_por_kg").value(4200));
@@ -272,8 +272,8 @@ class AgrovalleConnectApplicationTests {
             .contentType(MediaType.APPLICATION_JSON)
             .content("""
                 {"nombre":"Mango","categoria":"Frutas","municipio":"Dagua",
-                 "cantidadKg":35,"precioPorKg":4200,"fecha_cosecha":"2026-09-29"}
-                """))
+                 "cantidadKg":35,"precioPorKg":4200,"fecha_cosecha":"%s"}
+                """.formatted(LocalDate.now().plusDays(1))))
         .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString();
     Number productoId = com.jayway.jsonpath.JsonPath.read(producto, "$.id");
     mockMvc.perform(post("/api/v1/auth/register/comprador")
@@ -338,8 +338,8 @@ class AgrovalleConnectApplicationTests {
             .contentType(MediaType.APPLICATION_JSON)
             .content("""
                 {"nombre":"Mango","categoria":"Frutas","municipio":"Dagua",
-                 "cantidadKg":35,"precioPorKg":4200,"fecha_cosecha":"2026-09-29"}
-                """))
+                 "cantidadKg":35,"precioPorKg":4200,"fecha_cosecha":"%s"}
+                """.formatted(LocalDate.now().plusDays(1))))
         .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString();
     Number productoId = com.jayway.jsonpath.JsonPath.read(response, "$.id");
     mockMvc.perform(post("/api/v1/auth/register/comprador")
@@ -471,9 +471,9 @@ class AgrovalleConnectApplicationTests {
             .contentType(MediaType.APPLICATION_JSON)
             .content("""
                 {"nombre":"Mango","categoria":"Frutas","municipio":"Dagua",
-                 "cantidadKg":35,"precioPorKg":4200,"fecha_cosecha":"2026-09-29",
+                 "cantidadKg":35,"precioPorKg":4200,"fecha_cosecha":"%s",
                  "fincaId":%d}
-                """.formatted(fincaId.longValue())))
+                """.formatted(LocalDate.now().plusDays(1), fincaId.longValue())))
         .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString();
     Number productoId = com.jayway.jsonpath.JsonPath.read(oferta, "$.id");
     mockMvc.perform(get("/api/v1/productos/{id}", productoId.longValue()))
@@ -525,9 +525,9 @@ class AgrovalleConnectApplicationTests {
     mockMvc.perform(post("/api/v1/despachos").header("Authorization", "Bearer " + tokenAgricultor)
             .contentType(MediaType.APPLICATION_JSON)
             .content("""
-                {"pedidoId":%d,"fecha_programada":"2026-09-29",
+                {"pedidoId":%d,"fecha_programada":"%s",
                  "franjaHoraria":"8:00-12:00","ruta":"Dagua-Cali"}
-                """.formatted(pedidoId.longValue())))
+                """.formatted(pedidoId.longValue(), LocalDate.now().plusDays(1))))
         .andExpect(status().isCreated());
     mockMvc.perform(get("/api/v1/reservas/{id}/trazabilidad", pedidoId.longValue())
             .header("Authorization", "Bearer " + tokenComprador))
@@ -560,7 +560,7 @@ class AgrovalleConnectApplicationTests {
         passwordEncoder.encode("AdminClave2026"), RolUsuario.ADMIN));
     String tokenAdmin = token("admin@example.com", "AdminClave2026");
     mockMvc.perform(get("/api/v1/admin/reportes/actividad")
-            .param("desde", "2026-09-29").param("hasta", "2026-09-29")
+            .param("desde", LocalDate.now().toString()).param("hasta", LocalDate.now().toString())
             .header("Authorization", "Bearer " + tokenAdmin))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.usuariosRegistrados").value(1));
