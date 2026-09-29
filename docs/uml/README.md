@@ -1,6 +1,6 @@
 # Modelo UML evolutivo
 
-Estos diagramas describen los endpoints del incremento inicial y el modelo relacional base del proyecto. La fase de arquitectura incluye entidades persistentes para cuentas, compradores, fincas, lotes, pedidos, despachos, trazabilidad, contactos, favoritos, notificaciones y transacciones. Tener una entidad no significa que su caso de uso REST ya este implementado; las funcionalidades se incorporaran progresivamente con sus servicios, validaciones y pruebas.
+Estos diagramas describen el backend REST y la interfaz estática servida por Spring Boot. Los flujos representados están conectados con entidades, servicios, repositorios y pruebas de integración. Actualizar los diagramas junto con cambios del código.
 
 ## Casos de uso
 
@@ -8,12 +8,27 @@ Estos diagramas describen los endpoints del incremento inicial y el modelo relac
 flowchart LR
   agricultor[Actor: Agricultor]
   comprador[Actor: Comerciante o restaurante]
+  admin[Actor: Administrador]
   registrar((Registrarse))
-  consultar((Consultar perfil))
-  filtrar((Filtrar catalogo))
+  login((Iniciar sesión))
+  publicar((Publicar cosecha))
+  reservar((Reservar inventario))
+  despachar((Programar despacho))
+  filtrar((Buscar catálogo))
+  contactar((Contactar agricultor))
+  favorito((Guardar oferta favorita))
+  reporte((Consultar actividad))
   agricultor --> registrar
-  agricultor --> consultar
+  agricultor --> login
+  agricultor --> publicar
+  agricultor --> despachar
+  agricultor --> contactar
   comprador --> filtrar
+  comprador --> login
+  comprador --> reservar
+  comprador --> contactar
+  comprador --> favorito
+  admin --> reporte
 ```
 
 ## Actividad: registro de agricultor
@@ -42,6 +57,9 @@ classDiagram
   }
   class ProductoController {
     +buscar(municipio, categoria) List~ProductoResponse~
+    +publicar(jwt, request) ProductoResponse
+    +consultarDetalle(id) OfertaDetalleResponse
+    +actualizarEstado(jwt, id, request) ProductoResponse
   }
   class AgricultorService {
     +registrar(request) AgricultorResponse
@@ -79,6 +97,13 @@ classDiagram
   ProductoController --> ProductoService
   ProductoService --> ProductoRepository
   ProductoRepository --> Producto
+  class UsuarioFactory
+  class NotificacionObserver
+  class ReglasDisponibilidad
+  class ReservaService
+  UsuarioFactory --> Usuario
+  ReservaService --> ReglasDisponibilidad
+  NotificacionObserver --> Notificacion
 ```
 
 ## Modelo de entidades persistentes
@@ -215,7 +240,31 @@ flowchart LR
   Controller -->|8 HTTP 200 JSON| Cliente
 ```
 
-## Despliegue fisico (objetivo del primer corte)
+## Secuencia: reserva y despacho
+
+```mermaid
+sequenceDiagram
+  actor Comprador
+  actor Agricultor
+  participant API as ReservaController
+  participant Servicio as ReservaService
+  participant Regla as ReglasDisponibilidad
+  participant DB as PostgreSQL
+  participant Observer as NotificacionObserver
+  Comprador->>API: POST /api/v1/reservas con JWT
+  API->>Servicio: reservar(usuario, oferta, cantidad)
+  Servicio->>DB: bloquear oferta y leer stock
+  DB-->>Servicio: stock vigente
+  Servicio->>Regla: validar cantidad
+  Servicio->>DB: descontar stock y crear pedido/evento
+  DB-->>API: reserva creada
+  Agricultor->>API: confirmar y programar despacho
+  API->>DB: persistir estado y trazabilidad
+  DB-->>Observer: evento después del commit
+  Observer->>DB: persistir notificación
+```
+
+## Despliegue físico (objetivo del primer corte)
 
 ```mermaid
 flowchart LR
@@ -242,11 +291,12 @@ flowchart LR
 
 ## Patrones y decisiones
 
-- **Repository:** aplicado con Spring Data JPA para aislar el acceso a datos.
-- **Singleton:** los servicios y controladores de Spring usan el ciclo de vida singleton por defecto.
-- **Factory y Observer:** se reservan para cuando el dominio incorpore tipos diferenciados de pedidos/usuarios y eventos de cambio de estado. No se simulan en este Sprint porque esos flujos no existen todavia.
-- La separacion controller-service-repository-domain materializa MVC para la API; la interfaz web y las vistas se desarrollaran en un incremento posterior.
+- **Repository:** repositorios Spring Data JPA aíslan persistencia y consultas.
+- **Factory:** `UsuarioFactory` crea cuentas con hash BCrypt y un rol válido.
+- **Observer:** `NotificacionObserver` observa eventos transaccionales de contacto y pedido para persistir notificaciones.
+- **Singleton:** `ReglasDisponibilidad` es stateless y Spring lo administra como singleton para validar inventario.
+- La interfaz demostrativa vive en `src/main/resources/static/index.html` y consume los endpoints REST.
 
 ## Pendientes de evolucion
 
-Completar autenticacion/autorizacion y los casos de uso REST de publicacion, precios, contacto, fincas, pedidos y estados. Las entidades de pedidos, trazabilidad, notificaciones, favoritos y transacciones ya tienen migracion y mapeo JPA, pero sus servicios/controladores deben implementarse antes de presentar esos flujos como funcionales. Actualizar los diagramas cuando cambien contratos o reglas del dominio.
+Pendientes de cierre: verificar el build bajo JDK 17 real y el job CI en PostgreSQL; revisar la UI ejecutándose en navegador; conciliar la historia HU-07 entre el `BACKLOG.md`, el PDF oficial y el alcance pegado; y configurar proveedor/secreto reales si se activa staging. Las ceremonias o aprobaciones del equipo requieren evidencia real.
