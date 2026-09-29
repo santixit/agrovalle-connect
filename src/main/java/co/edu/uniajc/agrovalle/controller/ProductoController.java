@@ -3,7 +3,6 @@ package co.edu.uniajc.agrovalle.controller;
 import co.edu.uniajc.agrovalle.api.dto.ProductoResponse;
 import co.edu.uniajc.agrovalle.service.ProductoService;
 import co.edu.uniajc.agrovalle.api.dto.PublicarProductoRequest;
-import co.edu.uniajc.agrovalle.api.dto.ProductoResponse;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.Valid;
 import java.net.URI;
