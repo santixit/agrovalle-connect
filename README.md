@@ -4,8 +4,12 @@ AgroValle Connect es una aplicación web para conectar a pequeños y medianos ag
 
 ## Visión del producto
 
-Para los productores del Valle que necesitan vender directamente, AgroValle Connect conecta oferta y demanda con precios visibles, contacto directo y trazabilidad de las entregas.
+Para pequeños y medianos productores del Valle del Cauca que necesitan vender sus cosechas directamente, AgroValle Connect es una plataforma web de comercio agrícola que conecta su oferta con comerciantes y restaurantes de Cali y la región. A diferencia de la venta mediante cadenas largas de intermediarios, ofrece catálogo por municipio, contacto directo y coordinación de reservas y entregas.
 
+## Enlaces del proyecto
+
+- Repositorio: [santixit/agrovalle-connect](https://github.com/santixit/agrovalle-connect)
+- Tablero Kanban: [Agrovalle-Kamba](https://github.com/users/santixit/projects/3/views/1)
 ## Integrantes y roles
 
 | Integrante | Rol Scrum / responsabilidad |
@@ -13,7 +17,7 @@ Para los productores del Valle que necesitan vender directamente, AgroValle Conn
 | Danny Alexander Gomez | Scrum Master / facilitación |
 | Michelle Guerrero Arboleda | Product Owner / Product Backlog |
 | Starlin Gomez Asprilla | Developer / pruebas y calidad |
-| Raul Santiago Carrillo | Developer / desarrollo backend |
+| Raul Santiago Carrillo Hernandez | Developer / desarrollo backend |
 
 ## Estado funcional
 
@@ -41,7 +45,7 @@ El backend se organiza en `controller → service → repository → domain`, co
 | HU-04 | Filtro de catálogo por municipio/categoría | Implementada |
 | HU-05 | Contacto del comprador y aviso al agricultor | Implementada |
 | HU-06 | Registro de finca y asociación a oferta | Implementada |
-| HU-07 | Registro de comprador | Expuesto como alta de cuenta para habilitar compras y contactos |
+| HU-07 | Consulta del perfil del agricultor | Implementada; devuelve datos públicos del perfil asociado al identificador |
 | HU-08 | Carrito, reservas y reducción segura de inventario | Implementada; consolida productos repetidos y crea un pedido por agricultor en una transacción con bloqueo de filas |
 | HU-09 | Cambio de estado de una oferta propia | Implementada para `AGRICULTOR` |
 | HU-10 | Detalle público de oferta | Implementada sin exponer cédula ni credenciales |
@@ -51,7 +55,7 @@ El backend se organiza en `controller → service → repository → domain`, co
 | HU-14 | Favoritos del comprador | Implementada |
 | HU-15 | Reporte de actividad por fechas | Implementada y restringida a `ADMIN` |
 
-**Alinear antes de entregar:** el `BACKLOG.md` del repositorio denomina HU-07 “consulta del perfil del agricultor”, mientras que el alcance pegado para este trabajo la denomina “registro de comprador”. La API de perfil anterior se conserva y la creación de compradores está implementada; el equipo debe acordar con la profesora cuál descripción corresponde a la HU-07 oficial y actualizar un solo documento fuente si difieren.
+La definición oficial de HU-07 para el Primer Corte es la consulta del perfil del agricultor; así se conserva en `BACKLOG.md` y en la planificación del Sprint 1. El registro de compradores es una capacidad adicional del software y no sustituye esa historia.
 
 ## Preparar el entorno
 
