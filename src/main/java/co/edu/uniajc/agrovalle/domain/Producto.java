@@ -15,6 +15,7 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "productos")
@@ -56,6 +57,9 @@ public class Producto {
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, length = 20)
   private EstadoProducto estado = EstadoProducto.DISPONIBLE;
+
+  @Column(name = "creado_en", nullable = false)
+  private LocalDateTime creadoEn = LocalDateTime.now();
 
   protected Producto() { }
 
@@ -125,12 +129,28 @@ public class Producto {
     return estado;
   }
 
+  public LocalDateTime getCreadoEn() {
+    return creadoEn;
+  }
+
   public void cambiarEstado(EstadoProducto nuevoEstado) {
     if (nuevoEstado == null) {
       throw new IllegalArgumentException("El estado del producto es obligatorio");
     }
     this.estado = nuevoEstado;
     this.activo = nuevoEstado == EstadoProducto.DISPONIBLE;
+  }
+
+  public void actualizarCantidad(BigDecimal cantidad) {
+    if (cantidad == null || cantidad.signum() < 0) {
+      throw new IllegalArgumentException("La cantidad disponible no puede ser negativa");
+    }
+    this.cantidadKg = cantidad;
+    if (cantidad.signum() == 0) {
+      cambiarEstado(EstadoProducto.AGOTADO);
+    } else if (estado == EstadoProducto.AGOTADO || estado == EstadoProducto.RESERVADO) {
+      cambiarEstado(EstadoProducto.DISPONIBLE);
+    }
   }
 
   @PrePersist

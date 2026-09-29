@@ -79,4 +79,11 @@ public class Despacho {
   public LocalDateTime getCreadoEn() {
     return creadoEn;
   }
+
+  public void marcarEntregado() {
+    if (estado != EstadoDespacho.PROGRAMADO && estado != EstadoDespacho.EN_RUTA) {
+      throw new IllegalStateException("El despacho no puede marcarse como entregado");
+    }
+    estado = EstadoDespacho.ENTREGADO;
+  }
 }

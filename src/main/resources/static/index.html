@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Conecta cosechas del Valle del Cauca con comercios de Cali.">
+  <title>AgroValle Connect</title>
+  <style>
+    :root { color-scheme: light; --green: #236b45; --pale: #edf5ef; --ink: #183127; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #f6f8f6; color: var(--ink); font: 16px/1.5 system-ui, sans-serif; }
+    header { padding: 1rem max(1rem, calc((100vw - 1100px)/2)); background: var(--green); color: white; }
+    header h1 { margin: 0; font-size: 1.5rem; }
+    header p { margin: .2rem 0 0; }
+    main { max-width: 1100px; padding: 1.2rem; margin: auto; display: grid; gap: 1rem; }
+    section { background: white; border: 1px solid #d8e3db; border-radius: 12px; padding: 1rem; }
+    h2 { margin: 0 0 .7rem; font-size: 1.15rem; }
+    form, .filters { display: flex; flex-wrap: wrap; gap: .65rem; align-items: end; }
+    label { display: grid; gap: .2rem; font-size: .9rem; flex: 1 1 170px; }
+    input, select, textarea, button { font: inherit; padding: .55rem .65rem; border: 1px solid #b9c9bd; border-radius: 7px; }
+    textarea { min-height: 5rem; }
+    button { cursor: pointer; color: white; background: var(--green); border-color: var(--green); font-weight: 600; }
+    button.secondary { background: white; color: var(--green); }
+    .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: .8rem; }
+    .card { border: 1px solid #d8e3db; background: var(--pale); border-radius: 10px; padding: .85rem; }
+    .card h3 { margin: 0 0 .3rem; }
+    .actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .7rem; }
+    .status { min-height: 1.5rem; color: var(--green); }
+    .muted { color: #53665a; font-size: .9rem; }
+    [hidden] { display: none !important; }
+    footer { text-align: center; color: #53665a; padding: 1rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>AgroValle Connect</h1>
+    <p>Productos del Valle del Cauca, directamente de sus agricultores.</p>
+  </header>
+  <main>
+    <section aria-labelledby="acceso-titulo">
+      <h2 id="acceso-titulo">Acceso</h2>
+      <form id="login-form">
+        <label>Correo<input name="correo" type="email" required autocomplete="username"></label>
+        <label>Contraseña<input name="contrasena" type="password" required autocomplete="current-password"></label>
+        <button>Iniciar sesión</button>
+        <button type="button" id="salir" class="secondary" hidden>Cerrar sesión</button>
+      </form>
+      <details>
+        <summary>Crear cuenta</summary>
+        <form id="registro-form">
+          <label>Tipo de cuenta<select name="tipo"><option value="AGRICULTOR">Agricultor</option><option value="COMPRADOR">Comprador</option></select></label>
+          <label>Nombre<input name="nombre" maxlength="120" required></label>
+          <label>Correo<input name="correo" type="email" maxlength="254" required></label>
+          <label>Contraseña<input name="contrasena" type="password" minlength="10" maxlength="72" required></label>
+          <label data-farmer>Documento<input name="cedula" maxlength="30"></label>
+          <label data-farmer>Municipio<input name="ubicacion_valle" maxlength="80"></label>
+          <label data-buyer hidden>Teléfono<input name="telefono" maxlength="30"></label>
+          <label data-buyer hidden>Tipo de comercio<input name="tipoComercio" maxlength="80"></label>
+          <button>Crear cuenta</button>
+        </form>
+      </details>
+      <p id="auth-status" class="status" role="status"></p>
+    </section>
+
+    <section id="agricultor-panel" hidden>
+      <h2>Mi finca y nueva oferta</h2>
+      <form id="finca-form">
+        <label>Nombre de finca<input name="nombre" maxlength="120" required></label>
+        <label>Municipio<input name="municipio" maxlength="80" required></label>
+        <label>Dirección o vereda<input name="direccion" maxlength="200" required></label>
+        <button>Registrar finca</button>
+      </form>
+      <p id="farm-status" class="status" role="status"></p>
+      <form id="producto-form">
+        <label>Producto<input name="nombre" maxlength="120" required></label>
+        <label>Categoría<input name="categoria" maxlength="80" required></label>
+        <label>Municipio<input name="municipio" maxlength="80" required></label>
+        <label>Finca<select name="fincaId" id="finca-select"><option value="">Sin finca asociada</option></select></label>
+        <label>Cantidad (kg)<input name="cantidadKg" type="number" min="0.01" step="0.01" required></label>
+        <label>Precio por kg (COP)<input name="precioPorKg" type="number" min="0.01" step="0.01" required></label>
+        <label>Fecha de cosecha<input name="fecha_cosecha" type="date" required></label>
+        <button>Publicar oferta</button>
+      </form>
+      <p id="product-status" class="status" role="status"></p>
+    </section>
+
+    <section aria-labelledby="catalogo-titulo">
+      <h2 id="catalogo-titulo">Catálogo de cosechas</h2>
+      <form id="buscar-form" class="filters">
+        <label>Municipio<input name="municipio" maxlength="80" placeholder="Ej. Dagua"></label>
+        <label>Categoría<input name="categoria" maxlength="80" placeholder="Ej. Frutas"></label>
+        <button>Buscar</button>
+        <button type="button" id="limpiar" class="secondary">Ver todo</button>
+      </form>
+      <p id="catalog-status" class="muted" role="status"></p>
+      <div id="catalogo" class="row"></div>
+    </section>
+
+    <section>
+      <h2>Precios regionales</h2>
+      <form id="precios-form">
+        <label>Categoría<input name="categoria" maxlength="80" required placeholder="Ej. Frutas"></label>
+        <button>Consultar promedio</button>
+      </form>
+      <p id="precio-status" class="status" role="status"></p>
+    </section>
+
+    <section id="cuenta-panel" hidden>
+      <h2>Mi actividad</h2>
+      <div class="actions">
+        <button id="ver-favoritos" class="secondary">Ver favoritos</button>
+        <button id="ver-notificaciones" class="secondary">Ver notificaciones</button>
+        <button id="ver-pedidos" class="secondary">Ver mis reservas/pedidos</button>
+      </div>
+      <div id="actividad" class="row"></div>
+    </section>
+
+    <section id="admin-panel" hidden>
+      <h2>Reporte administrativo</h2>
+      <form id="reporte-form">
+        <label>Desde<input name="desde" type="date" required></label>
+        <label>Hasta<input name="hasta" type="date" required></label>
+        <button>Generar reporte</button>
+      </form>
+      <p id="reporte-status" class="status" role="status"></p>
+    </section>
+  </main>
+  <footer>AgroValle Connect · Valle del Cauca</footer>
+  <script>
+    const api = '/api/v1';
+    let token = null;
+    let rol = null;
+    const byId = (id) => document.getElementById(id);
+    const formData = (form) => Object.fromEntries(new FormData(form).entries());
+    const tell = (id, text) => { byId(id).textContent = text; };
+    async function request(path, options = {}) {
+      const headers = { ...(options.body ? { 'Content-Type': 'application/json' } : {}),
+        ...(token ? { Authorization: `Bearer ${token}` } : {}), ...options.headers };
+      const response = await fetch(api + path, { ...options, headers });
+      if (response.status === 204) return null;
+      const body = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(body.error || `Solicitud fallida (${response.status})`);
+      return body;
+    }
+    function actualizarPaneles() {
+      byId('salir').hidden = !token;
+      byId('cuenta-panel').hidden = !token;
+      byId('agricultor-panel').hidden = rol !== 'AGRICULTOR';
+      byId('admin-panel').hidden = rol !== 'ADMIN';
+      if (rol === 'AGRICULTOR') cargarFincas();
+    }
+    byId('login-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      try {
+        const result = await request('/auth/login', { method: 'POST', body: JSON.stringify(formData(event.currentTarget)) });
+        token = result.accessToken;
+        rol = JSON.parse(atob(token.split('.')[1])).scope;
+        actualizarPaneles();
+        tell('auth-status', `Sesión iniciada como ${rol}.`);
+      } catch (error) { tell('auth-status', error.message); }
+    });
+    byId('salir').addEventListener('click', () => { token = null; rol = null; actualizarPaneles(); tell('auth-status', 'Sesión cerrada.'); });
+    byId('registro-form').addEventListener('change', (event) => {
+      if (event.target.name !== 'tipo') return;
+      document.querySelectorAll('[data-farmer]').forEach((field) => { field.hidden = event.target.value !== 'AGRICULTOR'; field.querySelector('input').required = !field.hidden; });
+      document.querySelectorAll('[data-buyer]').forEach((field) => { field.hidden = event.target.value !== 'COMPRADOR'; });
+    });
+    byId('registro-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const data = formData(event.currentTarget);
+      const type = data.tipo;
+      delete data.tipo;
+      const path = type === 'AGRICULTOR' ? '/auth/register' : '/auth/register/comprador';
+      try {
+        await request(path, { method: 'POST', body: JSON.stringify(data) });
+        tell('auth-status', 'Cuenta creada. Ya puedes iniciar sesión.');
+        event.currentTarget.reset();
+      } catch (error) { tell('auth-status', error.message); }
+    });
+    async function cargarFincas() {
+      try {
+        const fincas = await request('/fincas');
+        const select = byId('finca-select');
+        select.replaceChildren(new Option('Sin finca asociada', ''));
+        fincas.forEach((finca) => select.add(new Option(`${finca.nombre} · ${finca.municipio}`, finca.id)));
+      } catch (error) { tell('farm-status', error.message); }
+    }
+    byId('finca-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      try { await request('/fincas', { method: 'POST', body: JSON.stringify(formData(event.currentTarget)) });
+        tell('farm-status', 'Finca registrada.'); await cargarFincas(); event.currentTarget.reset();
+      } catch (error) { tell('farm-status', error.message); }
+    });
+    byId('producto-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const data = formData(event.currentTarget);
+      data.cantidadKg = Number(data.cantidadKg); data.precioPorKg = Number(data.precioPorKg);
+      data.fincaId = data.fincaId ? Number(data.fincaId) : null;
+      try { await request('/productos', { method: 'POST', body: JSON.stringify(data) });
+        tell('product-status', 'Oferta publicada.'); event.currentTarget.reset(); await buscar();
+      } catch (error) { tell('product-status', error.message); }
+    });
+    function tarjeta(producto) {
+      const article = document.createElement('article'); article.className = 'card';
+      const title = document.createElement('h3'); title.textContent = producto.nombre;
+      const info = document.createElement('p'); info.textContent = `${producto.categoria} · ${producto.municipio}`;
+      const amount = document.createElement('p'); amount.textContent = producto.cantidad_kg == null ? 'Disponibilidad por confirmar' : `${producto.cantidad_disponible_kg ?? producto.cantidad_kg} kg · $${producto.precio_por_kg ?? '—'} COP/kg`;
+      article.append(title, info, amount);
+      const actions = document.createElement('div'); actions.className = 'actions';
+      const detail = document.createElement('button'); detail.className = 'secondary'; detail.textContent = 'Ver detalle';
+      detail.onclick = async () => { try { const d = await request(`/productos/${producto.id}`); alert(`${d.nombre}\n${d.categoria} · ${d.municipio}\n${d.cantidad_disponible_kg ?? '—'} kg\nAgricultor: ${d.agricultor ?? '—'}\nFinca: ${d.finca ?? '—'}`); } catch (error) { tell('catalog-status', error.message); } };
+      actions.append(detail);
+      if (token && rol === 'COMPRADOR') {
+        const reserve = document.createElement('button'); reserve.textContent = 'Reservar';
+        reserve.onclick = async () => { const quantity = Number(prompt('Cantidad a reservar en kg:')); if (!quantity) return;
+          try { await request('/reservas', { method: 'POST', body: JSON.stringify({ productoId: producto.id, cantidad_kg: quantity }) }); tell('catalog-status', 'Reserva creada. El agricultor debe confirmarla.'); await buscar(); }
+          catch (error) { tell('catalog-status', error.message); } };
+        const favorite = document.createElement('button'); favorite.className = 'secondary'; favorite.textContent = 'Guardar favorito';
+        favorite.onclick = async () => { try { await request(`/favoritos/${producto.id}`, { method: 'POST' }); tell('catalog-status', 'Oferta guardada en favoritos.'); } catch (error) { tell('catalog-status', error.message); } };
+        const contact = document.createElement('button'); contact.className = 'secondary'; contact.textContent = 'Contactar';
+        contact.onclick = async () => { const mensaje = prompt('Escribe tu mensaje para el agricultor:'); if (!mensaje?.trim()) return;
+          try { await request('/contactos', { method: 'POST', body: JSON.stringify({ productoId: producto.id, mensaje }) }); tell('catalog-status', 'Contacto registrado y notificación enviada al agricultor.'); }
+          catch (error) { tell('catalog-status', error.message); } };
+        actions.append(reserve, favorite, contact);
+      }
+      article.append(actions); return article;
+    }
+    async function buscar() {
+      const values = formData(byId('buscar-form'));
+      const params = new URLSearchParams(Object.entries(values).filter(([, value]) => value.trim()));
+      try { const products = await request(`/productos${params.size ? `?${params}` : ''}`);
+        byId('catalogo').replaceChildren(...products.map(tarjeta));
+        tell('catalog-status', `${products.length} oferta(s) encontrada(s).`);
+      } catch (error) { tell('catalog-status', error.message); }
+    }
+    byId('buscar-form').addEventListener('submit', (event) => { event.preventDefault(); buscar(); });
+    byId('limpiar').addEventListener('click', () => { byId('buscar-form').reset(); buscar(); });
+    byId('precios-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      try { const p = await request(`/precios/regionales?categoria=${encodeURIComponent(formData(event.currentTarget).categoria)}`);
+        tell('precio-status', p.transaccionesAnalizadas ? `Promedio: $${p.promedioPorKg} ${p.moneda}/kg, a partir de ${p.transaccionesAnalizadas} transacción(es).` : 'Aún no hay transacciones completadas para calcular un promedio.');
+      } catch (error) { tell('precio-status', error.message); }
+    });
+    byId('ver-favoritos').addEventListener('click', async () => {
+      try { const items = await request('/favoritos'); byId('actividad').replaceChildren(...items.map((f) => { const p = document.createElement('p'); p.textContent = `${f.nombre} · ${f.categoria} · ${f.municipio}`; return p; })); }
+      catch (error) { tell('auth-status', error.message); }
+    });
+    byId('ver-notificaciones').addEventListener('click', async () => {
+      try { const items = await request('/notificaciones/mias'); byId('actividad').replaceChildren(...items.map((n) => { const p = document.createElement('p'); p.textContent = n.mensaje; return p; })); }
+      catch (error) { tell('auth-status', error.message); }
+    });
+    byId('ver-pedidos').addEventListener('click', async () => {
+      try {
+        const path = rol === 'AGRICULTOR' ? '/reservas/pendientes' : '/reservas/mias';
+        const orders = await request(path);
+        const cards = orders.map((order) => {
+          const card = document.createElement('article'); card.className = 'card';
+          const title = document.createElement('h3'); title.textContent = `Pedido #${order.id} · ${order.estado}`;
+          const description = document.createElement('p');
+          description.textContent = order.productos.map((p) => `${p.nombre}: ${p.cantidadKg} kg`).join(' · ');
+          card.append(title, description);
+          const actions = document.createElement('div'); actions.className = 'actions';
+          if (rol === 'AGRICULTOR' && order.estado === 'PENDIENTE') {
+            const button = document.createElement('button'); button.textContent = 'Confirmar reserva';
+            button.onclick = async () => { try { await request(`/reservas/${order.id}/confirmar`, { method: 'POST' }); tell('auth-status', 'Reserva confirmada.'); await cargarPedidos(); } catch (error) { tell('auth-status', error.message); } };
+            actions.append(button);
+          } else if (rol === 'AGRICULTOR' && order.estado === 'CONFIRMADO') {
+            const button = document.createElement('button'); button.textContent = 'Programar despacho';
+            button.onclick = async () => {
+              const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Bogota' }).format(new Date());
+              const fecha = prompt('Fecha (AAAA-MM-DD):', today); if (!fecha) return;
+              const franjaHoraria = prompt('Franja horaria:'); if (!franjaHoraria) return;
+              const ruta = prompt('Ruta (opcional):') || '';
+              try { await request('/despachos', { method: 'POST', body: JSON.stringify({ pedidoId: order.id, fecha_programada: fecha, franjaHoraria, ruta }) }); tell('auth-status', 'Despacho programado.'); await cargarPedidos(); } catch (error) { tell('auth-status', error.message); }
+            };
+            actions.append(button);
+          } else if (rol === 'AGRICULTOR' && order.estado === 'EN_DESPACHO') {
+            const button = document.createElement('button'); button.textContent = 'Marcar entrega completada';
+            button.onclick = async () => { try { await request(`/despachos/${order.id}/entregado`, { method: 'PATCH' }); tell('auth-status', 'Entrega registrada y precio agregado a las estadísticas.'); await cargarPedidos(); } catch (error) { tell('auth-status', error.message); } };
+            actions.append(button);
+          } else if (rol === 'COMPRADOR') {
+            const button = document.createElement('button'); button.className = 'secondary'; button.textContent = 'Ver trazabilidad';
+            button.onclick = async () => { try { const events = await request(`/reservas/${order.id}/trazabilidad`); description.textContent += ` · ${events.map((event) => event.estado).join(' → ')}`; } catch (error) { tell('auth-status', error.message); } };
+            actions.append(button);
+          }
+          card.append(actions); return card;
+        });
+        byId('actividad').replaceChildren(...cards);
+        if (orders.length === 0) tell('auth-status', 'Aún no hay reservas/pedidos.');
+      } catch (error) { tell('auth-status', error.message); }
+    });
+    async function cargarPedidos() { byId('ver-pedidos').click(); }
+    byId('reporte-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const { desde, hasta } = formData(event.currentTarget);
+      try {
+        const report = await request(`/admin/reportes/actividad?desde=${encodeURIComponent(desde)}&hasta=${encodeURIComponent(hasta)}`);
+        tell('reporte-status', `Usuarios: ${report.usuariosRegistrados} · Ofertas: ${report.ofertasPublicadas} · Contactos: ${report.contactosRegistrados}`);
+      } catch (error) { tell('reporte-status', error.message); }
+    });
+    buscar();
+  </script>
+</body>
+</html>
