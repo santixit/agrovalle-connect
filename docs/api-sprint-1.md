@@ -55,7 +55,7 @@ La respuesta incluye `accessToken`, `tokenType: Bearer` y `expiresIn`. Enviar el
 - `GET /api/v1/productos?municipio=Dagua&categoria=Frutas` y `GET /api/v1/productos/{id}` permiten buscar y ver oferta pública sin datos privados.
 - `POST /api/v1/reservas` exige comprador y recibe `{ "productoId": 1, "cantidad_kg": 20 }`. Un bloqueo de escritura protege el inventario contra reservas simultáneas; insuficiencia responde 409.
 - El agricultor confirma con `POST /api/v1/reservas/{id}/confirmar`; programa con `POST /api/v1/despachos`, que requiere `pedidoId`, `fecha_programada`, `franjaHoraria` y ruta opcional.
-- Al confirmar entrega con `PATCH /api/v1/despachos/{pedidoId}/entregado`, el sistema registra la transacción completada y `GET /api/v1/precios/regionales?categoria=Frutas` consulta el promedio de las 50 ventas más recientes.
+- Al confirmar entrega con `PATCH /api/v1/despachos/{pedidoId}/entregado`, el sistema registra la transacción completada y `GET /api/v1/precios/regionales?categoria=Frutas` consulta la media aritmética de hasta 50 ventas completadas durante las últimas 24 horas.
 - `GET /api/v1/reservas/{id}/trazabilidad` solo permite al comprador dueño consultar eventos ordenados cronológicamente.
 
 ### Contactos, notificaciones y favoritos

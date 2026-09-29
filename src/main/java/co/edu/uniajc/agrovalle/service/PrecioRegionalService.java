@@ -5,6 +5,7 @@ import co.edu.uniajc.agrovalle.domain.TransaccionPrecio;
 import co.edu.uniajc.agrovalle.repository.TransaccionPrecioRepository;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class PrecioRegionalService {
 
   public PrecioRegionalResponse consultar(String categoria) {
     List<TransaccionPrecio> transacciones = repository.buscarRecientesPorCategoria(
-        categoria.trim(), PageRequest.of(0, MAX_TRANSACCIONES));
+        categoria.trim(), LocalDateTime.now().minusHours(24), PageRequest.of(0, MAX_TRANSACCIONES));
     BigDecimal promedio = transacciones.stream().map(TransaccionPrecio::getPrecioPorKg)
         .reduce(BigDecimal.ZERO, BigDecimal::add);
     if (!transacciones.isEmpty()) {

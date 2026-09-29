@@ -24,5 +24,5 @@ AgroValle Connect requiere soportar perfiles de agricultores y compradores, finc
 - El modelo cubre las entidades directamente asociadas a las historias del producto y evita crear una tabla de administrador redundante.
 - Las asociaciones opcionales preservan compatibilidad mientras se migra desde perfiles sin cuenta autenticada.
 - Las operaciones de inventario y transición de pedidos se implementan en transacciones; la reserva bloquea la fila de oferta para prevenir sobreventa concurrente.
-- Solo las entregas completadas crean filas de `transacciones_precio`, que alimentan el promedio de las 50 operaciones más recientes.
+- Solo las entregas completadas crean filas de `transacciones_precio`, que alimentan el promedio aritmético de hasta 50 operaciones de las últimas 24 horas.
 - Cada cambio futuro del esquema requiere una nueva migración Flyway, nunca editar migraciones ya aplicadas.

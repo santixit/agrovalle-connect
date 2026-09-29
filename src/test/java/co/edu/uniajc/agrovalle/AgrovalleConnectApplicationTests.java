@@ -33,6 +33,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.util.ReflectionTestUtils;
 
 /** Verifies the Sprint 1 REST scenarios against the test database. */
 @AutoConfigureMockMvc
@@ -293,6 +294,11 @@ class AgrovalleConnectApplicationTests {
   @Test
   void consultaPromedioDePreciosUsaTransaccionesGuardadas() throws Exception {
     Producto cafe = productoRepository.save(new Producto("Cafe", "Granos", "Dagua", true));
+    TransaccionPrecio antigua = new TransaccionPrecio(cafe,
+        new BigDecimal("50"), new BigDecimal("5000"));
+    ReflectionTestUtils.setField(antigua, "ocurridaEn", java.time.LocalDateTime.now()
+        .minusHours(25));
+    transaccionPrecioRepository.save(antigua);
     transaccionPrecioRepository.save(new TransaccionPrecio(cafe,
         new BigDecimal("10"), new BigDecimal("8000")));
     transaccionPrecioRepository.save(new TransaccionPrecio(cafe,

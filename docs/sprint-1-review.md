@@ -41,7 +41,8 @@ Resultados que se esperan según los contratos documentados: HU-01 devuelve `201
 
 ## Calidad y trazabilidad
 
-- Ejecución local del 2026-09-29 con `mvnw.cmd --batch-mode --no-transfer-progress clean verify`: build exitoso; 11 pruebas aprobadas, 0 fallidas, 0 errores de Checkstyle y 95,00% de cobertura de líneas (304/320; mínimo configurado 60%). Se usó JDK 26 con compilación `--release 17` y perfil local H2; este resultado no demuestra ejecución sobre PostgreSQL.
+- Validación inicial del primer corte en el commit `c2a0fd5`: 11 pruebas aprobadas y 95,00% de cobertura de líneas (304/320), ejecutada bajo JDK 26 con compilación `--release 17` y H2; no demuestra ejecución sobre PostgreSQL.
+- Validación local complementaria del alcance integrador en la rama `feature/full-integrator-phase1` (2026-09-29): `mvnw.cmd --batch-mode --no-transfer-progress clean verify` exitoso, 28 pruebas aprobadas (18 de integración de API, 9 unitarias y 1 de persistencia), Checkstyle con 0 violaciones y JaCoCo 90,02% (749/832 líneas; mínimo 60%). Se ejecutó bajo JDK 26 compilando con `--release 17` y perfil local H2; no demuestra ejecución con JDK 17 ni con PostgreSQL.
 - Ejecución de GitHub Actions con Java 17 y PostgreSQL 16 para el commit revisado: **adjuntar enlace al run y confirmar el resultado actual**.
 - Pull Request de implementación: **adjuntar enlace y comprobar que la evidencia de aprobación corresponde a una revisión anterior al merge**.
 - Resultado de Checkstyle y pruebas en el incremento revisado: **confirmar en el run actual; no inferirlo de este borrador**.

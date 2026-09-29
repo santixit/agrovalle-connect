@@ -37,7 +37,7 @@ El backend se organiza en `controller → service → repository → domain`, co
 |---|---|---|
 | HU-01 | Registro de agricultores | Implementada; correo y contraseña opcionales en perfiles heredados, requeridos para acceso JWT |
 | HU-02 | Publicación autenticada de cosechas | Implementada para rol `AGRICULTOR` |
-| HU-03 | Promedio de precios recientes | Implementada con hasta 50 transacciones completadas por categoría; sin ventas muestra muestra vacía |
+| HU-03 | Promedio de precios recientes | Implementada con hasta 50 transacciones completadas por categoría en las últimas 24 horas; sin ventas muestra promedio nulo |
 | HU-04 | Filtro de catálogo por municipio/categoría | Implementada |
 | HU-05 | Contacto del comprador y aviso al agricultor | Implementada |
 | HU-06 | Registro de finca y asociación a oferta | Implementada |
@@ -107,7 +107,7 @@ Los endpoints usan `/api/v1` y JSON. Los roles se asignan en JWT: `AGRICULTOR`, 
 | POST | `/productos` | Agricultor |
 | POST / GET | `/fincas` | Agricultor |
 | PATCH | `/productos/{id}/estado` | Dueño agricultor |
-| GET | `/precios/regionales?categoria=Frutas` | Público; últimas 50 ventas completadas |
+| GET | `/precios/regionales?categoria=Frutas` | Público; últimas 50 ventas completadas de las últimas 24 horas |
 | POST | `/contactos` | Comprador |
 | POST | `/reservas` | Comprador |
 | POST | `/reservas/{id}/confirmar` | Agricultor dueño de las ofertas |
