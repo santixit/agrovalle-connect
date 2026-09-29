@@ -226,18 +226,22 @@ sequenceDiagram
   C-->>Agricultor: 201 Created
 ```
 
-## Comunicacion: filtro de catalogo
+## Diagrama de colaboracion (comunicacion UML): HU-04 filtro del catalogo
+
+Los nodos representan objetos participantes y los numeros de los mensajes indican el orden de la interaccion. La respuesta recorre los mismos enlaces en sentido inverso. Este diagrama complementa la secuencia de registro y muestra como colaboran la interfaz, las capas MVC, el repositorio y PostgreSQL para aplicar ambos filtros.
 
 ```mermaid
 flowchart LR
-  Cliente[Cliente HTTP] -->|1 buscar municipio y categoria| Controller[ProductoController]
-  Controller -->|2 delegar filtros| Service[ProductoService]
-  Service -->|3 consultar activos| Repository[ProductoRepository]
-  Repository -->|4 SELECT filtrado| DB[(PostgreSQL)]
-  DB -->|5 filas coincidentes| Repository
-  Repository -->|6 entidades| Service
-  Service -->|7 lista de DTO| Controller
-  Controller -->|8 HTTP 200 JSON| Cliente
+  comprador["comprador: Usuario"] -->|1. ingresar municipio y categoria| interfaz["interfaz: CatalogoWeb"]
+  interfaz -->|2. GET /api/v1/productos?municipio=Dagua&categoria=Frutas| controller["controller: ProductoController"]
+  controller -->|3. buscar(municipio, categoria)| service["service: ProductoService"]
+  service -->|4. consultar ofertas activas coincidentes| repository["repository: ProductoRepository"]
+  repository -->|5. SELECT de ofertas activas y filtros| db[("PostgreSQL")]
+  db -->|6. filas coincidentes| repository
+  repository -->|7. entidades Producto| service
+  service -->|8. lista de ProductoResponse| controller
+  controller -->|9. HTTP 200 y JSON| interfaz
+  interfaz -->|10. mostrar tarjetas coincidentes| comprador
 ```
 
 ## Secuencia: reserva y despacho

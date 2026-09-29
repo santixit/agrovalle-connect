@@ -22,7 +22,7 @@ AgroValle Connect busca conectar directamente a productores del Valle del Cauca 
 
 | Historia | Alcance que debe demostrarse | Evidencia técnica existente | Resultado y feedback de la revisión |
 |---|---|---|---|
-| HU-01 — Registro de agricultores | `POST /api/v1/auth/register`; registro persistido; respuesta `201 Created`; la respuesta no expone la cédula. | Implementación y escenarios automatizados descritos en el registro técnico previo. Colección Postman: `docs/postman/agrovalle-sprint-1.postman_collection.json`. Evidencia en PostgreSQL y resultado actual de CI: **pendientes de adjuntar**. | **Completar en la reunión**: aceptada/no aceptada, comentario del Product Owner y seguimiento. |
+| HU-01 — Registro de agricultores | `POST /api/v1/auth/register`; registro persistido; respuesta `201 Created`; la respuesta no expone la cédula. | Implementación y escenarios automatizados. Colección Postman: `docs/postman/agrovalle-sprint-1.postman_collection.json`. CI: [run exitoso del commit aa12a0d](https://github.com/santixit/agrovalle-connect/actions/runs/36608168866). Evidencia de ejecución en vivo y fila de PostgreSQL: **pendientes**. | **Completar en la reunión**: aceptada/no aceptada, comentario del Product Owner y seguimiento. |
 | HU-07 — Consulta del perfil del agricultor | `GET /api/v1/productores/{id}`; perfil existente en `200 OK`; identificador inexistente en `404 Not Found`; DTO sin cédula. | Implementación y escenarios automatizados descritos en el registro técnico previo. Colección Postman: `docs/postman/agrovalle-sprint-1.postman_collection.json`. Captura de respuestas: **pendiente**. | **Completar en la reunión**: aceptada/no aceptada, comentario del Product Owner y seguimiento. |
 | HU-04 — Filtro del catálogo | `GET /api/v1/productos?municipio=Dagua&categoria=Frutas`; resultado `200 OK`; solo ofertas coincidentes. | Colección Postman: `docs/postman/agrovalle-sprint-1.postman_collection.json`; datos de ejemplo idempotentes: `scripts/sprint-1-demo-data.sql`. Captura del resultado y verificación PostgreSQL: **pendientes**. | **Completar en la reunión**: aceptada/no aceptada, comentario del Product Owner y seguimiento. |
 
@@ -42,9 +42,9 @@ Resultados que se esperan según los contratos documentados: HU-01 devuelve `201
 ## Calidad y trazabilidad
 
 - Validación inicial del primer corte en el commit `c2a0fd5`: 11 pruebas aprobadas y 95,00% de cobertura de líneas (304/320), ejecutada con H2; no demuestra ejecución sobre PostgreSQL.
-- Validación local complementaria de `feature/full-integrator-phase1` (2026-09-29): `mvnw.cmd clean verify` terminó correctamente con Eclipse Temurin JDK 17.0.20.1: 30 pruebas aprobadas, 0 fallas, Checkstyle con 0 violaciones y JaCoCo 90,11% (820/910 líneas; umbral 60%). Se ejecutó el perfil local H2.
+- Validación de `feature/full-integrator-phase1` (2026-09-29): el commit `aa12a0d` pasó GitHub Actions con Java 17, PostgreSQL 16, las 31 pruebas, Checkstyle y el control de cobertura JaCoCo. [Run exitoso](https://github.com/santixit/agrovalle-connect/actions/runs/36608168866). Esto verifica CI; no reemplaza la demostración funcional del equipo en su instancia local.
 - La conexión de la aplicación con PostgreSQL 18 en la base local `agrovalle conect` se autenticó y Flyway aplicó las migraciones V1–V4. Esta comprobación confirma la creación del esquema; no equivale a una demostración funcional de los endpoints ni a las pruebas completas sobre PostgreSQL.
-- GitHub Actions ejecutó correctamente el workflow con Java 17 y PostgreSQL 16 en el commit `bdf3990` de `feature/full-integrator-phase1`: [run de CI](https://github.com/santixit/agrovalle-connect/actions/runs/36601582622). En local, `mvnw.cmd clean verify` también pasó con Temurin 17.0.20.1, 30 pruebas, 0 violaciones de Checkstyle y 90,11% de cobertura JaCoCo.
+- El historial conserva ejecuciones CI exitosas de commits anteriores; para el estado actual debe usarse el run enlazado al commit `aa12a0d` arriba.
 - La regla pública `main-protection` aparece activa para la rama predeterminada `main`; exige una aprobación, el chequeo `Build, tests, Checkstyle and JaCoCo`, y bloquea borrado y force-push. [Configuración del ruleset](https://github.com/santixit/agrovalle-connect/rules/24141794).
 - [PR #23](https://github.com/santixit/agrovalle-connect/pull/23) se fusionó el 2026-09-28. GitHub registra la aprobación de `DannyGomez02` el 2026-09-29, después de la fusión; no cumple el requisito de aprobación previa.
 - [PR #24](https://github.com/santixit/agrovalle-connect/pull/24) recibió aprobación de `DannyGomez02` antes de fusionarse el 2026-09-29 y reporta dos comprobaciones exitosas. Ese PR modificó documentación; no valida por sí solo la implementación completa del integrador.
@@ -65,4 +65,4 @@ Resultados que se esperan según los contratos documentados: HU-01 devuelve `201
 - [ ] Captura o salida de consulta que demuestre la fila persistida en PostgreSQL con datos sintéticos.
 - [ ] Enlace al run de GitHub Actions del commit revisado, con build, pruebas, Checkstyle y cobertura visibles.
 - [ ] Fecha, participantes, decisión y feedback reales de la Sprint Review.
-- [ ] Enlace al PR y evidencia de revisión por pares previa al merge, cuando exista.
+- [ ] Enlace al PR y evidencia de revisión por pares previa al merge, cuando exista.\n
