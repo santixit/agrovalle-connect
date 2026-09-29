@@ -1,6 +1,6 @@
 # Product Backlog - AgroValle Connect
 
-Las estimaciones fueron acordadas con Planning Poker usando Fibonacci. Las historias se revisaron contra INVEST: son independientes en lo posible, negociables, valiosas, estimables, pequenas y verificables mediante el escenario BDD. La prioridad se expresa con MoSCoW, no con codigos numericos como P0 o P1.
+Los puntos de historia usan la secuencia Fibonacci y la prioridad se expresa con MoSCoW, no con codigos numericos como P0 o P1. La tabla registra las estimaciones; la evidencia de una sesion de Planning Poker debe conservarse aparte cuando el equipo la tenga. Las historias se revisan contra INVEST: son independientes en lo posible, negociables, valiosas, estimables, pequenas y verificables mediante el escenario BDD.
 
 | ID | Historia de usuario | Prioridad MoSCoW | SP |
 |---|---|---:|---:|
@@ -33,13 +33,13 @@ Las estimaciones fueron acordadas con Planning Poker usando Fibonacci. Las histo
 Los escenarios describen comportamiento de negocio. Los contratos REST y codigos HTTP se definen en la planificacion tecnica, no en este backlog de producto.
 
 ### HU-01 Registro de agricultores
-**Given** una persona que proporciona datos personales validos y una cedula no registrada, **When** solicita registrarse como agricultor, **Then** su perfil queda creado y disponible para ofrecer productos.
+**Given** una persona con nombre, `ubicacion_valle` y cedula validos, y una cedula que aun no esta registrada, **When** envia esos datos como JSON a `POST /api/v1/auth/register`, **Then** la API responde `201 Created`, persiste el perfil en PostgreSQL y devuelve su identificador.
 
 ### HU-02 Publicacion de cosechas
-**Given** un agricultor con una cuenta habilitada, **When** publica una cosecha con tipo, cantidad y fecha valida, **Then** la oferta queda registrada y visible para compradores.
+**Given** un agricultor autenticado con JWT y una cosecha cuya fecha es hoy o posterior, **When** envia nombre, categoria, municipio, cantidad, precio y `fecha_cosecha` a `POST /api/v1/productos`, **Then** la API responde `201 Created` con un identificador unico, guarda la oferta y la muestra en el catalogo.
 
 ### HU-03 Consulta de precios regionales
-**Given** que existen transacciones recientes de cafe en la region, **When** un usuario consulta los precios regionales, **Then** el sistema presenta el promedio en pesos colombianos para apoyar la negociacion.
+**Given** al menos 50 transacciones completadas de cafe registradas en las ultimas 24 horas, **When** un usuario consulta `GET /api/v1/precios/regionales?categoria=Cafe`, **Then** el sistema calcula la media aritmetica de las 50 mas recientes y devuelve el promedio en COP con dos decimales. Si hay menos de 50, usa las disponibles dentro de esas 24 horas.
 
 ### HU-04 Filtro por categoria y municipio
 **Given** ofertas activas de frutas en Dagua y en otros municipios o categorias, **When** un comprador filtra por municipio y categoria, **Then** solo encuentra las ofertas coincidentes con ambos filtros.
