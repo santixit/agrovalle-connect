@@ -1,6 +1,6 @@
 # Planificacion del Sprint 1
 
-> Borrador basado en la consigna oficial del primer corte. Alcance propuesto: HU-01, HU-07 y HU-04 (10 SP). Revisar con el equipo antes de incorporarlo al tablero publico.
+> Plan tecnico del alcance oficial del Sprint 1: HU-01, HU-07 y HU-04 (10 SP). El equipo debe validar las estimaciones en horas y los contratos de datos; la capacidad en Story Points y el Sprint Goal se mantienen segun la consigna.
 
 ## Sprint Goal
 

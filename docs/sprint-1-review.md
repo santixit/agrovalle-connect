@@ -1,6 +1,6 @@
 # Sprint Review — Sprint 1
 
-> Evidencia tecnica preparada el 2026-09-28 antes de la reunion de Sprint Review. Este registro no sustituye la demostracion ni los acuerdos con Product Owner y equipo; completar esa parte durante la reunion.
+> Estado actualizado el 2026-09-28 con evidencia tecnica disponible. Este registro no sustituye la demostracion ni los acuerdos con Product Owner y equipo; completar esos datos despues de la reunion real.
 
 ## Datos de la revision
 
@@ -22,4 +22,7 @@
 - Funcionalidades aceptadas por Product Owner: completar durante la revision.
 - Historias no aceptadas y motivo: completar.
 - Feedback y cambios al Product Backlog: completar.
-- La CI esta configurada para usar PostgreSQL 16; en GitHub el flujo de `main` aun esta rojo por dos clases principales detectadas en esa rama. La rama de trabajo elimina la clase duplicada. Adjuntar resultado verde de GitHub Actions y evidencia de API/PostgreSQL despues de ejecutar el flujo actualizado y realizar la demostracion.
+- GitHub Actions ejecuto correctamente el workflow de `main` con Java 17, PostgreSQL 16, pruebas, Checkstyle y JaCoCo el 2026-09-28. [Consultar la ejecucion](https://github.com/santixit/agrovalle-connect/actions/runs/36497630535). Esta evidencia confirma la CI; no reemplaza la demostracion funcional de los endpoints ni la consulta de persistencia en PostgreSQL durante la Sprint Review.
+- El PR #23 recibio una revision `APPROVED` de `DannyGomez02` despues de que el PR ya se habia fusionado. La revision queda registrada, pero no demuestra aprobacion previa a la integracion. Para cumplir el flujo en adelante, las nuevas fusiones deben tener aprobacion antes de integrar.
+- La proteccion de `main` ahora exige PR, una aprobacion y el check `Build, tests, Checkstyle and JaCoCo`. Esta regla aplica a fusiones futuras y no cambia el historial del PR #23.
+- El job de staging puede finalizar sin desplegar si falta el secreto `STAGING_DEPLOY_HOOK`. Por eso, el estado de Actions no confirma por si solo que el servicio este publicado. Adjuntar la URL funcional y una consulta real a PostgreSQL cuando el equipo complete la demo.
