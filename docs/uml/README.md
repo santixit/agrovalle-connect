@@ -269,7 +269,7 @@ sequenceDiagram
   Observer->>DB: persistir notificación
 ```
 
-## Despliegue físico (objetivo del primer corte)
+## Despliegue físico actual
 
 ```mermaid
 flowchart LR
@@ -287,12 +287,15 @@ flowchart LR
     Runner -->|mvn clean verify| AppTest[Spring Boot y JUnit 5]
     AppTest --> CiDB
   end
-  subgraph Staging pendiente de proveedor
-    Stage[Servicio Java 17]
-    StageDB[(PostgreSQL administrado)]
+  subgraph Render Staging
+    Stage[Render Web Service Free<br/>Spring Boot Java 17]
+    StageDB[(PostgreSQL administrado<br/>agrovalle_connect_staging)]
     Stage --> StageDB
   end
+  Browser[Comprador o agricultor] -->|HTTPS| Stage
 ```
+
+La instancia pública de staging es [AgroValle Connect en Render](https://agrovalle-connect-staging.onrender.com/). Al ser un servicio gratuito, puede suspenderse por inactividad; la base de datos gratuita también tiene una fecha de expiración indicada por Render.
 
 ## Patrones y decisiones
 
@@ -304,4 +307,4 @@ flowchart LR
 
 ## Pendientes de evolucion
 
-Pendientes de cierre: verificar el build bajo JDK 17 real y el job CI en PostgreSQL; revisar la UI ejecutándose en navegador; conciliar la historia HU-07 entre el `BACKLOG.md`, el PDF oficial y el alcance pegado; y configurar proveedor/secreto reales si se activa staging. Las ceremonias o aprobaciones del equipo requieren evidencia real.
+Pendiente de evidencia del equipo: adjuntar fecha, participantes y resultado del Planning Poker si esa sesión ya ocurrió; si no ocurrió, realizarla antes de afirmar que las estimaciones fueron acordadas allí. La existencia de pruebas automatizadas no demuestra por sí sola que se siguió TDD: conservar evidencia real del ciclo Red-Green-Refactor o aplicarlo en los próximos cambios. Cada Pull Request necesita aprobación de un revisor distinto al autor antes de fusionarse. La configuración actual de staging y su enlace se documentan arriba. No registrar ceremonias ni aprobaciones que no hayan ocurrido.
