@@ -227,6 +227,10 @@ class AgrovalleConnectApplicationTests {
         .andExpect(status().isOk())
         .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers
             .content().contentTypeCompatibleWith("text/html"));
+    mockMvc.perform(get("/styles.css"))
+        .andExpect(status().isOk())
+        .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers
+            .content().contentTypeCompatibleWith("text/css"));
   }
 
   @Test

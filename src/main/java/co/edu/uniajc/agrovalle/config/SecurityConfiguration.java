@@ -36,7 +36,8 @@ public class SecurityConfiguration {
     return http.csrf(csrf -> csrf.disable())
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/", "/index.html", "/favicon.ico", "/assets/**").permitAll()
+            .requestMatchers("/", "/index.html", "/favicon.ico", "/assets/**", "/styles.css")
+                .permitAll()
             .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/productos")
                 .hasAuthority("SCOPE_AGRICULTOR")
             .requestMatchers(org.springframework.http.HttpMethod.PATCH,
