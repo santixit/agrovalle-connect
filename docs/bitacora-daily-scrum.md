@@ -4,7 +4,11 @@
 
 ## Registro de sesiones
 
-Duplicar la fila de ejemplo por cada Daily Scrum real. La evidencia puede ser un acta, captura o enlace que exista y que el equipo pueda compartir.
+**Estado al 2026-09-30:** esta bitácora no contiene registros verificables de Daily Scrum. La fila siguiente es solo un formato en blanco; no representa una reunión realizada. Agregar una fila únicamente cuando exista evidencia y el equipo confirme los datos.
+
+### Formato para una sesión real
+
+Duplicar la fila de formato por cada Daily Scrum que efectivamente ocurra. La evidencia puede ser un acta, captura o enlace que exista y que el equipo pueda compartir.
 
 | Fecha y hora | Duración (min) | Integrantes presentes y roles | Avance realizado hacia el Sprint Goal | Plan acordado hasta el siguiente Daily | Impedimentos, responsable y seguimiento | Acuerdos / evidencia |
 |---|---:|---|---|---|---|---|
@@ -20,6 +24,6 @@ El equipo responde brevemente, con referencia a las historias del Sprint 1 (HU-0
 
 ## Cierre de la bitácora
 
-- Periodo del Sprint documentado: `Por completar con fechas acordadas`.
+- Periodo del Sprint: `Sprint 1; cierre previsto: 2026-10-07. Confirmar la fecha de inicio con la planificación del equipo`.
 - Persona responsable de consolidar las entradas: `Por acordar`.
-- Evidencias disponibles: `Agregar enlaces reales o indicar que no se conservaron`.
+- Evidencias de Daily Scrum enlazadas aquí al 2026-09-30: `Ninguna registrada en este documento`.

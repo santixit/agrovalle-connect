@@ -2,6 +2,8 @@
 
 > Completar después de la Sprint Review, en tercera persona y con observaciones que el equipo haya discutido y acordado. Las preguntas siguientes son disparadores de conversación, no conclusiones sobre el equipo. No marcar un punto como hallazgo si no refleja lo que realmente ocurrió.
 
+**Estado al 2026-09-30:** el Sprint sigue en curso hasta el 2026-10-07 y este archivo no contiene evidencia de una retrospectiva realizada. Los espacios de Start, Stop y Continue son una plantilla; no son hallazgos. Completarla después de la sesión real y enlazar evidencia si el equipo la conserva.
+
 ## Datos de la sesión
 
 - Fecha y duración: `Por completar`.

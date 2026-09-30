@@ -12,11 +12,19 @@ AgroValle Connect busca conectar directamente a productores del Valle del Cauca 
 
 ## Datos de la revisión
 
-- Fecha de preparación de este borrador: 2026-09-29.
+- Fecha de corte de este borrador: 2026-09-30.
+- Periodo del Sprint: en curso; cierre previsto para el 2026-10-07. La review corresponde al cierre y no se presenta como realizada.
 - Fecha y hora de la reunión: **por completar por el equipo**.
 - Participantes y roles presentes: **por completar por el equipo**.
 - Product Owner y decisión de aceptación: **por completar durante la revisión**.
 - Evidencia de la reunión/demo: **adjuntar capturas o enlace real**.
+
+### Estado de evidencias al 2026-09-30
+
+- El repositorio contiene la colección Postman y un guion con datos de prueba sintéticos; esto prepara la demostración, pero no acredita que se haya ejecutado.
+- No se ha enlazado evidencia de una ejecución en vivo de Postman/Swagger, de una fila persistida durante la demostración, ni de una decisión o feedback del Product Owner.
+- La integración continua aporta evidencia automatizada del commit que valida; no sustituye la demostración funcional ni la aceptación del Product Owner.
+- La documentación de Daily Scrum y retrospectiva mantiene formatos pendientes; no se presentan conclusiones de reuniones no evidenciadas.
 
 ## Historias revisadas
 
@@ -46,10 +54,10 @@ Resultados que se esperan según los contratos documentados: HU-01 devuelve `201
 - La conexión de la aplicación con PostgreSQL 18 en la base local `agrovalle conect` se autenticó y Flyway aplicó las migraciones V1–V4. Esta comprobación confirma la creación del esquema; no equivale a una demostración funcional de los endpoints ni a las pruebas completas sobre PostgreSQL.
 - El historial conserva ejecuciones CI exitosas de commits anteriores; para el estado actual debe usarse el run enlazado al commit `aa12a0d` arriba.
 - La regla pública `main-protection` aparece activa para la rama predeterminada `main`; exige una aprobación, el chequeo `Build, tests, Checkstyle and JaCoCo`, y bloquea borrado y force-push. [Configuración del ruleset](https://github.com/santixit/agrovalle-connect/rules/24141794).
-- [PR #23](https://github.com/santixit/agrovalle-connect/pull/23) se fusionó el 2026-09-28. GitHub registra la aprobación de `DannyGomez02` el 2026-09-29, después de la fusión; no cumple el requisito de aprobación previa.
-- [PR #24](https://github.com/santixit/agrovalle-connect/pull/24) recibió aprobación de `DannyGomez02` antes de fusionarse el 2026-09-29 y reporta dos comprobaciones exitosas. Ese PR modificó documentación; no valida por sí solo la implementación completa del integrador.
+- [PR #23](https://github.com/santixit/agrovalle-connect/pull/23) se fusionó el 2026-09-28. GitHub registra la aprobación de `DannyGomez02` el 2026-09-29, después de la fusión. Por tanto, #23 no demuestra revisión y aprobación previa a la integración ni satisface la política de peer review para ese merge.
+- [PR #24](https://github.com/santixit/agrovalle-connect/pull/24) recibió aprobación de `DannyGomez02` antes de fusionarse el 2026-09-29 y reporta dos comprobaciones exitosas. Su único cambio fue documental (`docs/sprint-1-planning.md` y `docs/sprint-1-review.md`); demuestra aprobación previa de documentación, no una revisión previa del código de las historias del Sprint.
 - El workflow no despliega en una rama feature. El despliegue automático desde `main` sigue pendiente de elegir proveedor y configurar `STAGING_DEPLOY_HOOK`; el equipo debe comprobar una URL pública y una consulta real antes de afirmar que staging funciona.
-- La demostración con Postman, evidencia de fila persistida en PostgreSQL, resultado del Product Owner, Daily Scrums y retrospectiva siguen pendientes de evidencia real del equipo.
+- Al corte del 2026-09-30, la demostración funcional con Postman/Swagger, la evidencia de una fila persistida en PostgreSQL durante esa demostración, la decisión y el feedback del Product Owner, los registros de Daily Scrum y los hallazgos de retrospectiva siguen pendientes de evidencia real del equipo. El Sprint no cierra hasta el 2026-10-07.
 
 ## Acuerdos de la revisión
 
@@ -65,4 +73,4 @@ Resultados que se esperan según los contratos documentados: HU-01 devuelve `201
 - [ ] Captura o salida de consulta que demuestre la fila persistida en PostgreSQL con datos sintéticos.
 - [ ] Enlace al run de GitHub Actions del commit revisado, con build, pruebas, Checkstyle y cobertura visibles.
 - [ ] Fecha, participantes, decisión y feedback reales de la Sprint Review.
-- [ ] Enlace al PR y evidencia de revisión por pares previa al merge, cuando exista.\n
+- [ ] Enlace al PR y evidencia de revisión por pares previa al merge, cuando exista.
