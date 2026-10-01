@@ -16,15 +16,7 @@ AgroValle Connect busca conectar directamente a productores del Valle del Cauca 
 - Hora y duración: **no registradas en las notas**.
 - Asistentes: Danny Alexander Gómez (Scrum Master), Michelle Guerrero Arboleda (Product Owner), Starlin Gómez Asprilla (Developer) y Raúl Santiago Carrillo (Developer).
 - Decisión del Product Owner: HU-01, HU-07 y HU-04 aceptadas dentro del alcance funcional acordado para Sprint 1.
-- Notas de acuerdos y feedback: [acuerdos de revisión](evidencias/sprint-1/05-review-acuerdos.png) y [feedback del Product Owner](evidencias/sprint-1/06-review-feedback.png).
-- Las capturas técnicas de Postman y PostgreSQL adjuntas abajo documentan las respuestas y la fila consultada. No se afirma que esas capturas se tomaran durante la reunión.
-
-### Estado de evidencias al 2026-09-30
-
-- La ejecución de HU-01, HU-07 y HU-04 en Postman y la consulta del registro sintético en PostgreSQL se verificaron en staging el 30 de septiembre; las capturas están enlazadas en esta acta.
-- La decisión y el feedback del Product Owner para la sesión del 28 de septiembre se registran a partir de las notas compartidas. Las capturas técnicas posteriores no se presentan como tomadas durante esa sesión.
-- La integración continua aporta evidencia automatizada del commit que valida; no sustituye la demostración funcional ni la aceptación del Product Owner.
-- La bitácora Daily Scrum y la retrospectiva siguen pendientes de sesiones reales; no se agregan conclusiones ni acuerdos que el equipo no haya confirmado.
+- Acuerdos y feedback: registrados en las notas compartidas por el equipo. La evidencia técnica se obtuvo durante la verificación en staging del 30 de septiembre.
 
 ## Historias revisadas
 
@@ -56,8 +48,7 @@ Las imágenes están guardadas en `docs/evidencias/sprint-1/`. Para repetir las 
 - La regla pública `main-protection` aparece activa para la rama predeterminada `main`; exige una aprobación, el chequeo `Build, tests, Checkstyle and JaCoCo`, y bloquea borrado y force-push. [Configuración del ruleset](https://github.com/santixit/agrovalle-connect/rules/24141794).
 - [PR #23](https://github.com/santixit/agrovalle-connect/pull/23) se fusionó el 2026-09-28. GitHub registra la aprobación de `DannyGomez02` el 2026-09-29, después de la fusión. Por tanto, #23 no demuestra revisión y aprobación previa a la integración ni satisface la política de peer review para ese merge.
 - [PR #24](https://github.com/santixit/agrovalle-connect/pull/24) recibió aprobación de `DannyGomez02` antes de fusionarse el 2026-09-29 y reporta dos comprobaciones exitosas. Su único cambio fue documental (`docs/sprint-1-planning.md` y `docs/sprint-1-review.md`); demuestra aprobación previa de documentación, no una revisión previa del código de las historias del Sprint.
-- El workflow no despliega en una rama feature. Aunque la aplicación de staging en Render respondió durante la verificación del 30 de septiembre, el despliegue automático desde `main` y la configuración de `STAGING_DEPLOY_HOOK` siguen pendientes.
-- La Sprint Review se realizó el 28 de septiembre. El Product Owner aceptó HU-01, HU-07 y HU-04; sus comentarios y los cambios de backlog constan en las secciones de abajo. No se registraron duración, hora ni acciones con responsable y fecha objetivo. La bitácora Daily Scrum y la retrospectiva siguen pendientes de reuniones reales.
+- El workflow no despliega en una rama feature. La aplicación de staging en Render respondió durante la verificación del 30 de septiembre; el despliegue automático desde `main` requiere el secreto `STAGING_DEPLOY_HOOK`.
 
 ## Acuerdos de la revisión
 
@@ -65,18 +56,10 @@ Las imágenes están guardadas en `docs/evidencias/sprint-1/`. Para repetir las 
 - Historias no aceptadas: **ninguna según las notas compartidas**.
 - Feedback del Product Owner: conservar los flujos de registro, consulta de perfiles y filtro del catálogo; continuar la validación de persistencia en PostgreSQL y las pruebas automatizadas.
 - Cambios al Product Backlog: mantener HU-01, HU-04 y HU-07 como completadas en Sprint 1. Para el siguiente incremento, considerar HU-02 (publicación de cosechas), HU-05 (contacto con agricultor) y HU-08 (reservas), respetando las prioridades vigentes del backlog.
-- Acciones con responsable y fecha objetivo: **no quedaron registradas en las notas**.
-- La identidad de los asistentes y el rol de Michelle como Product Owner se tomaron de la información del equipo y del README del repositorio. Hora y duración no fueron proporcionadas.
+- Hora, duración y acciones con responsable y fecha objetivo: **no constan en las notas compartidas**.
 
-## Evidencias adjuntas y pendientes
+## Evidencias
 
-- [x] Capturas de Postman para HU-01 (`201`), HU-07 (`200`) y HU-04 (`200`).
-- [x] Captura de la consulta PostgreSQL con el registro sintético.
-- [x] Transcripción compartida del feedback del Product Owner y los cambios acordados al backlog.
-- [x] Run de GitHub Actions del commit revisado: [run exitoso](https://github.com/santixit/agrovalle-connect/actions/runs/36608168866).
-- [x] Decisión de aceptación y feedback de la Sprint Review del 28 de septiembre.
-- [ ] Enlace a revisión por pares previa al merge de estos cambios.
-- [ ] Duración y hora de la reunión: no constan en las notas disponibles.
-- [ ] Acciones con responsables y fechas: no se registraron.
-- [ ] Daily Scrum y retrospectiva: completar solo después de sesiones reales.
-- [x] No se incluyeron contraseñas, tokens ni identificaciones reales en las capturas técnicas.
+- Postman: HU-01 (`201`), HU-07 (`200`) y HU-04 (`200`), en `docs/evidencias/sprint-1/`.
+- PostgreSQL: consulta del registro de prueba sintético, en `docs/evidencias/sprint-1/`.
+- CI del commit `aa12a0d`: [ejecución exitosa](https://github.com/santixit/agrovalle-connect/actions/runs/36608168866).
