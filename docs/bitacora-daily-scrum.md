@@ -9,11 +9,14 @@ Los enlaces permiten consultar actividad del repositorio relacionada con el trab
 ### Actividad verificable relacionada
 
 - [fix(ci): enforce JaCoCo coverage gate](https://github.com/santixit/agrovalle-connect/commit/a66dbf1)
+- [fix(boot): remove duplicate application entry point](https://github.com/santixit/agrovalle-connect/commit/c5b31e0)
+- [test(api): verify readiness endpoint](https://github.com/santixit/agrovalle-connect/commit/cc4ce0a)
 - [feat: implementar historias de Sprint 1 y pipeline de calidad](https://github.com/santixit/agrovalle-connect/commit/3e0154a)
 - [feat: add relational model for integrator domain](https://github.com/santixit/agrovalle-connect/commit/d79324b)
 - [feat: improve marketplace UI and validation](https://github.com/santixit/agrovalle-connect/commit/3aa24dc)
 - [PR #24 — actualización de evidencia del Sprint 1](https://github.com/santixit/agrovalle-connect/pull/24)
 - [PR #26 — enlace de staging](https://github.com/santixit/agrovalle-connect/pull/26)
+- [PR #1 — corrección de CI y cobertura](https://github.com/santixit/agrovalle-connect/pull/1)
 
 ## Registro de sesiones de coordinación
 
