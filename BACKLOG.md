@@ -1,6 +1,6 @@
 # Product Backlog - AgroValle Connect
 
-Los puntos de historia usan la secuencia Fibonacci y la prioridad se expresa con MoSCoW, no con codigos numericos como P0 o P1. La tabla registra las estimaciones; la evidencia de una sesion de Planning Poker debe conservarse aparte cuando el equipo la tenga. Las historias se revisan contra INVEST: son independientes en lo posible, negociables, valiosas, estimables, pequenas y verificables mediante el escenario BDD.
+Las estimaciones usan la secuencia Fibonacci y las prioridades siguen MoSCoW. Las historias se organizan según INVEST y se describen con escenarios BDD.
 
 | ID | Historia de usuario | Prioridad MoSCoW | SP |
 |---|---|---:|---:|

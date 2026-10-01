@@ -28,7 +28,7 @@ Estimaciones iniciales para validar durante el Sprint Planning. Ninguna tarea su
 | T05 / HU-01 | Implementar `AgricultorController` para el registro REST | 4 h | Adecuacion funcional | Prueba de contrato |
 | T06 / HU-01 | Traducir BDD de registro a JUnit 5 y MockMvc (obligatorio) | 6 h | Fiabilidad y mantenibilidad | Suite automatizada verde |
 | T07 / HU-01 | Auditar y corregir Checkstyle en componentes de registro | 2 h | Mantenibilidad: conformidad de codigo | Checkstyle sin errores |
-| T08 / HU-07 | Implementar consulta de perfil en `ProductorRepository`, `ProductorService` y `ProductorController`, con DTO | 4 h | Seguridad: exponer solo datos necesarios | Pruebas perfil existente/no encontrado |
+| T08 / HU-07 | Implementar consulta de perfil en `AgricultorRepository`, `AgricultorService` y `AgricultorController`, con DTO | 4 h | Seguridad: exponer solo datos necesarios | Pruebas perfil existente/no encontrado |
 | T09 / HU-07 | Automatizar BDD de consulta con JUnit 5/MockMvc | 4 h | Fiabilidad: resultado asociado al ID | Prueba de integracion |
 | T10 / HU-04 | Implementar filtros opcionales en `ProductoRepository` y servicio | 5 h | Adecuacion funcional: filtros coincidentes | Pruebas combinaciones |
 | T11 / HU-04 | Exponer consulta en `ProductoController` y validar coleccion JSON | 3 h | Adecuacion funcional | Prueba MockMvc Dagua/Frutas |

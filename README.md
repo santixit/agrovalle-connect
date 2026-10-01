@@ -158,8 +158,6 @@ gitGraph
    merge feature/HU-02-productos
 ```
 
-Las reuniones, revisiones, aprobaciones y datos de los integrantes solo se registran con evidencia real. Este trabajo permanece local hasta que el equipo decida revisarlo mediante PR.
-
 ## Referencias
 
 - [Product Backlog y BDD](BACKLOG.md)

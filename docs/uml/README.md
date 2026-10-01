@@ -304,7 +304,3 @@ La instancia pública de staging es [AgroValle Connect en Render](https://agrova
 - **Observer:** `NotificacionObserver` observa eventos transaccionales de contacto y pedido para persistir notificaciones.
 - **Singleton:** `ReglasDisponibilidad` es stateless y Spring lo administra como singleton para validar inventario.
 - La interfaz demostrativa vive en `src/main/resources/static/index.html` y consume los endpoints REST.
-
-## Pendientes de evolucion
-
-Pendiente de evidencia del equipo: adjuntar fecha, participantes y resultado del Planning Poker si esa sesión ya ocurrió; si no ocurrió, realizarla antes de afirmar que las estimaciones fueron acordadas allí. La existencia de pruebas automatizadas no demuestra por sí sola que se siguió TDD: conservar evidencia real del ciclo Red-Green-Refactor o aplicarlo en los próximos cambios. Cada Pull Request necesita aprobación de un revisor distinto al autor antes de fusionarse. La configuración actual de staging y su enlace se documentan arriba. No registrar ceremonias ni aprobaciones que no hayan ocurrido.
