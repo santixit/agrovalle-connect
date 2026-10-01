@@ -1,0 +1,75 @@
+{
+  "info": {
+    "name": "AgroValle Connect - Sprint 1",
+    "description": "Requests para HU-01, HU-07 y HU-04. Usar solo datos de prueba.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "farmerId", "value": "1" },
+    { "key": "testCedula", "value": "ID-DE-PRUEBA-001" }
+  ],
+  "item": [
+    {
+      "name": "HU-01 - Registrar agricultor",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Ana Ruiz\",\n  \"cedula\": \"{{testCedula}}\",\n  \"ubicacion_valle\": \"Dagua\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": "{{baseUrl}}/api/v1/auth/register"
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test('El agricultor se crea con HTTP 201', function () { pm.response.to.have.status(201); });",
+            "const body = pm.response.json();",
+            "if (body.id) pm.collectionVariables.set('farmerId', body.id);",
+            "pm.test('La respuesta no expone la cedula', function () { pm.expect(body).not.to.have.property('cedula'); });"
+          ]
+        }
+      }]
+    },
+    {
+      "name": "HU-07 - Consultar perfil",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/v1/productores/{{farmerId}}"
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test('El perfil existe y responde HTTP 200', function () { pm.response.to.have.status(200); });",
+            "pm.test('El perfil incluye nombre y ubicacion', function () { const body = pm.response.json(); pm.expect(body.nombre).to.be.a('string'); pm.expect(body.ubicacion_valle).to.be.a('string'); });"
+          ]
+        }
+      }]
+    },
+    {
+      "name": "HU-04 - Filtrar frutas de Dagua",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/v1/productos?municipio=Dagua&categoria=Frutas"
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test('El catalogo responde HTTP 200', function () { pm.response.to.have.status(200); });",
+            "pm.test('La respuesta es un arreglo de ofertas coincidentes', function () { const rows = pm.response.json(); pm.expect(rows).to.be.an('array'); rows.forEach(function (row) { pm.expect(row.municipio.toLowerCase()).to.eql('dagua'); pm.expect(row.categoria.toLowerCase()).to.eql('frutas'); }); });"
+          ]
+        }
+      }]
+    }
+  ]
+}

@@ -1,5 +1,11 @@
 # Maven
 target/
+*.class
+# Ignore local Maven configuration and binaries, but keep wrapper configuration required by mvnw.
+.mvn/*
+!.mvn/wrapper/
+.mvn/wrapper/*
+!.mvn/wrapper/maven-wrapper.properties
 .mvn/wrapper/maven-wrapper.jar
 
 # IDEs
