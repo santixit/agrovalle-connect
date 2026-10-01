@@ -24,7 +24,7 @@ Para pequeños y medianos productores del Valle del Cauca que necesitan vender s
 
 El repositorio conserva la base inicial de Sprint 0 y añade los flujos del integrador. El alcance actual incluye registro e inicio de sesión con JWT, catálogo y filtros, publicación de ofertas, consulta de precios a partir de entregas registradas, fincas, contactos con notificación, reservas con control transaccional de inventario, estados, despachos, trazabilidad, favoritos y reporte administrativo. La web de demostración se sirve desde Spring Boot en `/`.
 
-El rol `ADMIN` se asigna mediante aprovisionamiento controlado de la cuenta, nunca por registro público. Las reuniones, revisiones por compañeros, decisiones del equipo y despliegue real deben documentarse con evidencia ocurrida; el repositorio no las inventa.
+El rol `ADMIN` se asigna mediante aprovisionamiento controlado de la cuenta, nunca por registro público.
 
 ## Tecnologías y arquitectura
 
