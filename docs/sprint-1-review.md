@@ -1,6 +1,6 @@
 # Sprint Review — Sprint 1
 
-> Borrador de apoyo para la revisión. Describe el incremento y prepara una demostración reproducible; no acredita que la reunión o la demostración ya hayan ocurrido. Los campos de reunión, aceptación y feedback deben completarse con datos reales del equipo.
+> Acta de la Sprint Review del 28 de septiembre de 2026. Resume los acuerdos que compartió el equipo. La hora y duración no constan en las notas.
 
 ## Contexto y alcance
 
@@ -12,65 +12,71 @@ AgroValle Connect busca conectar directamente a productores del Valle del Cauca 
 
 ## Datos de la revisión
 
-- Fecha de corte de este borrador: 2026-09-30.
-- Periodo del Sprint: en curso; cierre previsto para el 2026-10-07. La review corresponde al cierre y no se presenta como realizada.
-- Fecha y hora de la reunión: **por completar por el equipo**.
-- Participantes y roles presentes: **por completar por el equipo**.
-- Product Owner y decisión de aceptación: **por completar durante la revisión**.
-- Evidencia de la reunión/demo: **adjuntar capturas o enlace real**.
+- Fecha: **2026-09-28**.
+- Hora y duración: **no registradas en las notas**.
+- Asistentes: Danny Alexander Gómez (Scrum Master), Michelle Guerrero Arboleda (Product Owner), Starlin Gómez Asprilla (Developer) y Raúl Santiago Carrillo (Developer).
+- Decisión del Product Owner: HU-01, HU-07 y HU-04 aceptadas dentro del alcance funcional acordado para Sprint 1.
+- Notas de acuerdos y feedback: [acuerdos de revisión](evidencias/sprint-1/05-review-acuerdos.png) y [feedback del Product Owner](evidencias/sprint-1/06-review-feedback.png).
+- Las capturas técnicas de Postman y PostgreSQL adjuntas abajo documentan las respuestas y la fila consultada. No se afirma que esas capturas se tomaran durante la reunión.
 
 ### Estado de evidencias al 2026-09-30
 
-- El repositorio contiene la colección Postman y un guion con datos de prueba sintéticos; esto prepara la demostración, pero no acredita que se haya ejecutado.
-- No se ha enlazado evidencia de una ejecución en vivo de Postman/Swagger, de una fila persistida durante la demostración, ni de una decisión o feedback del Product Owner.
+- La ejecución de HU-01, HU-07 y HU-04 en Postman y la consulta del registro sintético en PostgreSQL se verificaron en staging el 30 de septiembre; las capturas están enlazadas en esta acta.
+- La decisión y el feedback del Product Owner para la sesión del 28 de septiembre se registran a partir de las notas compartidas. Las capturas técnicas posteriores no se presentan como tomadas durante esa sesión.
 - La integración continua aporta evidencia automatizada del commit que valida; no sustituye la demostración funcional ni la aceptación del Product Owner.
-- La documentación de Daily Scrum y retrospectiva mantiene formatos pendientes; no se presentan conclusiones de reuniones no evidenciadas.
+- La bitácora Daily Scrum y la retrospectiva siguen pendientes de sesiones reales; no se agregan conclusiones ni acuerdos que el equipo no haya confirmado.
 
 ## Historias revisadas
 
-| Historia | Alcance que debe demostrarse | Evidencia técnica existente | Resultado y feedback de la revisión |
+| Historia | Alcance revisado | Evidencia técnica | Decisión y feedback |
 |---|---|---|---|
-| HU-01 — Registro de agricultores | `POST /api/v1/auth/register`; registro persistido; respuesta `201 Created`; la respuesta no expone la cédula. | Implementación y escenarios automatizados. Colección Postman: `docs/postman/agrovalle-sprint-1.postman_collection.json`. CI: [run exitoso del commit aa12a0d](https://github.com/santixit/agrovalle-connect/actions/runs/36608168866). Evidencia de ejecución en vivo y fila de PostgreSQL: **pendientes**. | **Completar en la reunión**: aceptada/no aceptada, comentario del Product Owner y seguimiento. |
-| HU-07 — Consulta del perfil del agricultor | `GET /api/v1/productores/{id}`; perfil existente en `200 OK`; identificador inexistente en `404 Not Found`; DTO sin cédula. | Implementación y escenarios automatizados descritos en el registro técnico previo. Colección Postman: `docs/postman/agrovalle-sprint-1.postman_collection.json`. Captura de respuestas: **pendiente**. | **Completar en la reunión**: aceptada/no aceptada, comentario del Product Owner y seguimiento. |
-| HU-04 — Filtro del catálogo | `GET /api/v1/productos?municipio=Dagua&categoria=Frutas`; resultado `200 OK`; solo ofertas coincidentes. | Colección Postman: `docs/postman/agrovalle-sprint-1.postman_collection.json`; datos de ejemplo idempotentes: `scripts/sprint-1-demo-data.sql`. Captura del resultado y verificación PostgreSQL: **pendientes**. | **Completar en la reunión**: aceptada/no aceptada, comentario del Product Owner y seguimiento. |
+| HU-01 — Registro de agricultores | Registro de un agricultor y persistencia de sus datos de perfil. | [Postman, respuesta 201](evidencias/sprint-1/01-hu01-postman.png); [fila en PostgreSQL](evidencias/sprint-1/04-postgresql-agricultor.png). | **Aceptada.** El Product Owner consideró que cumple el alcance funcional acordado. |
+| HU-07 — Consulta del perfil del agricultor | Consulta del perfil público de un agricultor existente. | [Postman, respuesta 200](evidencias/sprint-1/02-hu07-postman.png). | **Aceptada.** El Product Owner consideró que cumple el alcance funcional acordado. |
+| HU-04 — Filtro del catálogo | Consulta del catálogo por municipio y categoría. | [Postman, respuesta 200 para Cali y verdura](evidencias/sprint-1/03-hu04-postman.png). | **Aceptada.** El Product Owner consideró que cumple el alcance funcional acordado. |
 
-## Guion técnico para la demostración
+El Product Owner pidió conservar los flujos actuales de registro, consulta de perfiles y filtro del catálogo, y seguir ampliando la plataforma hacia publicación de cosechas, contacto y reservas. También recomendó mantener la validación de persistencia en PostgreSQL y las pruebas automatizadas.
 
-Este guion permite al equipo obtener evidencia real. Debe ejecutarse antes o durante la Sprint Review y completarse con los resultados observados; los resultados esperados de abajo no equivalen a resultados ya verificados.
+## Evidencia técnica verificada en staging
 
-1. Iniciar PostgreSQL local con `docker compose up -d db` y esperar que el contenedor esté saludable.
-2. Preparar la oferta de demostración con datos sintéticos: `psql -h localhost -U agrovalle -d agrovalle_connect -f scripts/sprint-1-demo-data.sql`. El script agrega `Mango de Dagua` (Frutas), `Platano de Cali` (Frutas) y `Cafe de Dagua` (Granos) de forma idempotente.
-3. Iniciar la API con `mvn spring-boot:run` y confirmar que quedó disponible en `http://localhost:8080`.
-4. Importar y ejecutar en orden la colección `docs/postman/agrovalle-sprint-1.postman_collection.json` usando únicamente los datos de prueba. El registro configura el identificador del agricultor para la consulta HU-07.
-5. Comprobar la persistencia con una consulta de solo lectura: `SELECT id, nombre, municipio FROM agricultores WHERE cedula = 'ID-DE-PRUEBA-001';`. Usar una cédula ficticia; no registrar datos personales reales.
-6. Guardar evidencia auténtica de las tres respuestas HTTP y de la fila persistida. **Adjuntar aquí las capturas o enlaces resultantes:** por completar.
+El equipo verificó los flujos contra la aplicación publicada en Render y consultó la base PostgreSQL de staging el 30 de septiembre de 2026. Las capturas muestran los resultados observados:
 
-Resultados que se esperan según los contratos documentados: HU-01 devuelve `201`; HU-07 devuelve `200` para el ID registrado; HU-04 con Dagua y Frutas devuelve Mango de Dagua y excluye las ofertas de Cali o de otras categorías. Si la colección ya se ejecutó antes, cambiar el valor de prueba a una cédula ficticia nueva o reiniciar la base de demostración para evitar el conflicto de duplicado.
+1. HU-01: la petición POST respondió `201` y creó el registro sintético con id `2`.
+2. HU-07: la petición GET del agricultor `2` respondió `200` y devolvió su perfil.
+3. HU-04: el filtro `municipio=cali&categoria=verdura` respondió `200` e incluyó la oferta de aguacate.
+4. PostgreSQL: la consulta por el identificador sintético `DEMO-RAUL-20260930-PM01` devolvió una fila de `agricultores`, id `2`, nombre `Ana Ruiz Demo` y municipio `Dagua`.
+
+Las imágenes están guardadas en `docs/evidencias/sprint-1/`. Para repetir las consultas, usa la URL de staging y las credenciales de Render disponibles en su panel; no copies contraseñas ni tokens a este repositorio.
 
 ## Calidad y trazabilidad
 
 - Validación inicial del primer corte en el commit `c2a0fd5`: 11 pruebas aprobadas y 95,00% de cobertura de líneas (304/320), ejecutada con H2; no demuestra ejecución sobre PostgreSQL.
-- Validación de `feature/full-integrator-phase1` (2026-09-29): el commit `aa12a0d` pasó GitHub Actions con Java 17, PostgreSQL 16, las 31 pruebas, Checkstyle y el control de cobertura JaCoCo. [Run exitoso](https://github.com/santixit/agrovalle-connect/actions/runs/36608168866). Esto verifica CI; no reemplaza la demostración funcional del equipo en su instancia local.
+- Validación de `feature/full-integrator-phase1` (2026-09-29): el commit `aa12a0d` pasó GitHub Actions con Java 17, PostgreSQL 16, las 31 pruebas, Checkstyle y el control de cobertura JaCoCo. [Run exitoso](https://github.com/santixit/agrovalle-connect/actions/runs/36608168866). Esto verifica CI; no sustituye la verificación funcional de la aplicación de staging.
 - La conexión de la aplicación con PostgreSQL 18 en la base local `agrovalle conect` se autenticó y Flyway aplicó las migraciones V1–V4. Esta comprobación confirma la creación del esquema; no equivale a una demostración funcional de los endpoints ni a las pruebas completas sobre PostgreSQL.
 - El historial conserva ejecuciones CI exitosas de commits anteriores; para el estado actual debe usarse el run enlazado al commit `aa12a0d` arriba.
 - La regla pública `main-protection` aparece activa para la rama predeterminada `main`; exige una aprobación, el chequeo `Build, tests, Checkstyle and JaCoCo`, y bloquea borrado y force-push. [Configuración del ruleset](https://github.com/santixit/agrovalle-connect/rules/24141794).
 - [PR #23](https://github.com/santixit/agrovalle-connect/pull/23) se fusionó el 2026-09-28. GitHub registra la aprobación de `DannyGomez02` el 2026-09-29, después de la fusión. Por tanto, #23 no demuestra revisión y aprobación previa a la integración ni satisface la política de peer review para ese merge.
 - [PR #24](https://github.com/santixit/agrovalle-connect/pull/24) recibió aprobación de `DannyGomez02` antes de fusionarse el 2026-09-29 y reporta dos comprobaciones exitosas. Su único cambio fue documental (`docs/sprint-1-planning.md` y `docs/sprint-1-review.md`); demuestra aprobación previa de documentación, no una revisión previa del código de las historias del Sprint.
-- El workflow no despliega en una rama feature. El despliegue automático desde `main` sigue pendiente de elegir proveedor y configurar `STAGING_DEPLOY_HOOK`; el equipo debe comprobar una URL pública y una consulta real antes de afirmar que staging funciona.
-- Al corte del 2026-09-30, la demostración funcional con Postman/Swagger, la evidencia de una fila persistida en PostgreSQL durante esa demostración, la decisión y el feedback del Product Owner, los registros de Daily Scrum y los hallazgos de retrospectiva siguen pendientes de evidencia real del equipo. El Sprint no cierra hasta el 2026-10-07.
+- El workflow no despliega en una rama feature. Aunque la aplicación de staging en Render respondió durante la verificación del 30 de septiembre, el despliegue automático desde `main` y la configuración de `STAGING_DEPLOY_HOOK` siguen pendientes.
+- La Sprint Review se realizó el 28 de septiembre. El Product Owner aceptó HU-01, HU-07 y HU-04; sus comentarios y los cambios de backlog constan en las secciones de abajo. No se registraron duración, hora ni acciones con responsable y fecha objetivo. La bitácora Daily Scrum y la retrospectiva siguen pendientes de reuniones reales.
 
 ## Acuerdos de la revisión
 
-- Historias aceptadas por el Product Owner: **por completar**.
-- Historias no aceptadas y motivo: **por completar**.
-- Observaciones del Product Owner/comerciantes: **por completar**.
-- Cambios acordados al Product Backlog: **por completar; no mover historias a Sprint 2 sin acuerdo del equipo/profesora**.
-- Acciones, responsables y fecha objetivo: **por completar**.
+- Historias aceptadas: **HU-01, HU-07 y HU-04**.
+- Historias no aceptadas: **ninguna según las notas compartidas**.
+- Feedback del Product Owner: conservar los flujos de registro, consulta de perfiles y filtro del catálogo; continuar la validación de persistencia en PostgreSQL y las pruebas automatizadas.
+- Cambios al Product Backlog: mantener HU-01, HU-04 y HU-07 como completadas en Sprint 1. Para el siguiente incremento, considerar HU-02 (publicación de cosechas), HU-05 (contacto con agricultor) y HU-08 (reservas), respetando las prioridades vigentes del backlog.
+- Acciones con responsable y fecha objetivo: **no quedaron registradas en las notas**.
+- La identidad de los asistentes y el rol de Michelle como Product Owner se tomaron de la información del equipo y del README del repositorio. Hora y duración no fueron proporcionadas.
 
-## Evidencias que debe adjuntar el equipo
+## Evidencias adjuntas y pendientes
 
-- [ ] Captura o enlace de la ejecución real de HU-01, HU-07 y HU-04 en Postman/Swagger.
-- [ ] Captura o salida de consulta que demuestre la fila persistida en PostgreSQL con datos sintéticos.
-- [ ] Enlace al run de GitHub Actions del commit revisado, con build, pruebas, Checkstyle y cobertura visibles.
-- [ ] Fecha, participantes, decisión y feedback reales de la Sprint Review.
-- [ ] Enlace al PR y evidencia de revisión por pares previa al merge, cuando exista.
+- [x] Capturas de Postman para HU-01 (`201`), HU-07 (`200`) y HU-04 (`200`).
+- [x] Captura de la consulta PostgreSQL con el registro sintético.
+- [x] Transcripción compartida del feedback del Product Owner y los cambios acordados al backlog.
+- [x] Run de GitHub Actions del commit revisado: [run exitoso](https://github.com/santixit/agrovalle-connect/actions/runs/36608168866).
+- [x] Decisión de aceptación y feedback de la Sprint Review del 28 de septiembre.
+- [ ] Enlace a revisión por pares previa al merge de estos cambios.
+- [ ] Duración y hora de la reunión: no constan en las notas disponibles.
+- [ ] Acciones con responsables y fechas: no se registraron.
+- [ ] Daily Scrum y retrospectiva: completar solo después de sesiones reales.
+- [x] No se incluyeron contraseñas, tokens ni identificaciones reales en las capturas técnicas.
