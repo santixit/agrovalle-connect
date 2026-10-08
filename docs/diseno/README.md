@@ -4,7 +4,7 @@ Este paquete documenta el diseno arquitectonico del sistema AgroValle Connect y 
 
 ## Artefactos
 
-- [Modelo entidad-relacion conceptual](modelo-entidad-relacion.pdf) y fuente editable [modelo-entidad-relacion.mmd](modelo-entidad-relacion.mmd). El PDF tiene tres laminas: entidades principales, contactos y actividad/seguimiento; la guia acepta PNG o PDF para este artefacto.
+- [Modelo entidad-relacion conceptual](modelo-entidad-relacion.pdf) y fuente editable [modelo-entidad-relacion.mmd](modelo-entidad-relacion.mmd). El PDF presenta las entidades unicas y sus relaciones en una sola lamina; usa una paleta verde y coral diferenciada. La guia acepta PNG o PDF para este artefacto.
 - [DER fisico y notas de normalizacion](modelo-datos-der.pdf) y fuente [modelo-datos-der.mmd](modelo-datos-der.mmd). El PDF tiene dos laminas y se acompana del DDL de referencia.
 - [Snapshot DDL PostgreSQL](schema.sql). Es una consolidacion legible de Flyway V1-V4 para consulta y evaluacion. Las migraciones siguen siendo la unica fuente ejecutable del esquema; no ejecutar este snapshot en paralelo con Flyway.
 - [Arquitectura MVC en cuatro capas y patrones](arquitectura-mvc-gof.md).
