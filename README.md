@@ -167,6 +167,8 @@ gitGraph
 - [Review y retrospectiva](docs/sprint-1-review.md), [retrospectiva](docs/sprint-1-retrospective.md)
 - [Colección Postman inicial](docs/postman/agrovalle-sprint-1.postman_collection.json)
 - [Diagramas UML](docs/uml/README.md)
+- [Sprint de diseno y artefactos de arquitectura](docs/diseno/README.md)
+- [Requisito formal IEEE 29148 y comparacion BDD](docs/ieee29148-req01.md)
 - [ADR 001 Arquitectura](docs/adr/001-arquitectura-inicial.md)
 - [ADR 002 Modelo relacional](docs/adr/002-modelo-relacional-integrador.md)
 - [ADR 003 Seguridad JWT](docs/adr/003-autenticacion-y-autorizacion.md)
