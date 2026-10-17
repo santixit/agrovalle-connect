@@ -4,11 +4,10 @@ Este paquete documenta el diseno arquitectonico del sistema AgroValle Connect y 
 
 ## Artefactos
 
-- [Modelo entidad-relacion conceptual](modelo-entidad-relacion.pdf) y fuente editable [modelo-entidad-relacion.mmd](modelo-entidad-relacion.mmd). El PDF presenta las entidades unicas y sus relaciones en una sola lamina; usa una paleta verde y coral diferenciada. La guia acepta PNG o PDF para este artefacto.
-- [DER fisico y notas de normalizacion](modelo-datos-der.pdf) y fuente [modelo-datos-der.mmd](modelo-datos-der.mmd). El PDF tiene dos laminas y se acompana del DDL de referencia.
+- Modelo entidad-relacion implementado: fuentes [conceptual](modelo-entidad-relacion.mmd) y [fisica](modelo-datos-der.mmd), alineadas con las migraciones actuales. Se retiraron sus antiguos exports graficos para que no sigan apareciendo junto con los nuevos disenos.
 - [Snapshot DDL PostgreSQL](schema.sql). Es una consolidacion legible de Flyway V1-V4 para consulta y evaluacion. Las migraciones siguen siendo la unica fuente ejecutable del esquema; no ejecutar este snapshot en paralelo con Flyway.
 - [Arquitectura MVC en cuatro capas y patrones](arquitectura-mvc-gof.md).
-- PNG exigidos por la estructura de la guia: [diagrama de componentes](diagrama-componentes.png), [diagrama de despliegue](diagrama-despliegue.png) y [secuencias HU-01/HU-02](diagrama-secuencia.png). El PDF combinado [diagramas-uml.pdf](diagramas-uml.pdf) es una copia de consulta. Fuentes editables: [diagrama-secuencia.puml](diagrama-secuencia.puml), [diagrama-componentes.puml](diagrama-componentes.puml) y [diagrama-despliegue.puml](diagrama-despliegue.puml).
+- Fuentes UML editables de componentes, despliegue y secuencia: [diagrama-componentes.puml](diagrama-componentes.puml), [diagrama-despliegue.puml](diagrama-despliegue.puml) y [diagrama-secuencia.puml](diagrama-secuencia.puml). Se quitaron las imagenes PNG y el PDF de las versiones visuales anteriores.
 - [Prototipos de interfaz](mockups-ui.pdf), actualizados con los wireframes y mockups aportados para inicio, detalle y publicacion. Las seis laminas se conservan como PNG en [mockups/](mockups/); la interfaz estatica se ajusto al patron visual y mantiene sus flujos/API actuales. La aprobacion del Product Owner queda pendiente.
 - Modelos de datos aportados como propuesta: [DER conceptual propuesto](modelo-entidad-relacion-propuesta.pdf) y [DER fisico propuesto](modelo-datos-der-propuesta.pdf), con sus [imagenes originales](mockups/). No reemplazan los modelos canonicos ni el DDL: incluyen entidades/campos que no corresponden con las migraciones Flyway vigentes y requieren reconciliacion antes de adoptarse como esquema.
 - Especificacion IEEE 29148 y comparacion BDD: [../ieee29148-req01.md](../ieee29148-req01.md).
@@ -24,7 +23,7 @@ No se preparo un PDF unico de entrega. Los artefactos quedan separados en esta c
 
 El PDF de mockups agrupa primero las tres pantallas de baja fidelidad y despues las tres de alta fidelidad (inicio, detalle y publicar). Los originales PNG se guardan en `mockups/` para que puedan editarse o compararse. La pantalla de publicar refleja los datos soportados por el DTO vigente; no se agrega una carga de imagen ficticia porque el contrato y el backend actual no persisten imagenes.
 
-Los dos diagramas ER suministrados se publican como referencias de propuesta. El [DER implementado](modelo-entidad-relacion.mmd), el [DER fisico implementado](modelo-datos-der.mmd) y las migraciones `V1` a `V4` siguen describiendo el estado real de la aplicacion.
+Los dos diagramas ER suministrados se publican como referencias de propuesta. El [DER implementado](modelo-entidad-relacion.mmd), el [DER fisico implementado](modelo-datos-der.mmd) y las migraciones `V1` a `V4` siguen describiendo el estado real de la aplicacion. Se retiraron de este PR los exports graficos anteriores de esos modelos.
 
 ## Validaciones del equipo pendientes
 
