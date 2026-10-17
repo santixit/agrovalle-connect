@@ -162,6 +162,8 @@ gitGraph
 
 - [Product Backlog y BDD](BACKLOG.md)
 - [Definition of Done](docs/dod.md)
+- [Políticas Kanban, límites WIP y métricas de flujo](docs/kanban-policies.md)
+- [Estrategia de pruebas, pirámide y TDD](docs/estrategia-pruebas.md)
 - [Planificación Sprint 1](docs/sprint-1-planning.md)
 - [Bitácora Daily Scrum](docs/bitacora-daily-scrum.md)
 - [Review y retrospectiva](docs/sprint-1-review.md), [retrospectiva](docs/sprint-1-retrospective.md)
