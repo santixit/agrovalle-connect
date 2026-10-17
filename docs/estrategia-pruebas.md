@@ -37,3 +37,7 @@ JaCoCo exige al menos **60% de instrucciones, ramas y líneas a nivel de módulo
 ```
 
 El reporte HTML queda en `target/site/jacoco/index.html`. Para demostrar TDD en un Pull Request, adjuntar el resultado del primer test fallido, el paso a verde y el resultado tras refactorizar, junto con el reporte JaCoCo.
+
+### Ejercicio TDD registrado
+
+El ciclo Red–Green–Refactor de la regla de descuento mayorista está documentado con resultados y cobertura en [Evidencia TDD: descuento mayorista](evidencias/tdd-descuento-mayorista.md).
