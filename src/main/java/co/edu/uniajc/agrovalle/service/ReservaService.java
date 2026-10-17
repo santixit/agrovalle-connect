@@ -35,15 +35,18 @@ public class ReservaService {
   private final PedidoRepository pedidoRepository;
   private final EventoTrazabilidadRepository eventoRepository;
   private final ReglasDisponibilidad reglasDisponibilidad;
+  private final CalculadorDescuentoAgricola calculadorDescuentoAgricola;
 
   public ReservaService(CompradorRepository compradorRepository,
       ProductoRepository productoRepository, PedidoRepository pedidoRepository,
-      EventoTrazabilidadRepository eventoRepository, ReglasDisponibilidad reglasDisponibilidad) {
+      EventoTrazabilidadRepository eventoRepository, ReglasDisponibilidad reglasDisponibilidad,
+      CalculadorDescuentoAgricola calculadorDescuentoAgricola) {
     this.compradorRepository = compradorRepository;
     this.productoRepository = productoRepository;
     this.pedidoRepository = pedidoRepository;
     this.eventoRepository = eventoRepository;
     this.reglasDisponibilidad = reglasDisponibilidad;
+    this.calculadorDescuentoAgricola = calculadorDescuentoAgricola;
   }
 
   @Transactional
@@ -58,9 +61,11 @@ public class ReservaService {
     }
     reglasDisponibilidad.validarReserva(request.cantidadKg(), producto.getCantidadKg());
     producto.actualizarCantidad(producto.getCantidadKg().subtract(request.cantidadKg()));
+    BigDecimal precioPorKg = calculadorDescuentoAgricola.calcularPrecioUnitario(
+        request.cantidadKg(), producto.getPrecioPorKg());
     Pedido pedido = new Pedido(comprador);
     pedido.agregarDetalle(new DetallePedido(producto, request.cantidadKg(),
-        producto.getPrecioPorKg()));
+        precioPorKg));
     Pedido guardado = pedidoRepository.save(pedido);
     eventoRepository.save(new EventoTrazabilidad(guardado, EstadoPedido.PENDIENTE,
         "Reserva creada para la oferta " + producto.getNombre()));
@@ -68,7 +73,7 @@ public class ReservaService {
       producto.cambiarEstado(EstadoProducto.DISPONIBLE);
     }
     return new ReservaResponse(guardado.getId(), guardado.getEstado().name(), producto.getId(),
-        request.cantidadKg(), producto.getPrecioPorKg());
+        request.cantidadKg(), precioPorKg);
   }
 
   @Transactional
@@ -105,7 +110,9 @@ public class ReservaService {
       for (Producto producto : ofertas) {
         BigDecimal cantidad = cantidades.get(producto.getId());
         producto.actualizarCantidad(producto.getCantidadKg().subtract(cantidad));
-        pedido.agregarDetalle(new DetallePedido(producto, cantidad, producto.getPrecioPorKg()));
+        BigDecimal precioPorKg = calculadorDescuentoAgricola.calcularPrecioUnitario(
+            cantidad, producto.getPrecioPorKg());
+        pedido.agregarDetalle(new DetallePedido(producto, cantidad, precioPorKg));
       }
       Pedido guardado = pedidoRepository.save(pedido);
       eventoRepository.save(new EventoTrazabilidad(guardado, EstadoPedido.PENDIENTE,
@@ -115,3 +122,5 @@ public class ReservaService {
     return new CarritoReservaResponse(List.copyOf(pedidos));
   }
 }
+
+

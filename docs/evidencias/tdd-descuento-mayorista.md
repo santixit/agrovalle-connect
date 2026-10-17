@@ -24,12 +24,16 @@ Commit `140c5d3` (`feat: apply five percent discount above one hundred kilos`). 
 
 La implementación ahora depende del contrato `CalculadorDescuentoAgricola`, extrae el límite de 100 kg y la constante `DESCUENTO_MAYORISTA_CINCO_PORCIENTO`, y conserva el comportamiento cubierto por las pruebas.
 
-Verificación final con `mvnw clean verify`: 40 pruebas, 0 fallos, 0 errores; Checkstyle con 0 violaciones; JaCoCo superó los mínimos del 60 %:
+## Integración en reservas — Red/Green de extremo a extremo
+
+Se añadió `reservaMayoristaAplicaDescuentoAlPrecioPorKilogramo` en la prueba de integración de la API. El commit `04980cc` guardó primero la prueba en rojo: para una reserva de 101 kg esperaba `1900.00` por kg y el endpoint devolvía `2000.00`. Después se conectó `CalculadorDescuentoAgricola` a `ReservaService`: el precio con descuento se guarda como detalle del pedido y se devuelve en la respuesta. También se aplica a cada línea del carrito según la cantidad reservada de esa oferta. La prueba enfocada pasó con la integración.
+
+Verificación final con `mvnw clean verify`: 41 pruebas, 0 fallos, 0 errores; Checkstyle con 0 violaciones; JaCoCo superó los mínimos del 60 %:
 
 | Métrica | Cobertura |
 |---|---:|
 | Instrucciones | 90,4 % |
 | Ramas | 61,4 % |
-| Líneas | 91,9 % |
+| Líneas | 92,0 % |
 
 El reporte HTML está en `target/site/jacoco/index.html`. En CI, el workflow publica `target/site/jacoco/` como artefacto `jacoco-coverage-report`.
