@@ -1,0 +1,26 @@
+@startuml AgroValle_Deployment
+skinparam monochrome true
+skinparam shadowing false
+title Despliegue actual
+
+node "Cliente" as client {
+  artifact "Navegador web\nHTML/CSS/JS" as browser
+}
+
+node "Render Web Service\nLinux / red publica" as render {
+  node "JVM Java 17\nSpring Boot 3.3.4\nTomcat embebido" as app {
+    artifact "agrovalle-connect.jar\nUI estatica + API REST" as jar
+  }
+}
+
+database "Render PostgreSQL\nagrovalle_connect_staging" as pg
+node "GitHub Actions\nUbuntu runner" as ci {
+  artifact "mvn clean verify\nJUnit 5 / Checkstyle / JaCoCo" as job
+  database "PostgreSQL de pruebas" as testdb
+}
+
+browser --> jar : HTTPS / JSON\n443 en el borde; 8080 interno
+jar --> pg : JDBC / PostgreSQL\n5432 por red privada
+job --> testdb : JDBC para CI
+job ..> jar : construye y verifica
+@enduml

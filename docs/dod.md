@@ -6,7 +6,7 @@ Una historia solo pasa a Done cuando cumple todos los criterios siguientes. El e
 - [ ] Java 17 compila el proyecto y `mvn clean verify` termina correctamente.
 - [ ] `mvn checkstyle:check` termina con cero violaciones o advertencias.
 - [ ] Pasa el 100% de las pruebas automatizadas; el cambio incluye pruebas para sus escenarios BDD.
-- [ ] La cobertura de lineas cumple el umbral minimo del 60% en JaCoCo.
+- [ ] La cobertura de instrucciones, ramas y lineas cumple el umbral minimo del 60% en JaCoCo.
 - [ ] Los criterios Given-When-Then de la historia se validaron.
 - [ ] Se aplican MVC, SOLID y nombres claros.
 - [ ] README, BACKLOG y documentacion tecnica se actualizaron cuando corresponde.
