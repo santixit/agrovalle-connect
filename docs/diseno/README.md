@@ -9,7 +9,8 @@ Este paquete documenta el diseno arquitectonico del sistema AgroValle Connect y 
 - [Snapshot DDL PostgreSQL](schema.sql). Es una consolidacion legible de Flyway V1-V4 para consulta y evaluacion. Las migraciones siguen siendo la unica fuente ejecutable del esquema; no ejecutar este snapshot en paralelo con Flyway.
 - [Arquitectura MVC en cuatro capas y patrones](arquitectura-mvc-gof.md).
 - PNG exigidos por la estructura de la guia: [diagrama de componentes](diagrama-componentes.png), [diagrama de despliegue](diagrama-despliegue.png) y [secuencias HU-01/HU-02](diagrama-secuencia.png). El PDF combinado [diagramas-uml.pdf](diagramas-uml.pdf) es una copia de consulta. Fuentes editables: [diagrama-secuencia.puml](diagrama-secuencia.puml), [diagrama-componentes.puml](diagrama-componentes.puml) y [diagrama-despliegue.puml](diagrama-despliegue.puml).
-- [Prototipos de interfaz](mockups-ui.pdf), alineados a los DTOs actuales. La guia solicita este PDF (o capturas); su revision por el Product Owner queda pendiente.
+- [Prototipos de interfaz](mockups-ui.pdf), actualizados con los wireframes y mockups aportados para inicio, detalle y publicacion. Las seis laminas se conservan como PNG en [mockups/](mockups/); la interfaz estatica se ajusto al patron visual y mantiene sus flujos/API actuales. La aprobacion del Product Owner queda pendiente.
+- Modelos de datos aportados como propuesta: [DER conceptual propuesto](modelo-entidad-relacion-propuesta.pdf) y [DER fisico propuesto](modelo-datos-der-propuesta.pdf), con sus [imagenes originales](mockups/). No reemplazan los modelos canonicos ni el DDL: incluyen entidades/campos que no corresponden con las migraciones Flyway vigentes y requieren reconciliacion antes de adoptarse como esquema.
 - Especificacion IEEE 29148 y comparacion BDD: [../ieee29148-req01.md](../ieee29148-req01.md).
 - Los contratos HTTP detallados de HU-01, HU-07 y HU-04 estan en [../api-sprint-1.md](../api-sprint-1.md); las 15 historias y escenarios BDD estan en [../../BACKLOG.md](../../BACKLOG.md).
 
@@ -18,6 +19,12 @@ Este paquete documenta el diseno arquitectonico del sistema AgroValle Connect y 
 La consigna de esta guia exige terminar HU-01, HU-07 y HU-04 en Sprint 1. Se conserva la capacidad de 10 SP ya acordada (5 + 2 + 3). La guia tambien menciona Sprint 2; se deja fuera de este trabajo para respetar la decision del equipo de no iniciarlo todavia.
 
 No se preparo un PDF unico de entrega. Los artefactos quedan separados en esta carpeta y en `docs/ieee29148-req01.md`, como indica la guia, para revisarlos y versionarlos en GitHub.
+
+## Prototipos entregados
+
+El PDF de mockups agrupa primero las tres pantallas de baja fidelidad y despues las tres de alta fidelidad (inicio, detalle y publicar). Los originales PNG se guardan en `mockups/` para que puedan editarse o compararse. La pantalla de publicar refleja los datos soportados por el DTO vigente; no se agrega una carga de imagen ficticia porque el contrato y el backend actual no persisten imagenes.
+
+Los dos diagramas ER suministrados se publican como referencias de propuesta. El [DER implementado](modelo-entidad-relacion.mmd), el [DER fisico implementado](modelo-datos-der.mmd) y las migraciones `V1` a `V4` siguen describiendo el estado real de la aplicacion.
 
 ## Validaciones del equipo pendientes
 
