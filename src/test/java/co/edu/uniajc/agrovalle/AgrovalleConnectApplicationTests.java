@@ -351,6 +351,22 @@ class AgrovalleConnectApplicationTests {
   }
 
   @Test
+  void reservaMayoristaAplicaDescuentoAlPrecioPorKilogramo() throws Exception {
+    Agricultor agricultor = crearAgricultor("descuento@example.com", "667788");
+    Comprador comprador = crearComprador("compras-descuento@example.com");
+    Producto producto = productoRepository.save(new Producto(agricultor, null, "Maiz",
+        "Granos", "Dagua", new BigDecimal("150"), new BigDecimal("2000.00"),
+        LocalDate.now()));
+    String tokenComprador = token(comprador.getUsuario().getCorreo(), "ClaveSegura2026");
+
+    mockMvc.perform(post("/api/v1/reservas")
+            .header("Authorization", "Bearer " + tokenComprador)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{\"productoId\":" + producto.getId() + ",\"cantidad_kg\":101}"))
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("$.precio_por_kg").value(1900.00));
+  }
+  @Test
   void reservaDescuentaInventarioYRechazaExceso() throws Exception {
     mockMvc.perform(post("/api/v1/auth/register")
             .contentType(MediaType.APPLICATION_JSON)
@@ -602,3 +618,4 @@ class AgrovalleConnectApplicationTests {
     return com.jayway.jsonpath.JsonPath.read(response, "$.accessToken");
   }
 }
+
