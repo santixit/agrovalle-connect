@@ -1,6 +1,6 @@
 # Sprint de Diseno y cierre de Sprint 1
 
-Este paquete documenta el diseno arquitectonico del sistema AgroValle Connect y enlaza los artefactos comprobables en el repositorio. Se basa en la implementacion actual; no se presenta como una fase historica realizada antes de programar. Los prototipos son propuestas para revision del Product Owner y no implican una aprobacion que no conste en evidencia.
+Este paquete documenta el diseno arquitectonico del sistema AgroValle Connect y enlaza los artefactos comprobables en el repositorio. Se basa en la implementacion actual; no se presenta como una fase historica realizada antes de programar. El usuario del proyecto informa que el Product Owner dio su visto bueno a los mockups el 17 de octubre de 2026; esta nota registra esa confirmacion, no un acta firmada ni la aprobacion de otros artefactos.
 
 ## Artefactos
 
@@ -8,8 +8,8 @@ Este paquete documenta el diseno arquitectonico del sistema AgroValle Connect y 
 - [Snapshot DDL PostgreSQL](schema.sql). Es una consolidacion legible de Flyway V1-V4 para consulta y evaluacion. Las migraciones siguen siendo la unica fuente ejecutable del esquema; no ejecutar este snapshot en paralelo con Flyway.
 - [Arquitectura MVC en cuatro capas y patrones](arquitectura-mvc-gof.md).
 - Fuentes UML editables de componentes, despliegue y secuencia: [diagrama-componentes.puml](diagrama-componentes.puml), [diagrama-despliegue.puml](diagrama-despliegue.puml) y [diagrama-secuencia.puml](diagrama-secuencia.puml). Se quitaron las imagenes PNG y el PDF de las versiones visuales anteriores.
-- [Prototipos de interfaz](mockups-ui.pdf), actualizados con los wireframes y mockups aportados para inicio, detalle y publicacion. Las seis laminas se conservan como PNG en [mockups/](mockups/); la interfaz estatica se ajusto al patron visual y mantiene sus flujos/API actuales. La aprobacion del Product Owner queda pendiente.
-- Modelos de datos aportados como propuesta: [DER conceptual propuesto](modelo-entidad-relacion-propuesta.pdf) y [DER fisico propuesto](modelo-datos-der-propuesta.pdf), con sus [imagenes originales](mockups/). No reemplazan los modelos canonicos ni el DDL: incluyen entidades/campos que no corresponden con las migraciones Flyway vigentes y requieren reconciliacion antes de adoptarse como esquema.
+- [Prototipos de interfaz](mockups-ui.pdf), actualizados con los wireframes y mockups aportados para inicio, detalle y publicacion. Las seis laminas se conservan como PNG en [mockups/](mockups/); la interfaz estatica se ajusto al patron visual y mantiene sus flujos/API actuales. Visto bueno de los mockups: confirmado por el usuario del proyecto el 17 de octubre de 2026; no se adjunto acta firmada.
+- Modelos de datos aportados como propuesta: [DER conceptual propuesto](modelo-entidad-relacion-propuesta.pdf) y [DER fisico propuesto](modelo-datos-der-propuesta.pdf), con sus [imagenes originales](mockups/). La [reconciliacion con el esquema implementado](reconciliacion-der.md) identifica equivalencias y diferencias; estos DER siguen siendo propuestas y no reemplazan los modelos canonicos ni el DDL.
 - Especificacion IEEE 29148 y comparacion BDD: [../ieee29148-req01.md](../ieee29148-req01.md).
 - Los contratos HTTP detallados de HU-01, HU-07 y HU-04 estan en [../api-sprint-1.md](../api-sprint-1.md); las 15 historias y escenarios BDD estan en [../../BACKLOG.md](../../BACKLOG.md).
 
@@ -27,8 +27,9 @@ Los dos diagramas ER suministrados se publican como referencias de propuesta. El
 
 ## Validaciones del equipo pendientes
 
-- Product Owner: confirmar los wireframes y la version definitiva de historias, especialmente las diferencias entre el backlog actual y el documento `Sprint Planning- Sprint1 - Qué`.
+- Product Owner: el usuario del proyecto informa que los wireframes aportados recibieron visto bueno el 17 de octubre de 2026. Sigue pendiente validar la version definitiva de historias, especialmente las diferencias entre el backlog actual y el documento `Sprint Planning- Sprint1 - Qué`.
 - Equipo: revisar que el modelo conceptual y las decisiones de normalizacion representen las reglas reales del negocio.
 - Peer review: el PR #23 se aprobo despues de fusionarse; esa aprobacion no demuestra peer review previo. Los futuros PR deben aprobarse antes del merge.
 - Sprint 1: conservar el run CI y evidencias funcionales existentes, verificando que correspondan al commit que se entrega.
 - DoD: el archivo actual es una lista de verificacion, no tiene firmas verificables; las firmas deben agregarlas los integrantes si la docente las solicita.
+- Sprint Discovery: los artefactos describen el diseno comprobable actual; no hay evidencia fechada suficiente para afirmar que todas las actividades de discovery ocurrieron antes de empezar a codificar.
