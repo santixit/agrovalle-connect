@@ -1,0 +1,19 @@
+erDiagram
+    USUARIOS o|--o| AGRICULTORES : "perfil agricultor opcional"
+    USUARIOS ||--o| COMPRADORES : "perfil comprador"
+    AGRICULTORES ||--o{ FINCAS : posee
+    AGRICULTORES o|--o{ PRODUCTOS : publica
+    FINCAS o|--o{ PRODUCTOS : origen_opcional
+    COMPRADORES ||--o{ PEDIDOS : realiza
+    PEDIDOS ||--|{ DETALLE_PEDIDO : contiene
+    PRODUCTOS ||--o{ DETALLE_PEDIDO : aparece_en
+    COMPRADORES ||--o{ CONTACTOS : inicia
+    AGRICULTORES ||--o{ CONTACTOS : atiende
+    PRODUCTOS ||--o{ CONTACTOS : consulta
+    COMPRADORES }o--o{ PRODUCTOS : "marca favorito"
+    USUARIOS ||--o{ NOTIFICACIONES : recibe
+    PRODUCTOS ||--o{ TRANSACCIONES_PRECIO : genera
+    PEDIDOS ||--o| DESPACHOS : coordina
+    PEDIDOS ||--o{ EVENTOS_TRAZABILIDAD : registra
+
+%% La relacion M:N de favoritos lleva el atributo fecha_guardado y se implementa como tabla puente en el DER fisico.

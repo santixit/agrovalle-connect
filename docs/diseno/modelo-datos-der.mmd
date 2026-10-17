@@ -1,0 +1,125 @@
+erDiagram
+    USUARIOS {
+        BIGINT id PK
+        VARCHAR correo UK
+        VARCHAR password_hash
+        VARCHAR rol
+        BOOLEAN activo
+        TIMESTAMP creado_en
+    }
+    AGRICULTORES {
+        BIGINT id PK
+        BIGINT usuario_id FK_UQ
+        VARCHAR nombre
+        VARCHAR cedula UK
+        VARCHAR municipio
+    }
+    COMPRADORES {
+        BIGINT id PK
+        BIGINT usuario_id FK_UQ
+        VARCHAR nombre
+        VARCHAR telefono
+        VARCHAR tipo_comercio
+        TIMESTAMP creado_en
+    }
+    FINCAS {
+        BIGINT id PK
+        BIGINT agricultor_id FK
+        VARCHAR nombre
+        VARCHAR municipio
+        VARCHAR direccion
+        BOOLEAN activa
+        TIMESTAMP creada_en
+    }
+    PRODUCTOS {
+        BIGINT id PK
+        BIGINT agricultor_id FK
+        BIGINT finca_id FK
+        VARCHAR nombre
+        VARCHAR categoria
+        VARCHAR municipio
+        BOOLEAN activo
+        NUMERIC cantidad_kg
+        NUMERIC precio_por_kg
+        DATE fecha_cosecha
+        VARCHAR estado
+        TIMESTAMP creado_en
+    }
+    PEDIDOS {
+        BIGINT id PK
+        BIGINT comprador_id FK
+        VARCHAR estado
+        TIMESTAMP creado_en
+        TIMESTAMP actualizado_en
+    }
+    DETALLE_PEDIDO {
+        BIGINT id PK
+        BIGINT pedido_id FK
+        BIGINT producto_id FK
+        NUMERIC cantidad_kg
+        NUMERIC precio_por_kg_snapshot
+    }
+    DESPACHOS {
+        BIGINT id PK
+        BIGINT pedido_id FK_UQ
+        VARCHAR estado
+        DATE fecha_programada
+        VARCHAR franja_horaria
+        VARCHAR ruta
+        TIMESTAMP creado_en
+    }
+    EVENTOS_TRAZABILIDAD {
+        BIGINT id PK
+        BIGINT pedido_id FK
+        VARCHAR estado
+        VARCHAR descripcion
+        TIMESTAMP ocurrido_en
+    }
+    NOTIFICACIONES {
+        BIGINT id PK
+        BIGINT usuario_id FK
+        VARCHAR tipo
+        VARCHAR mensaje
+        BOOLEAN leida
+        TIMESTAMP creada_en
+    }
+    CONTACTOS {
+        BIGINT id PK
+        BIGINT comprador_id FK
+        BIGINT agricultor_id FK
+        BIGINT producto_id FK
+        VARCHAR mensaje
+        VARCHAR estado
+        TIMESTAMP creado_en
+    }
+    FAVORITOS {
+        BIGINT id PK
+        BIGINT comprador_id FK
+        BIGINT producto_id FK
+        TIMESTAMP creado_en
+    }
+    TRANSACCIONES_PRECIO {
+        BIGINT id PK
+        BIGINT producto_id FK
+        NUMERIC cantidad_kg
+        NUMERIC precio_por_kg
+        TIMESTAMP ocurrida_en
+    }
+
+    USUARIOS ||--o| AGRICULTORES : perfil
+    USUARIOS ||--o| COMPRADORES : perfil
+    AGRICULTORES ||--o{ FINCAS : posee
+    AGRICULTORES ||--o{ PRODUCTOS : publica
+    FINCAS o|--o{ PRODUCTOS : origen_opcional
+    COMPRADORES ||--o{ PEDIDOS : realiza
+    PEDIDOS ||--|{ DETALLE_PEDIDO : contiene
+    PRODUCTOS ||--o{ DETALLE_PEDIDO : vendido_en
+    PEDIDOS ||--o| DESPACHOS : coordina
+    PEDIDOS ||--o{ EVENTOS_TRAZABILIDAD : registra
+    USUARIOS ||--o{ NOTIFICACIONES : recibe
+    COMPRADORES ||--o{ CONTACTOS : inicia
+    AGRICULTORES ||--o{ CONTACTOS : recibe
+    PRODUCTOS ||--o{ CONTACTOS : consulta
+    COMPRADORES ||--o{ FAVORITOS : guarda
+    PRODUCTOS ||--o{ FAVORITOS : marcado
+    PRODUCTOS ||--o{ TRANSACCIONES_PRECIO : genera

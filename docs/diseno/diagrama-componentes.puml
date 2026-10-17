@@ -1,0 +1,39 @@
+@startuml AgroValle_Componentes
+skinparam componentStyle uml2
+skinparam monochrome true
+skinparam shadowing false
+title Componentes y capas de AgroValle Connect
+
+component "Navegador\nHTML / CSS / JavaScript" as Browser
+component "Recursos estaticos\nstatic/index.html, styles.css" as Web
+component "Controladores REST\n@RestController" as Controllers
+component "DTO de entrada/salida\n@Valid / JSON" as DTO
+component "Servicios\n@Service / @Transactional" as Services
+component "Dominio\n@Entity / reglas / eventos" as Domain
+component "Repositorios\nSpring Data JPA" as Repositories
+database "PostgreSQL\nEsquema agrovalle_connect" as DB
+component "Flyway\nMigraciones V1-V4" as Flyway
+component "GitHub Actions\nBuild / Test / Checkstyle / JaCoCo" as CI
+
+Browser --> Web : HTTPS / archivos estaticos
+Browser --> Controllers : HTTPS / JSON REST
+Controllers --> DTO : valida y serializa
+Controllers --> Services : invoca casos de uso
+Services --> Domain : reglas y entidades
+Services --> Repositories : coordina operaciones
+Repositories --> DB : JDBC / JPA
+Flyway --> DB : aplica migraciones al iniciar
+CI ..> DB : PostgreSQL de servicio para pruebas
+CI ..> Controllers : compila y valida
+
+note right of Controllers
+  Puerto HTTP del contenedor: 8080
+  En staging TLS termina en el proveedor
+end note
+
+note bottom of Services
+  Inyeccion por constructor.
+  Los beans Spring usan scope singleton
+  por defecto.
+end note
+@enduml
