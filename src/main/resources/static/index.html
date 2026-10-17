@@ -10,7 +10,7 @@
 <body>
   <header>
     <div class="hero">
-      <h1 class="brand"><span aria-hidden="true">🌱</span> AgroValle Connect</h1>
+      <h1 class="brand">AgroValle Connect</h1>
       <p class="tagline">Cosechas del Valle del Cauca, directo del campo a los comercios de la región.</p>
       <nav aria-label="Navegación principal">
         <a href="#catalogo-seccion">Explorar cosechas</a>
@@ -73,37 +73,16 @@
     </section>
 
     <section id="catalogo-seccion" aria-labelledby="catalogo-titulo">
-      <div class="catalog-heading">
-        <div>
-          <h2 id="catalogo-titulo">Últimas novedades</h2>
-          <p class="section-intro">Cosechas frescas de productores del Valle del Cauca.</p>
-        </div>
-        <label class="catalog-search">Buscar producto o municipio<input id="catalog-query" form="buscar-form" maxlength="120" placeholder="Ej. tomate o Dagua" aria-label="Buscar producto o municipio"></label>
-      </div>
-      <div class="catalog-layout">
-        <aside class="catalog-filters" aria-label="Filtros de cosechas">
-          <h3>Filtros</h3>
-          <form id="buscar-form" class="filters">
-            <label>Municipio<input name="municipio" maxlength="80" placeholder="Todos los municipios"></label>
-            <label>Categoría<input name="categoria" maxlength="80" placeholder="Todas las categorías"></label>
-            <button>Aplicar filtros</button>
-            <button type="button" id="limpiar" class="secondary">Ver todo</button>
-          </form>
-          <div class="price-widget">
-            <h3>Precio regional</h3>
-            <p>Compara el promedio de ventas completadas por categoría.</p>
-            <form id="precios-form">
-              <label>Categoría<input name="categoria" maxlength="80" required placeholder="Ej. Frutas"></label>
-              <button class="secondary">Consultar promedio</button>
-            </form>
-            <p id="precio-status" class="status" role="status"></p>
-          </div>
-        </aside>
-        <div class="catalog-results">
-          <p id="catalog-status" class="muted" role="status"></p>
-          <div id="catalogo" class="row"></div>
-        </div>
-      </div>
+      <h2 id="catalogo-titulo">Catálogo de cosechas</h2>
+      <p class="section-intro">Busca ofertas activas por municipio y categoría.</p>
+      <form id="buscar-form" class="filters">
+        <label>Municipio<input name="municipio" maxlength="80" placeholder="Ej. Dagua"></label>
+        <label>Categoría<input name="categoria" maxlength="80" placeholder="Ej. Frutas"></label>
+        <button>Buscar</button>
+        <button type="button" id="limpiar" class="secondary">Ver todo</button>
+      </form>
+      <p id="catalog-status" class="muted" role="status"></p>
+      <div id="catalogo" class="row"></div>
     </section>
 
     <section id="carrito-seccion" hidden aria-labelledby="carrito-titulo">
@@ -116,6 +95,16 @@
         <button type="button" id="vaciar-carrito" class="secondary">Vaciar carrito</button>
       </div>
       <p id="carrito-status" class="status" role="status"></p>
+    </section>
+
+    <section id="precios-seccion">
+      <h2>Precios regionales</h2>
+      <p class="section-intro">Consulta promedios recientes de ventas completadas.</p>
+      <form id="precios-form">
+        <label>Categoría<input name="categoria" maxlength="80" required placeholder="Ej. Frutas"></label>
+        <button>Consultar promedio</button>
+      </form>
+      <p id="precio-status" class="status" role="status"></p>
     </section>
 
     <section id="cuenta-panel" hidden>
@@ -276,7 +265,7 @@
         }
         try {
           const d = await request(`/productos/${producto.id}`);
-          detailPanel.textContent = `Precio: ${formatCop(d.precio_por_kg)}/kg · ${d.cantidad_disponible_kg} kg disponibles · Cosecha: ${d.fecha_cosecha} · Agricultor: ${d.agricultor ?? 'No informado'} · Finca: ${d.finca ?? 'No asociada'}`;
+          detailPanel.textContent = `Agricultor: ${d.agricultor ?? 'No informado'} · Finca: ${d.finca ?? 'No asociada'}`;
           detailPanel.hidden = false; detail.textContent = 'Ocultar detalle'; detail.setAttribute('aria-expanded', 'true');
         } catch (error) { tell('catalog-status', error.message); }
       };
@@ -363,14 +352,9 @@
       form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
     async function buscar() {
-      const { municipio, categoria } = formData(byId('buscar-form'));
-      const values = { municipio, categoria };
+      const values = formData(byId('buscar-form'));
       const params = new URLSearchParams(Object.entries(values).filter(([, value]) => value.trim()));
-      try {
-        const query = byId('catalog-query').value.trim().toLocaleLowerCase('es');
-        const allProducts = await request(`/productos${params.size ? `?${params}` : ''}`);
-        const products = query ? allProducts.filter((product) =>
-          `${product.nombre} ${product.municipio} ${product.categoria}`.toLocaleLowerCase('es').includes(query)) : allProducts;
+      try { const products = await request(`/productos${params.size ? `?${params}` : ''}`);
         if (products.length === 0) {
           const empty = document.createElement('p'); empty.className = 'empty-state';
           empty.textContent = 'No encontramos cosechas con esos filtros. Prueba con otro municipio o categoría.';
