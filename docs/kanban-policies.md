@@ -8,7 +8,7 @@ Estas políticas aplican al tablero [Agrovalle-Kamba](https://github.com/users/s
 |---|---:|---|
 | Backlog / Ready | Sin límite | El Product Owner ordena y refina continuamente. Solo se inicia trabajo que cumpla la política de entrada a In Progress. |
 | In Progress | 3 elementos | Al llegar a 3, nadie toma una tarea nueva. El equipo colabora para terminar o desbloquear trabajo activo. |
-| Code Review / Testing | 2 Pull Requests | Al llegar a 2, se detiene el inicio de trabajo nuevo y se prioriza revisar y atender comentarios. |
+| Code Review / Testing | 2 elementos de trabajo | Al llegar a 2, se detiene el inicio de trabajo nuevo y se prioriza revisar y atender comentarios. |
 | Done | Sin límite | Solo se mueve aquí trabajo que cumpla la Definition of Done y tenga evidencia enlazada. |
 
 Los límites cuentan historias y tareas activas, no subtareas usadas solo para descomponer una tarjeta. Una tarjeta bloqueada sigue contando en su columna; se etiqueta `blocked`, se documenta el impedimento y se solicita ayuda durante el Daily. Las excepciones al límite se acuerdan explícitamente en el Daily, con motivo y responsable de resolverlas.
