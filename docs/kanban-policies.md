@@ -43,11 +43,11 @@ En la vista **Backlog** del proyecto se verificaron los límites de columna `In 
 - **Throughput:** cantidad de historias o tareas terminadas por semana y por Sprint. Contar elementos cerrados, no puntos estimados.
 - **WIP:** cantidad de tarjetas en columnas activas en un momento dado; contrastarla con los límites anteriores.
 
-Al revisar métricas, indicar fechas y el conjunto de elementos medidos. No usar throughput como compromiso individual ni comparar personas. La Ley de Little (`WIP ≈ throughput × cycle time`) sirve como relación de largo plazo para un flujo estable; reducir WIP y terminar bloqueos ayuda a bajar el tiempo de ciclo, pero la fórmula no predice por sí sola la fecha de una historia individual.
+Al revisar métricas, indicar fechas, conjunto de elementos, fuente y granularidad de los eventos. Las plantillas de captura y un cálculo reproducible están en [evidencia de métricas de la Sesión 7](evidencias/kanban-metricas-sesion7.md). Si faltan fechas, reportar que la métrica no se puede calcular; no reconstruir movimientos a partir de conteos actuales. No usar throughput como compromiso individual ni comparar personas. La Ley de Little (`WIP ≈ throughput × cycle time`) sirve como relación de largo plazo para un flujo estable; reducir WIP y terminar bloqueos ayuda a bajar el tiempo de ciclo, pero la fórmula no predice por sí sola la fecha de una historia individual.
 
 ## Diagrama de flujo acumulado (CFD)
 
-Revisar el CFD del tablero al cierre de cada Sprint y en retrospectiva. Las bandas deben avanzar de forma continua; una banda que se ensancha indica acumulación en esa etapa. Si aumenta Code Review, bajar el WIP de desarrollo y ayudar a revisar antes de iniciar historias nuevas. Una línea Done que se aplana indica menor throughput; revisar bloqueos y causas en equipo. Registrar el periodo, el cuello de botella observado y una acción de mejora verificable.
+Revisar un CFD si la vista del tablero ofrece datos históricos por estado al cierre del periodo y al analizar el flujo. Las bandas deben avanzar de forma continua; una banda que se ensancha indica acumulación en esa etapa. Si aumenta Code Review, bajar el WIP de desarrollo y ayudar a revisar antes de iniciar historias nuevas. Una línea Done que se aplana indica menor throughput; revisar bloqueos y causas en equipo. Registrar el periodo, el cuello de botella observado y una acción de mejora verificable. Si el tablero solo ofrece conteos o snapshots aislados, dejar constancia de esa limitación en vez de presentar un gráfico de estado como CFD.
 
 ## Cadencia Scrumban
 
