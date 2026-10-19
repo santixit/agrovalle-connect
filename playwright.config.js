@@ -1,6 +1,6 @@
 const { defineConfig, devices } = require('@playwright/test');
 
-const mavenWrapper = process.platform === 'win32' ? '.\\mvnw.cmd' : './mvnw';
+const mavenWrapper = process.platform === 'win32' ? '.\\mvnw.cmd' : 'bash ./mvnw';
 
 module.exports = defineConfig({
   testDir: './e2e',
