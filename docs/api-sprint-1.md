@@ -20,7 +20,7 @@ Devuelve `201 Created`, un encabezado `Location` con el perfil y un DTO con `id`
 
 `GET /api/v1/productores/{id}`
 
-Devuelve `200 OK` con el DTO del perfil o `404 Not Found` si el agricultor no existe.
+Es un perfil público con datos no sensibles. Devuelve `200 OK` con el DTO `id`, `nombre` y `ubicacion_valle`, o `404 Not Found` si el agricultor no existe; no incluye cédula ni credenciales. Esta definición se alinea con el [issue #46](https://github.com/santixit/agrovalle-connect/issues/46) y el `AgricultorResponse` actual.
 
 ## HU-04 — Filtrar el catalogo
 

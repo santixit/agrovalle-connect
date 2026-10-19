@@ -1,6 +1,6 @@
 # Planificacion del Sprint 1
 
-> Plan tecnico del alcance oficial del Sprint 1: HU-01, HU-07 y HU-04 (10 SP). El equipo debe validar las estimaciones en horas y los contratos de datos; la capacidad en Story Points y el Sprint Goal se mantienen segun la consigna.
+> Documento de planificación técnica del Sprint 1: HU-01, HU-07 y HU-04 (10 SP). El equipo indica que trabajó informalmente y de forma asíncrona, sin una reunión formal de Sprint Planning ni roles permanentes. Este archivo describe el alcance y la descomposición técnica registrados; no es un acta ni prueba de una ceremonia. El issue #46 registra el Backlog como texto base y estos criterios técnicos como criterios de aceptación; las confirmaciones de integrantes que no comentaron siguen pendientes. Véase la [comparación](evidencias/comparacion-historias-backlog-sprint1.md).
 
 ## Sprint Goal
 
@@ -17,7 +17,7 @@ Habilitar el registro inicial de agricultores del Valle del Cauca y la consulta 
 
 ## Descomposicion tecnica
 
-Estimaciones iniciales para validar durante el Sprint Planning. Ninguna tarea supera 8 horas.
+Estimaciones técnicas que aparecen en el plan documentado; no se atribuyen a una reunión formal. Ninguna tarea supera 8 horas según esta descomposición.
 
 | ID / HU | Tarea tecnica y componente Java/Spring | Est. | ISO/IEC 25010 | Evidencia prevista |
 |---|---|---:|---|---|
@@ -37,12 +37,12 @@ Estimaciones iniciales para validar durante el Sprint Planning. Ninguna tarea su
 ## Criterios tecnicos
 
 - HU-01: `POST /api/v1/auth/register` registra agricultor con nombre, ubicacion en el Valle y cedula validos en PostgreSQL, y evita cedulas duplicadas.
-- HU-07: `GET /api/v1/productores/{id}` consulta el perfil asociado y maneja identificadores inexistentes.
-- HU-04: `GET /api/v1/productos?municipio=Dagua&categoria=Frutas` devuelve solo ofertas coincidentes como coleccion JSON.
+- HU-07: `GET /api/v1/productores/{id}` consulta el perfil público del agricultor con datos no sensibles y maneja identificadores inexistentes.
+- HU-04: `GET /api/v1/productos` acepta municipio, categoría, ambos filtros o ninguno; devuelve las ofertas activas coincidentes como colección JSON, incluida una lista vacía si no hay resultados.
 - Los escenarios BDD se traducen a pruebas JUnit 5/MockMvc; Checkstyle y DoD deben pasar antes de Done.
 
 ## Riesgos y dependencias
 
 - La implementacion local declara JPA, driver PostgreSQL y Flyway; las pruebas usan H2 en modo compatible con PostgreSQL.
 - La integracion continua levanta PostgreSQL 16 para ejecutar las pruebas de persistencia; la demostracion final debe adjuntar evidencia de persistencia.
-- El equipo debe validar estimaciones en horas y contratos de datos antes de cerrar la planificacion.
+- Pendiente de validación colectiva: si se mantienen las estimaciones en horas y los contratos de datos; el issue #46 resolvió la versión base de historias y la adopción de criterios técnicos, aunque aún falten comentarios de integrantes.

@@ -55,4 +55,4 @@ La topologia vigente se representa en [diagrama-despliegue.puml](diagrama-despli
 - Los perfiles de agricultor historicos pueden no tener cuenta `Usuario`, por eso la relacion de cuenta es opcional.
 - Una oferta puede conservar municipio propio y una finca opcional para soportar registros historicos; el modelo no debe asumir que todo producto tiene finca.
 - Los detalles de pedido conservan precio y cantidad como instantanea de la transaccion, aunque cambien los datos actuales de la oferta.
-- La revision de PO de los mockups se deja pendiente hasta que el equipo la realice.
+- El issue #46 registra el visto bueno de los mockups de manera informal y asíncrona; no se atribuye a un rol fijo ni se documenta una fecha o persona aprobadora. La confirmación de integrantes que no comentaron sigue pendiente.
