@@ -23,9 +23,9 @@ La ejecución local de `mvnw clean verify` pasó con **45 pruebas Java, cero fal
 | Ramas | 63,6 % (117 / 184 cubiertas) | 60 % |
 | Líneas | 92,0 % (859 / 934 cubiertas) | 60 % |
 
-JaCoCo instrumenta la suite Java; el flujo Playwright se ejecuta aparte y no se incluye en esos porcentajes. En esta máquina Playwright no pudo iniciar su servidor local: el proceso Java 26 terminó al abrir el loopback (`Unable to establish loopback connection`). Por ello, el caso E2E está implementado e integrado a CI, pero queda pendiente confirmar su resultado en GitHub Actions. En CI el proyecto usa Java 17 y PostgreSQL como servicio.
+JaCoCo instrumenta la suite Java; el flujo Playwright se ejecuta aparte y no se incluye en esos porcentajes. En esta máquina Playwright no pudo iniciar su servidor local: el proceso Java 26 terminó al abrir el loopback (`Unable to establish loopback connection`). En GitHub Actions, que usa Java 17 y PostgreSQL como servicio, el workflow **#66** pasó y ejecutó el flujo E2E en 26 segundos: [resultado CI](https://github.com/santixit/agrovalle-connect/actions/runs/39302021661).
 
-El workflow publica el HTML de JaCoCo como artefacto `jacoco-coverage-report`. Al abrir la PR y completar CI, adjuntar una captura del reporte real de cobertura como pide la guía; una captura no se afirma aquí como evidencia hasta que exista.
+El workflow publica el HTML JaCoCo como artefacto `jacoco-coverage-report`. La captura del reporte real que pide la guía sigue pendiente de adjuntar a la PR; el reporte existe como artefacto CI, pero no se presenta una captura que no se haya podido obtener.
 
 ## Evidencia TDD
 
