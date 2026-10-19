@@ -69,8 +69,14 @@ def calculate(periods: list[dict[str, str]], items: list[dict[str, str]]) -> lis
             if backlog is not None and deployed is not None and deployed >= backlog:
                 lead_days.append((deployed - backlog).days)
 
+        complete_value = row.get("done_events_complete", "").strip().lower()
+        if complete_value == "true":
+            throughput_result = f"{throughput} elementos"
+        else:
+            throughput_result = "sin datos (cierres del periodo no confirmados como completos)"
+
         output.append(
-            f"{period_id}: throughput={throughput} elementos; "
+            f"{period_id}: throughput={throughput_result}; "
             f"cycle time {summarize(cycle_days)}; lead time {summarize(lead_days)}"
         )
     return output

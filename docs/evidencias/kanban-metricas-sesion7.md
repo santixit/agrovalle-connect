@@ -21,8 +21,8 @@ Esta lectura es una nota de análisis basada en el tablero, no un acta ni eviden
 
 ## Registro hacia adelante
 
-- Al cierre de cada periodo que el equipo quiera analizar, registrar en [kanban-periodos-sesion7.csv](kanban-periodos-sesion7.csv) su identificador, fechas inicio/fin y enlace de fuente.
-- Por cada tarjeta, guardar en [kanban-items-sesion7.csv](kanban-items-sesion7.csv) su identificador y las fechas observadas de entrada al Backlog, primer movimiento a In Progress, paso a Done (cumple DoD) y despliegue/operación. Usar ISO-8601 (`YYYY-MM-DD` o timestamp) y enlazar la evidencia. No rellenar retrospectivamente fechas que no estén disponibles.
+- Al cierre de cada periodo que el equipo quiera analizar, registrar en [kanban-periodos-sesion7.csv](kanban-periodos-sesion7.csv) su identificador, fechas inicio/fin, enlace de fuente y `done_events_complete=true` solo cuando se haya comprobado que se capturaron todos los cierres del periodo. Si no se confirma esa integridad, throughput debe seguir como “sin datos”.
+- Por cada tarjeta completada, guardar en [kanban-items-sesion7.csv](kanban-items-sesion7.csv) su identificador, el periodo donde pasó a Done, las fechas observadas de entrada al Backlog, primer movimiento a In Progress, paso a Done (cumple DoD) y despliegue/operación. Usar ISO-8601 (`YYYY-MM-DD` o timestamp) y enlazar la evidencia. No rellenar retrospectivamente fechas que no estén disponibles.
 - Guardar un nuevo snapshot fechado en [kanban-snapshots-sesion7.csv](kanban-snapshots-sesion7.csv). Con varios snapshots se puede comparar WIP; para calcular tiempos y throughput hacen falta eventos por tarjeta.
 - Ejecutar `python scripts/kanban_metrics.py` cuando existan periodos y eventos. El script calcula throughput por fecha de Done, cycle time desde el primer In Progress hasta Done y lead time desde Backlog hasta despliegue/operación. Informa mediana, rango y cantidad de datos disponibles; no transforma campos vacíos en ceros.
 - Al revisar el flujo, anotar el cuello de botella y una acción de mejora verificable en el canal o issue que el equipo use. No presentar esta recomendación como acuerdo ya tomado.
