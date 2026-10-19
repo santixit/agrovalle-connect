@@ -18,6 +18,8 @@ target/
 
 # Node and Husky
 node_modules/
+playwright-report/
+test-results/
 
 # Operating system and secrets
 .DS_Store

@@ -33,4 +33,16 @@ class ReglasDisponibilidadTest {
     assertThrows(IllegalArgumentException.class, () -> reglas.validarReserva(
         BigDecimal.ONE, new BigDecimal("-1.00")));
   }
+
+  @Test
+  void rechazaCantidadSolicitadaNula() {
+    assertThrows(IllegalArgumentException.class, () -> reglas.validarReserva(
+        null, new BigDecimal("5.00")));
+  }
+
+  @Test
+  void trataInventarioDesconocidoComoInsuficiente() {
+    assertThrows(StockInsuficienteException.class, () -> reglas.validarReserva(
+        BigDecimal.ONE, null));
+  }
 }

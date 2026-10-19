@@ -44,6 +44,16 @@ jobs:
           cache: maven
       - name: Build, tests and Checkstyle
         run: mvn --batch-mode --no-transfer-progress clean verify
+      - name: Configure Node.js for browser E2E
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+      - name: Install browser test dependencies
+        run: npm ci
+      - name: Install Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+      - name: Run critical marketplace browser flow
+        run: npm run test:e2e
       - name: Save JaCoCo coverage report
         if: always()
         uses: actions/upload-artifact@v7
