@@ -53,6 +53,8 @@ button:active { transform: translateY(1px); }
 button:disabled { cursor: not-allowed; opacity: .55; }
 button.secondary { background: white; color: var(--green); }
 button.secondary:hover { background: var(--pale); }
+input.secondary { cursor: pointer; background: white; color: var(--green); font-weight: 700; }
+input.secondary:hover { background: var(--pale); }
 summary { cursor: pointer; color: var(--green); font-weight: 700; }
 
 #catalogo-seccion { padding: 0; overflow: hidden; }
