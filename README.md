@@ -1,5 +1,7 @@
 # AgroValle Connect
 
+[![CI](https://github.com/santixit/agrovalle-connect/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/santixit/agrovalle-connect/actions/workflows/ci.yml)
+
 AgroValle Connect es una aplicación web para conectar a pequeños y medianos agricultores del Valle del Cauca con compradores, restaurantes y comercios de Cali. Publica cosechas con cantidad, precio y fecha, facilita contacto y reservas, y conserva el avance logístico.
 
 ## Visión del producto
@@ -162,6 +164,7 @@ gitGraph
 - [Políticas Kanban, límites WIP y métricas de flujo](docs/kanban-policies.md)
 - [Estrategia de pruebas, pirámide y TDD](docs/estrategia-pruebas.md)
 - [Planificación Sprint 1](docs/sprint-1-planning.md)
+- [Propuesta técnica para revisión de Sprint 2](docs/sprint-2-planning.md), pendiente de validación del equipo y sin afirmar que esa iteración haya sido planificada o ejecutada.
 - [Registro de coordinación asíncrona](docs/bitacora-daily-scrum.md)
 - [Evidencia funcional del Sprint 1](docs/sprint-1-review.md), [registro retrospectivo](docs/sprint-1-retrospective.md)
 - [Colección Postman inicial](docs/postman/agrovalle-sprint-1.postman_collection.json)

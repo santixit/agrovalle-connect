@@ -53,6 +53,8 @@ button:active { transform: translateY(1px); }
 button:disabled { cursor: not-allowed; opacity: .55; }
 button.secondary { background: white; color: var(--green); }
 button.secondary:hover { background: var(--pale); }
+input.secondary { cursor: pointer; background: white; color: var(--green); font-weight: 700; }
+input.secondary:hover { background: var(--pale); }
 summary { cursor: pointer; color: var(--green); font-weight: 700; }
 
 #catalogo-seccion { padding: 0; overflow: hidden; }
@@ -106,4 +108,97 @@ footer { text-align: center; color: var(--muted); padding: 1.5rem 1rem; }
   section { border-radius: 10px; }
   .product-action-form { grid-template-columns: 1fr; }
   .catalog-layout { padding: .7rem; }
+}
+
+/* Pantallas del mockup de AgroValle */
+.site-header {
+  display: grid;
+  grid-template-columns: auto minmax(220px, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  max-width: 1480px;
+  padding-block: 1rem;
+}
+.site-header .brand { display: flex; align-items: center; color: white; text-decoration: none; gap: .45rem; }
+.site-header .brand > span:first-child { font-size: 2rem; }
+.site-header nav { grid-column: 1 / -1; }
+.catalog-search { position: relative; width: 100%; margin: 0; }
+.catalog-search input { min-height: 3.5rem; padding-left: 3rem; border: 1px solid #47864a; border-radius: 9px; font-size: 1.1rem; }
+.search-icon { position: absolute; z-index: 1; top: .15rem; left: .9rem; color: var(--green); font-size: 2rem; line-height: 1; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.header-login { display: inline-flex; justify-content: center; align-items: center; min-width: 8.5rem; min-height: 3.4rem; padding: .5rem 1.1rem; border-radius: 18px; background: var(--gold); color: var(--ink); text-decoration: none; font-weight: 700; }
+header { background: var(--green-mid); }
+.site-header nav a { border: 0; }
+#catalogo-seccion { background: transparent; border: 0; box-shadow: none; }
+.catalog-heading { padding: 1rem .3rem; background: transparent; color: var(--ink); }
+.catalog-heading .section-intro { color: var(--muted); }
+.catalog-layout { grid-template-columns: minmax(230px, 300px) minmax(0, 1fr); padding: 0; align-items: start; }
+.catalog-filters { background: white; border-color: var(--line); }
+.catalog-filters > h3 { font-size: 1.25rem; margin-bottom: 1rem; }
+.catalog-results { padding: .5rem .8rem; overflow: auto; max-height: 78vh; }
+.catalog-results .row { grid-template-columns: repeat(5, minmax(145px, 1fr)); gap: .85rem; }
+.catalog-results .card { min-width: 0; padding: .65rem; border: 0; border-radius: 10px; background: white; box-shadow: 0 2px 12px #18312710; }
+.catalog-results .card > h3::before { height: 90px; margin: -.1rem -.1rem .55rem; }
+.catalog-results .card h3 { font-size: .98rem; }
+.catalog-results .card p { font-size: .84rem; }
+.catalog-results .card .actions { margin-top: .6rem; }
+.catalog-results .card .actions button { min-height: 2.25rem; padding: .35rem; font-size: .78rem; }
+.catalog-filters .filters { gap: .65rem; }
+.price-widget { background: white; }
+.price-chart { min-height: 8rem; margin-top: .8rem; padding: .8rem; border-radius: 8px; background: #f7fbf6; }
+.price-chart-title { margin: 0 0 .6rem; color: var(--muted); font-size: .85rem; }
+.price-chart-track { display: flex; align-items: end; justify-content: center; gap: .5rem; height: 6rem; border-bottom: 2px solid #536d55; }
+.price-chart-bar { width: 28%; max-width: 70px; min-height: .3rem; border-radius: 7px 7px 0 0; background: var(--green-mid); }
+.price-chart-bar.secondary { background: #38573b; }
+.price-chart-labels { display: flex; justify-content: space-around; color: var(--muted); font-size: .72rem; }
+.history-button { width: 100%; margin-top: .8rem; background: var(--green-mid); border-color: var(--green-mid); }
+#agricultor-panel { border: 0; border-top: 0; background: transparent; padding: 0; box-shadow: none; }
+.publish-layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(320px, .9fr); gap: 1.8rem; }
+.publish-form-panel, .farm-card { padding: 1.2rem; border: 1px solid var(--line); border-radius: 10px; background: white; }
+.publish-form-panel h2 { font-size: 1.45rem; }
+.publish-form { display: grid; grid-template-columns: 1fr; gap: .85rem; }
+.publish-form label { font-weight: 500; }
+.publish-form input, .publish-form select { min-height: 2.7rem; }
+.publish-actions { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; margin-top: .25rem; }
+.publish-actions button { width: 100%; }
+.publish-aside { display: grid; align-content: start; gap: 1rem; }
+.farm-card { display: grid; gap: .75rem; }
+.farm-card h3 { font-size: 1.4rem; }
+.farm-list { display: grid; gap: .55rem; }
+.farm-item { padding: .75rem; border: 1px solid #d0d0d0; border-radius: 8px; }
+.farm-item strong, .farm-item span { display: block; }
+.farm-item span { color: var(--muted); font-size: .9rem; }
+.farm-form { display: grid; grid-template-columns: 1fr 1fr; }
+.farm-form label:first-child, .farm-form label:nth-child(3), .farm-form button { grid-column: 1 / -1; }
+.image-preview { display: grid; place-items: center; min-height: 15rem; border-radius: 9px; background: var(--green-soft); color: #586c5b; font-size: 1.25rem; overflow: hidden; }
+.image-preview img { width: 100%; height: 100%; max-height: 24rem; object-fit: cover; }
+.upload-button { display: grid; place-items: center; min-height: 2.8rem; padding: .6rem 1rem; border-radius: 9px; background: var(--green); color: white; font-weight: 700; cursor: pointer; }
+.upload-button input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.product-dialog { position: fixed; width: min(1100px, calc(100vw - 2rem)); max-width: none; max-height: min(90vh, 900px); padding: 1.4rem; border: 0; border-radius: 16px; box-shadow: 0 18px 70px #07140755; }
+.product-dialog::backdrop { background: #12221499; }
+.dialog-close { position: sticky; top: 0; float: right; z-index: 2; width: 2.5rem; min-height: 2.5rem; padding: .1rem; border-radius: 50%; font-size: 1.4rem; }
+.detail-layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(320px, .9fr); gap: 1.2rem; }
+.detail-photo { display: grid; place-items: center; min-height: 24rem; border-radius: 10px; background: var(--green-soft); color: #586c5b; font-size: 1.2rem; }
+.detail-photo img { width: 100%; max-height: 34rem; object-fit: cover; border-radius: inherit; }
+.detail-info { display: grid; align-content: start; gap: .8rem; }
+.detail-info h2 { font-size: 1.7rem; }
+.detail-facts, .reservation-box { padding: .9rem; border-radius: 9px; background: #f6faf5; }
+.detail-actions { display: grid; gap: .65rem; }
+.detail-actions .secondary { width: 100%; }
+@media (max-width: 1050px) {
+  .catalog-results .row { grid-template-columns: repeat(3, minmax(150px, 1fr)); }
+}
+@media (max-width: 760px) {
+  .site-header { grid-template-columns: 1fr auto; }
+  .site-header .catalog-search { grid-column: 1 / -1; grid-row: 2; }
+  .site-header nav { grid-row: 3; }
+  .catalog-layout, .publish-layout, .detail-layout { grid-template-columns: 1fr; }
+  .catalog-results { max-height: none; overflow: visible; }
+  .catalog-results .row { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
+  .detail-photo { min-height: 16rem; }
+}
+@media (max-width: 420px) {
+  .catalog-results .row { grid-template-columns: 1fr; }
+  .publish-actions, .farm-form { grid-template-columns: 1fr; }
+  .farm-form label, .farm-form button { grid-column: auto !important; }
 }
