@@ -1,20 +1,32 @@
-# Estado medido de la piramide — Sesion 8
+# Estado medido de la pirámide — Sesión 8
 
-## Metodo
+## Distribución observada
 
-Conteo estatico de metodos `@Test` en `src/test/java` y clasificacion por alcance visible en las clases. Se excluyen suites parametrizadas si se agregan en el futuro: este conteo es por metodo fuente, no por numero de casos ejecutados.
+Conteo manual de métodos `@Test` en `src/test/java` más las pruebas declaradas con `test()` en `e2e/`. Cada método se cuenta una vez; el porcentaje describe el inventario de pruebas y no el número de casos parametrizados que se ejecutan.
 
-| Nivel | Metodos | Porcentaje observado | Evidencia |
+| Nivel | Pruebas | Porcentaje observado | Evidencia |
 |---|---:|---:|---|
-| Unitarias aisladas | 18 | 43,9 % | Dominio y servicios con JUnit/Mockito, sin contexto Spring. |
-| Integracion | 23 | 56,1 % | 22 pruebas REST con `@SpringBootTest`/MockMvc y una prueba de persistencia con contexto Spring. |
-| E2E de interfaz | 0 | 0 % | No hay pruebas de navegador/UI en `src/test/java`. |
-| **Total** | **41** | **100 %** | Conteo de metodos `@Test` del estado revisado. |
+| Unitarias aisladas | 22 | 47,8 % | JUnit/Mockito sin contexto Spring; incluye cuatro casos nuevos para redondeo, umbral e inventario nulo. |
+| Integración | 23 | 50,0 % | Contratos REST con Spring Boot/MockMvc y persistencia con contexto Spring. |
+| E2E de interfaz | 1 | 2,2 % | Playwright recorre registro/login de agricultor, creación de finca y publicación, y reserva como comprador. |
+| **Total** | **46** | **100 %** | 45 pruebas Java y un flujo Playwright. |
 
-Los objetivos de referencia de la guia son 70/20/10; la suite observada todavia no tiene esa distribucion y carece de E2E. No se agregan pruebas artificiales para alcanzar porcentajes: conviene extraer casos puros del dominio a pruebas unitarias y seleccionar pocos flujos UI criticos cuando exista infraestructura E2E.
+La referencia de la guía es 70/20/10. La distribución observada aún está lejos de ese objetivo; no se añadieron pruebas artificiales para inflar porcentajes. La siguiente mejora es aumentar pruebas unitarias de reglas puras y mantener pocos flujos E2E críticos.
 
-## Cobertura y limites de evidencia
+## Ejecución y cobertura
 
-El registro de la ejecucion existente en [evidencia TDD de descuento mayorista](tdd-descuento-mayorista.md) reporta JaCoCo: instrucciones 90,4 %, ramas 61,4 % y lineas 92,0 %, sobre 41 pruebas, y Checkstyle sin violaciones. La guia exige minimo 60 % en las tres metricas. Estos valores corresponden a esa ejecucion documentada; no se presentan como un reporte recién generado para este cambio.
+La ejecución local de `mvnw clean verify` pasó con **45 pruebas Java, cero fallos y cero errores**; Checkstyle reportó cero violaciones y JaCoCo cumplió el umbral configurado. El reporte HTML generado está en `target/site/jacoco/index.html` y puede regenerarse con `mvnw jacoco:report`.
 
-CI publica el HTML JaCoCo como artefacto `jacoco-coverage-report`. No se encontro una captura del reporte adjunta a la PR #44; el artefacto CI es evidencia consultable, pero no sustituye una captura solicitada expresamente por la guia. El ciclo Red–Green–Refactor verificable esta enlazado con commits y resultados en el documento TDD; las pruebas de la separacion SOLID no se etiquetan retrospectivamente como TDD.
+| Métrica JaCoCo (Java) | Resultado local | Mínimo de la guía |
+|---|---:|---:|
+| Instrucciones | 90,5 % (3.878 / 4.287 cubiertas) | 60 % |
+| Ramas | 63,6 % (117 / 184 cubiertas) | 60 % |
+| Líneas | 92,0 % (859 / 934 cubiertas) | 60 % |
+
+JaCoCo instrumenta la suite Java; el flujo Playwright se ejecuta aparte y no se incluye en esos porcentajes. En esta máquina Playwright no pudo iniciar su servidor local: el proceso Java 26 terminó al abrir el loopback (`Unable to establish loopback connection`). En GitHub Actions, que usa Java 17 y PostgreSQL como servicio, el workflow **#66** pasó y ejecutó el flujo E2E en 26 segundos: [resultado CI](https://github.com/santixit/agrovalle-connect/actions/runs/39302021661).
+
+El workflow publica el HTML JaCoCo como artefacto `jacoco-coverage-report`. La captura del reporte real que pide la guía sigue pendiente de adjuntar a la PR; el reporte existe como artefacto CI, pero no se presenta una captura que no se haya podido obtener.
+
+## Evidencia TDD
+
+El ciclo Red–Green–Refactor de la regla de descuento mayorista está documentado con commits y resultados en [Evidencia TDD: descuento mayorista](tdd-descuento-mayorista.md). Los cuatro casos añadidos en esta sesión son regresiones de reglas ya existentes; no se etiquetan como TDD porque no se registró su fallo previo a la implementación.

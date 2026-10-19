@@ -10,7 +10,7 @@ La suite debe privilegiar feedback rápido y aislado, manteniendo una base ampli
 | Integración | 20% | Persistencia, migraciones y contratos REST; H2 para persistencia local y MockMvc para HTTP. |
 | E2E / UI | 10% | Flujos críticos completos desde la interfaz. Mantener pocos por su costo y sensibilidad a cambios de UI. |
 
-Las proporciones son una guía de diseño de la suite, no un reemplazo de cobertura significativa. No se añaden pruebas E2E para inflar cantidades; cada nivel debe verificar un riesgo distinto. La suite actual incluye pruebas unitarias de dominio/servicios y pruebas de persistencia y REST con Spring Boot y MockMvc.
+Las proporciones son una guía de diseño de la suite, no un reemplazo de cobertura significativa. No se añaden pruebas E2E para inflar cantidades; cada nivel debe verificar un riesgo distinto. La suite incluye pruebas unitarias de dominio/servicios, pruebas de persistencia y REST con Spring Boot y MockMvc, y un recorrido UI automatizado con Playwright para publicación y reserva.
 
 ## Patrón AAA
 
@@ -34,9 +34,13 @@ JaCoCo exige al menos **60% de instrucciones, ramas y líneas a nivel de módulo
 .\mvnw.cmd test
 .\mvnw.cmd jacoco:report
 .\mvnw.cmd clean verify
+npm ci
+npm run test:e2e
 ```
 
 El reporte HTML queda en `target/site/jacoco/index.html`. Para demostrar TDD en un Pull Request, adjuntar el resultado del primer test fallido, el paso a verde y el resultado tras refactorizar, junto con el reporte JaCoCo.
+
+La prueba E2E usa `playwright.config.js` para levantar la aplicación y abrir Chromium. GitHub Actions instala Playwright y Chromium, ejecuta el flujo después de `clean verify` y conserva el reporte JaCoCo como artefacto. La cobertura JaCoCo mide las pruebas Java; Playwright aporta evidencia de interfaz y no se suma a esos porcentajes.
 
 ### Ejercicio TDD registrado
 
