@@ -11,14 +11,11 @@ Para pequeños y medianos productores del Valle del Cauca que necesitan vender s
 - Repositorio: [santixit/agrovalle-connect](https://github.com/santixit/agrovalle-connect)
 - Tablero Kanban: [Agrovalle-Kamba](https://github.com/users/santixit/projects/3/views/1)
 - Aplicación publicada en staging: [AgroValle Connect](https://agrovalle-connect-staging.onrender.com/)
-## Integrantes y roles
+## Integrantes y metodología real de trabajo del equipo
 
-| Integrante | Rol Scrum / responsabilidad |
-|---|---|
-| Danny Alexander Gomez | Scrum Master / facilitación |
-| Michelle Guerrero Arboleda | Product Owner / Product Backlog |
-| Starlin Gomez Asprilla | Developer / pruebas y calidad |
-| Raul Santiago Carrillo Hernandez | Developer / desarrollo backend |
+El equipo trabaja de manera informal y asíncrona, principalmente mediante issues, mensajes, commits y Pull Requests. No realiza reuniones formales de Scrum ni mantiene roles fijos. Los nombres de roles Scrum que aparecieron en documentos anteriores se incluyeron como formato académico y no describen asignaciones efectivas. La priorización, revisión y coordinación se comparten; para cada tarea se puede acordar una persona que la impulse, sin convertir esa asignación puntual en un rol permanente. Los registros retrospectivos de Sprint 1 y Sesión 6 aclaran qué se puede verificar y qué debe validar el equipo.
+
+Integrantes registrados del proyecto: Danny Alexander Gomez, Michelle Guerrero Arboleda, Starlin Gomez Asprilla y Raul Santiago Carrillo Hernandez. Esta lista no asigna responsabilidades permanentes.
 
 ## Estado funcional
 
@@ -56,7 +53,7 @@ El backend se organiza en `controller → service → repository → domain`, co
 | HU-14 | Favoritos del comprador | Implementada |
 | HU-15 | Reporte de actividad por fechas | Implementada y restringida a `ADMIN` |
 
-La definición oficial de HU-07 para el Primer Corte es la consulta del perfil del agricultor; así se conserva en `BACKLOG.md` y en la planificación del Sprint 1. El registro de compradores es una capacidad adicional del software y no sustituye esa historia.
+La definición de HU-07 para el Primer Corte como consulta pública de datos no sensibles del agricultor aparece en `BACKLOG.md`, según la decisión del [issue #46](https://github.com/santixit/agrovalle-connect/issues/46). La comparación entre Backlog y Sprint Planning está en [docs/evidencias/comparacion-historias-backlog-sprint1.md](docs/evidencias/comparacion-historias-backlog-sprint1.md). Siguen pendientes las confirmaciones de integrantes que no comentaron en el issue. El registro de compradores es una capacidad adicional del software y no sustituye esa historia.
 
 ## Preparar el entorno
 
@@ -165,8 +162,8 @@ gitGraph
 - [Políticas Kanban, límites WIP y métricas de flujo](docs/kanban-policies.md)
 - [Estrategia de pruebas, pirámide y TDD](docs/estrategia-pruebas.md)
 - [Planificación Sprint 1](docs/sprint-1-planning.md)
-- [Bitácora Daily Scrum](docs/bitacora-daily-scrum.md)
-- [Review y retrospectiva](docs/sprint-1-review.md), [retrospectiva](docs/sprint-1-retrospective.md)
+- [Registro de coordinación asíncrona](docs/bitacora-daily-scrum.md)
+- [Evidencia funcional del Sprint 1](docs/sprint-1-review.md), [registro retrospectivo](docs/sprint-1-retrospective.md)
 - [Colección Postman inicial](docs/postman/agrovalle-sprint-1.postman_collection.json)
 - [Diagramas UML](docs/uml/README.md)
 - [Sprint de diseno y artefactos de arquitectura](docs/diseno/README.md)

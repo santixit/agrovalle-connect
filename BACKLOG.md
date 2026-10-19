@@ -7,10 +7,10 @@ Las estimaciones usan la secuencia Fibonacci y las prioridades siguen MoSCoW. La
 | HU-01 | Como agricultor, quiero registrarme para ofrecer mis productos. | Must have | 5 |
 | HU-02 | Como agricultor, quiero publicar una cosecha para que sea visible. | Must have | 5 |
 | HU-03 | Como usuario, quiero ver precios regionales para negociar mejor. | Should have | 5 |
-| HU-04 | Como comprador, quiero filtrar ofertas por municipio y categoria para encontrar productos locales. | Must have | 3 |
+| HU-04 | Como comprador, quiero filtrar ofertas opcionalmente por municipio, categoría o ambos para encontrar productos locales. | Must have | 3 |
 | HU-05 | Como comprador, quiero contactar al agricultor para acordar una compra. | Must have | 5 |
 | HU-06 | Como agricultor, quiero registrar mi finca para asociar sus ofertas a una ubicacion. | Must have | 3 |
-| HU-07 | Como agricultor, quiero consultar mi perfil para verificar mis datos registrados. | Must have | 2 |
+| HU-07 | Como usuario, quiero consultar el perfil público de un agricultor para conocer sus datos no sensibles. | Must have | 2 |
 | HU-08 | Como comprador, quiero reservar una cantidad disponible para evitar sobreventa. | Must have | 8 |
 | HU-09 | Como agricultor, quiero actualizar el estado del lote para informar su disponibilidad. | Should have | 3 |
 | HU-10 | Como comprador, quiero consultar el detalle de una oferta antes de contactar al productor. | Must have | 3 |
@@ -30,7 +30,7 @@ Las estimaciones usan la secuencia Fibonacci y las prioridades siguen MoSCoW. La
 
 ## Criterios de aceptacion BDD
 
-Los escenarios describen comportamiento de negocio. Los contratos REST y codigos HTTP se definen en la planificacion tecnica, no en este backlog de producto.
+Los escenarios describen comportamiento de negocio. Los contratos REST y codigos HTTP se definen en la planificacion tecnica, no en este backlog de producto. La selección del Backlog como base y las precisiones de HU-04 y HU-07 se registran a partir de la decisión y comentarios del [issue #46](https://github.com/santixit/agrovalle-connect/issues/46); las confirmaciones explícitas visibles allí son de algunos integrantes, no de todo el equipo.
 
 ### HU-01 Registro de agricultores
 **Given** una persona con nombre, `ubicacion_valle` y cedula validos, y una cedula que aun no esta registrada, **When** envia esos datos como JSON a `POST /api/v1/auth/register`, **Then** la API responde `201 Created`, persiste el perfil en PostgreSQL y devuelve su identificador.
@@ -42,7 +42,7 @@ Los escenarios describen comportamiento de negocio. Los contratos REST y codigos
 **Given** al menos 50 transacciones completadas de cafe registradas en las ultimas 24 horas, **When** un usuario consulta `GET /api/v1/precios/regionales?categoria=Cafe`, **Then** el sistema calcula la media aritmetica de las 50 mas recientes y devuelve el promedio en COP con dos decimales. Si hay menos de 50, usa las disponibles dentro de esas 24 horas.
 
 ### HU-04 Filtro por categoria y municipio
-**Given** ofertas activas de frutas en Dagua y en otros municipios o categorias, **When** un comprador filtra por municipio y categoria, **Then** solo encuentra las ofertas coincidentes con ambos filtros.
+**Given** ofertas activas en distintos municipios y categorías, **When** un comprador consulta el catálogo con municipio, categoría, ambos filtros o ninguno, **Then** el sistema aplica únicamente los filtros suministrados y devuelve las ofertas activas coincidentes; si no hay coincidencias, devuelve una lista vacía.
 
 ### HU-05 Contacto directo
 **Given** un comprador y una oferta activa, **When** el comprador envia un mensaje al agricultor, **Then** la interaccion queda registrada y asociada a la oferta.
@@ -51,7 +51,7 @@ Los escenarios describen comportamiento de negocio. Los contratos REST y codigos
 **Given** un agricultor registrado, **When** registra una finca con nombre, municipio y direccion validos, **Then** la finca queda asociada a su perfil.
 
 ### HU-07 Consulta del perfil del agricultor
-**Given** un agricultor registrado, **When** consulta su perfil usando su identificador, **Then** el sistema muestra los datos asociados a ese agricultor y no los de otra persona.
+**Given** un agricultor registrado, **When** un usuario consulta su perfil mediante el identificador, **Then** el sistema muestra el perfil público con datos no sensibles (identificador, nombre y ubicación) y no expone la cédula ni credenciales. La decisión de mantenerlo público consta en el [issue #46](https://github.com/santixit/agrovalle-connect/issues/46); el DTO actual devuelve esos tres campos.
 
 ### HU-08 Reserva de inventario
 **Given** una oferta activa con 100 kg disponibles y un comprador, **When** reserva 20 kg, **Then** la reserva queda registrada y la disponibilidad se actualiza a 80 kg sin permitir sobreventa.
