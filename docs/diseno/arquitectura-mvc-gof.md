@@ -42,6 +42,11 @@ La guia usa `ProductorDTO` como ejemplo; el codigo actual separa solicitudes y r
 | DTO | Records `*Request` y `*Response` separan JSON del modelo JPA y validan entradas. | Seguridad de informacion, compatibilidad y validacion. |
 | Factory | `UsuarioFactory` crea credenciales/rol para agricultor y comprador. | Consistencia al crear cuentas. |
 | Data Mapper | Metodos `from(...)` de respuestas convierten entidades a DTO; el servicio crea entidades a partir de solicitudes. | Separa modelo persistente del contrato externo. |
+| Strategy | `CalculadorDescuentoAgricola` abstrae el cálculo; `DescuentoMayoristaService` aplica el descuento consumido por `ReservaService`. | Aísla la regla de precio de los flujos de reserva y carrito. |
+| Strategy | `CalculadorFleteService` selecciona una implementación `CalculadorFleteStrategy` por municipio destino al programar un despacho. | Permite extender tarifas por destino sin modificar el flujo de despacho. |
+| Observer | `ContactoService` y `PedidoWorkflowService` publican eventos de dominio; `NotificacionObserver` los procesa después del commit. | Desacopla la operación de negocio de la persistencia de notificaciones. |
+
+El detalle de los patrones conductuales y sus diagramas está en [patrones.md](patrones.md). Los eventos de notificación actuales se procesan de forma síncrona después del commit; no se configura ejecución asíncrona.
 
 El proyecto no implementa un Builder dedicado. La guia de evaluacion permite Factory/Mapper; se documentan los patrones realmente usados, sin agregar un patron solo para completar una lista.
 

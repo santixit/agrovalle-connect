@@ -13,6 +13,7 @@ import co.edu.uniajc.agrovalle.service.OfertaNoPropiaException;
 import co.edu.uniajc.agrovalle.service.EstadoProductoInvalidoException;
 import co.edu.uniajc.agrovalle.service.RangoFechasInvalidoException;
 import co.edu.uniajc.agrovalle.service.TransicionPedidoInvalidaException;
+import co.edu.uniajc.agrovalle.service.MunicipioFleteNoSoportadoException;
 import jakarta.validation.ConstraintViolationException;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -81,6 +82,12 @@ public class ApiExceptionHandler {
   public ResponseEntity<Map<String, String>> conflictoEstado(RuntimeException exception) {
     return ResponseEntity.status(HttpStatus.CONFLICT)
         .body(Map.of("error", exception.getMessage()));
+  }
+
+  @ExceptionHandler(MunicipioFleteNoSoportadoException.class)
+  public ResponseEntity<Map<String, String>> municipioFleteNoSoportado(
+      MunicipioFleteNoSoportadoException exception) {
+    return ResponseEntity.badRequest().body(Map.of("error", exception.getMessage()));
   }
 
   @ExceptionHandler(EstadoProductoInvalidoException.class)

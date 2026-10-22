@@ -107,6 +107,9 @@ CREATE TABLE despachos (
     fecha_programada DATE NOT NULL,
     franja_horaria VARCHAR(80) NOT NULL,
     ruta VARCHAR(300),
+    municipio_destino VARCHAR(80),
+    peso_total_kg NUMERIC(12, 2),
+    costo_flete NUMERIC(12, 2),
     creado_en TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT ck_despachos_estado
         CHECK (estado IN ('PROGRAMADO', 'EN_RUTA', 'ENTREGADO', 'CANCELADO'))

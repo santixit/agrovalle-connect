@@ -6,6 +6,7 @@ import co.edu.uniajc.agrovalle.domain.Despacho;
 import co.edu.uniajc.agrovalle.domain.Pedido;
 import co.edu.uniajc.agrovalle.domain.EstadoDespacho;
 import co.edu.uniajc.agrovalle.domain.TransaccionPrecio;
+import java.math.BigDecimal;
 import co.edu.uniajc.agrovalle.repository.DespachoRepository;
 import co.edu.uniajc.agrovalle.repository.PedidoRepository;
 import co.edu.uniajc.agrovalle.repository.TransaccionPrecioRepository;
@@ -18,14 +19,17 @@ public class DespachoService {
   private final DespachoRepository despachoRepository;
   private final PedidoWorkflowService workflowService;
   private final TransaccionPrecioRepository transaccionPrecioRepository;
+  private final CalculadorFleteService calculadorFleteService;
 
   public DespachoService(PedidoRepository pedidoRepository,
       DespachoRepository despachoRepository, PedidoWorkflowService workflowService,
-      TransaccionPrecioRepository transaccionPrecioRepository) {
+      TransaccionPrecioRepository transaccionPrecioRepository,
+      CalculadorFleteService calculadorFleteService) {
     this.pedidoRepository = pedidoRepository;
     this.despachoRepository = despachoRepository;
     this.workflowService = workflowService;
     this.transaccionPrecioRepository = transaccionPrecioRepository;
+    this.calculadorFleteService = calculadorFleteService;
   }
 
   @Transactional
@@ -41,9 +45,14 @@ public class DespachoService {
     if (!propio) {
       throw new TransicionPedidoInvalidaException();
     }
+    BigDecimal pesoTotalKg = pedido.getDetalles().stream().map(detalle -> detalle.getCantidadKg())
+        .reduce(BigDecimal.ZERO, BigDecimal::add);
+    String municipioDestino = request.municipioDestino().trim();
+    BigDecimal costoFlete = calculadorFleteService.calcular(municipioDestino, pesoTotalKg);
     workflowService.enviarADespacho(pedido);
     Despacho despacho = despachoRepository.save(new Despacho(pedido,
-        request.fechaProgramada(), request.franjaHoraria().trim(), request.ruta()));
+        request.fechaProgramada(), request.franjaHoraria().trim(), request.ruta(),
+        municipioDestino, pesoTotalKg, costoFlete));
     return DespachoResponse.from(despacho);
   }
 
