@@ -11,4 +11,5 @@ import java.time.LocalDate;
 public record ProgramarDespachoRequest(@NotNull @Positive Long pedidoId,
     @NotNull @FutureOrPresent @JsonProperty("fecha_programada") LocalDate fechaProgramada,
     @NotBlank @Size(max = 80) String franjaHoraria,
-    @Size(max = 300) String ruta) { }
+    @Size(max = 300) String ruta,
+    @NotBlank @Size(max = 80) @JsonProperty("municipio_destino") String municipioDestino) { }

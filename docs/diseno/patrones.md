@@ -39,6 +39,65 @@ classDiagram
     ReservaService --> CalculadorDescuentoAgricola : inyecta y delega
 ```
 
+## Strategy: cálculo de flete por municipio
+
+### Problema de negocio
+
+El costo de traslado depende del destino y del peso total del pedido. Un condicional por municipio dentro de `DespachoService` haría que cada ruta nueva obligara a cambiar el flujo de programación del despacho.
+
+### Aplicación
+
+- `CalculadorFleteStrategy` define una estrategia de cálculo por destino.
+- `FleteDaguaStrategy`, `FleteBugaStrategy` y `FleteTuluaStrategy` implementan las tarifas demostrativas de la guía, registradas como componentes Spring.
+- `CalculadorFleteService` construye un mapa de estrategias y selecciona por municipio sin condicionales por ruta.
+- Al programar un despacho, se recibe `municipio_destino`, se suman los kilogramos de las líneas del pedido, y se persisten municipio, peso y costo calculado. La respuesta incluye esos tres datos.
+- Para municipios sin tarifa configurada la API responde 400; no se estima ni se cobra una tarifa silenciosa.
+
+| Municipio destino | Tarifa académica de ejemplo | Regla |
+| --- | ---: | --- |
+| Dagua | $1.200 COP/kg + $5.000 COP base | peso × 1.200 + 5.000 |
+| Buga | $800 COP/kg | peso × 800 |
+| Tuluá | $950 COP/kg | peso × 950 |
+
+Estos valores se usan para el ejercicio de patrones y no representan tarifas comerciales validadas. Los despachos históricos conservan los campos nuevos nulos porque el repositorio no registra el peso ni el municipio de entrega de esos envíos.
+
+```mermaid
+classDiagram
+    class CalculadorFleteStrategy {
+        <<interface>>
+        +getMunicipio() String
+        +calcular(pesoKg) BigDecimal
+    }
+    class FleteDaguaStrategy {
+        +calcular(pesoKg) BigDecimal
+    }
+    class FleteBugaStrategy {
+        +calcular(pesoKg) BigDecimal
+    }
+    class FleteTuluaStrategy {
+        +calcular(pesoKg) BigDecimal
+    }
+    class CalculadorFleteService {
+        -estrategias Map
+        +calcular(municipio, pesoKg) BigDecimal
+    }
+    class DespachoService {
+        -calculadorFleteService
+        +programar(usuarioAgricultorId, request) DespachoResponse
+    }
+    class Despacho {
+        -municipioDestino String
+        -pesoTotalKg BigDecimal
+        -costoFlete BigDecimal
+    }
+    CalculadorFleteStrategy <|.. FleteDaguaStrategy
+    CalculadorFleteStrategy <|.. FleteBugaStrategy
+    CalculadorFleteStrategy <|.. FleteTuluaStrategy
+    CalculadorFleteService o--> CalculadorFleteStrategy : selecciona por municipio
+    DespachoService --> CalculadorFleteService : calcula
+    DespachoService --> Despacho : guarda el resultado
+```
+
 ## Observer: notificaciones transaccionales
 
 ### Problema de negocio
@@ -97,8 +156,8 @@ classDiagram
 
 ## Verificación de calidad
 
-El proyecto aplica Checkstyle durante `verify` y en el hook local `pre-commit`. JaCoCo exige al menos 60 % de cobertura de instrucciones, ramas y líneas para el bundle. Estas condiciones describen la configuración del repositorio; el resultado vigente debe verificarse en la ejecución local y en CI del commit evaluado.
+El proyecto aplica Checkstyle durante `verify` y en el hook local `pre-commit`. JaCoCo exige al menos 60 % de cobertura de instrucciones, ramas y líneas para el bundle. `CalculadorFleteServiceTest` cubre las estrategias de los tres municipios, la normalización del nombre y el rechazo de peso o municipio no válido. El resultado de `clean verify` y el estado de CI se registran para el commit evaluado.
 
-## Pendiente de alcance
+## Alcance de las tarifas
 
-El PDF incluye Strategy de fletes como ejemplo, pero no define tarifas de transporte aprobadas por el negocio. No se agregan tarifas ficticias ni se modifica el contrato de despacho. El equipo tendría que confirmar esas reglas antes de extender el cálculo de costos con ese caso.
+Las tarifas anteriores son datos de demostración indicados para la entrega académica. No deben interpretarse como precios comerciales vigentes; una operación real debe reemplazarlas por tarifas acordadas y mantenibles desde configuración o datos de negocio.

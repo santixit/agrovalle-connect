@@ -569,9 +569,13 @@ class AgrovalleConnectApplicationTests {
             .contentType(MediaType.APPLICATION_JSON)
             .content("""
                 {"pedidoId":%d,"fecha_programada":"%s",
-                 "franjaHoraria":"8:00-12:00","ruta":"Dagua-Cali"}
+                 "franjaHoraria":"8:00-12:00","ruta":"Dagua-Cali",
+                 "municipio_destino":"Dagua"}
                 """.formatted(pedidoId.longValue(), LocalDate.now().plusDays(1))))
-        .andExpect(status().isCreated());
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("$.municipioDestino").value("Dagua"))
+        .andExpect(jsonPath("$.pesoTotalKg").value(20.0))
+        .andExpect(jsonPath("$.costoFlete").value(29000.0));
     mockMvc.perform(get("/api/v1/reservas/{id}/trazabilidad", pedidoId.longValue())
             .header("Authorization", "Bearer " + tokenComprador))
         .andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(4)))

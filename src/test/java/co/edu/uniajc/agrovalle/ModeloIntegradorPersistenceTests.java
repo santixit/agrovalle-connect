@@ -64,7 +64,8 @@ class ModeloIntegradorPersistenceTests {
     pedido.cambiarEstado(EstadoPedido.CONFIRMADO);
     entityManager.persist(pedido);
     Despacho despacho = new Despacho(
-        pedido, LocalDate.now().plusDays(3), "08:00-12:00", "Dagua-Cali");
+        pedido, LocalDate.now().plusDays(3), "08:00-12:00", "Dagua-Cali",
+        null, null, null);
     entityManager.persist(despacho);
     EventoTrazabilidad evento = new EventoTrazabilidad(
         pedido, EstadoPedido.CONFIRMADO, "La reserva fue confirmada");

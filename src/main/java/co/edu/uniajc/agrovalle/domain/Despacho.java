@@ -13,6 +13,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.math.BigDecimal;
 
 /** Planned or active delivery for an order. */
 @Entity
@@ -40,16 +41,29 @@ public class Despacho {
   @Column(length = 300)
   private String ruta;
 
+  @Column(name = "municipio_destino", length = 80)
+  private String municipioDestino;
+
+  @Column(name = "peso_total_kg", precision = 12, scale = 2)
+  private BigDecimal pesoTotalKg;
+
+  @Column(name = "costo_flete", precision = 12, scale = 2)
+  private BigDecimal costoFlete;
+
   @Column(name = "creado_en", nullable = false)
   private LocalDateTime creadoEn = LocalDateTime.now();
 
   protected Despacho() { }
 
-  public Despacho(Pedido pedido, LocalDate fechaProgramada, String franjaHoraria, String ruta) {
+  public Despacho(Pedido pedido, LocalDate fechaProgramada, String franjaHoraria, String ruta,
+      String municipioDestino, BigDecimal pesoTotalKg, BigDecimal costoFlete) {
     this.pedido = pedido;
     this.fechaProgramada = fechaProgramada;
     this.franjaHoraria = franjaHoraria;
     this.ruta = ruta;
+    this.municipioDestino = municipioDestino;
+    this.pesoTotalKg = pesoTotalKg;
+    this.costoFlete = costoFlete;
   }
 
   public Long getId() {
@@ -74,6 +88,18 @@ public class Despacho {
 
   public String getRuta() {
     return ruta;
+  }
+
+  public String getMunicipioDestino() {
+    return municipioDestino;
+  }
+
+  public BigDecimal getPesoTotalKg() {
+    return pesoTotalKg;
+  }
+
+  public BigDecimal getCostoFlete() {
+    return costoFlete;
   }
 
   public LocalDateTime getCreadoEn() {

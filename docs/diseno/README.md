@@ -5,7 +5,7 @@ Este paquete documenta el diseno arquitectonico del sistema AgroValle Connect y 
 ## Artefactos
 
 - Modelo entidad-relacion implementado: fuentes [conceptual](modelo-entidad-relacion.mmd) y [fisica](modelo-datos-der.mmd), alineadas con las migraciones actuales. Se retiraron sus antiguos exports graficos para que no sigan apareciendo junto con los nuevos disenos.
-- [Snapshot DDL PostgreSQL](schema.sql). Es una consolidacion legible de Flyway V1-V4 para consulta y evaluacion. Las migraciones siguen siendo la unica fuente ejecutable del esquema; no ejecutar este snapshot en paralelo con Flyway.
+- [Snapshot DDL PostgreSQL](schema.sql). Es una consolidacion legible de Flyway V1-V5 para consulta y evaluacion. Las migraciones siguen siendo la unica fuente ejecutable del esquema; no ejecutar este snapshot en paralelo con Flyway.
 - [Arquitectura MVC en cuatro capas y patrones](arquitectura-mvc-gof.md).
 - [Patrones GoF de comportamiento: Strategy y Observer](patrones.md), con problema de negocio, diagramas de clases y pruebas vinculadas al código actual.
 - Fuentes UML editables de componentes, despliegue y secuencia: [diagrama-componentes.puml](diagrama-componentes.puml), [diagrama-despliegue.puml](diagrama-despliegue.puml) y [diagrama-secuencia.puml](diagrama-secuencia.puml). Se quitaron las imagenes PNG y el PDF de las versiones visuales anteriores.
