@@ -9,7 +9,9 @@ Base local: `http://localhost:8080`. Levantar PostgreSQL con `docker compose up 
 ```json
 {
   "nombre": "Ana Ruiz",
+  "tipoDocumento": "CC",
   "cedula": "ID-DE-PRUEBA-001",
+  "telefono": "3001234567",
   "ubicacion_valle": "Dagua"
 }
 ```
@@ -38,9 +40,9 @@ La coleccion de Postman en `docs/postman/agrovalle-sprint-1.postman_collection.j
 
 ## Flujos funcionales del integrador
 
-El registro de agricultor admite credenciales para habilitar autenticación. En perfiles migrados que solo contienen nombre, cédula y municipio, estos campos siguen siendo válidos, pero no pueden publicar hasta vincular una cuenta. El campo `contrasena` debe tener de 10 a 72 caracteres.
+El registro de agricultor admite credenciales para habilitar autenticación y ahora guarda tipo de documento y teléfono cuando se proporcionan. En perfiles migrados que solo contienen nombre, cédula y municipio, estos campos siguen siendo válidos, pero no pueden publicar hasta vincular una cuenta. El campo `contrasena` debe tener de 10 a 72 caracteres. `tipoDocumento` y `telefono` son opcionales para conservar compatibilidad con clientes anteriores.
 
-`POST /api/v1/auth/register/comprador` recibe `nombre`, `correo`, `contrasena` y los campos opcionales `telefono` y `tipoComercio`. Luego ambos roles usan `POST /api/v1/auth/login`:
+`POST /api/v1/auth/register/comprador` recibe `nombre`, `correo`, `contrasena` y los campos opcionales `tipoDocumento`, `cedula`, `telefono` y `tipoComercio`. Los campos de documento y teléfono se guardan en el perfil del comprador. Luego ambos roles usan `POST /api/v1/auth/login`:
 
 ```json
 {"correo":"ana@example.com","contrasena":"ClaveSegura2026"}
@@ -51,8 +53,10 @@ La respuesta incluye `accessToken`, `tokenType: Bearer` y `expiresIn`. Enviar el
 ### Publicar, reservar y completar una entrega
 
 - `POST /api/v1/fincas` con `{ "nombre": "La Esperanza", "municipio": "Dagua", "direccion": "Vereda El Salado" }` crea una finca del agricultor autenticado.
+- `GET /api/v1/productos/mias` requiere rol agricultor y devuelve las ofertas propias, incluidas las inactivas, ordenadas de la más reciente a la más antigua.
 - `POST /api/v1/productos` exige rol agricultor y recibe `nombre`, `categoria`, `municipio`, `cantidadKg`, `precioPorKg`, `fecha_cosecha` y `fincaId` opcional. La fecha debe ser hoy o futura.
 - `GET /api/v1/productos?municipio=Dagua&categoria=Frutas` y `GET /api/v1/productos/{id}` permiten buscar y ver oferta pública sin datos privados.
+- `GET /api/v1/productos/mias` devuelve, para el agricultor autenticado, sus ofertas activas e inactivas. Las respuestas de catálogo también incluyen el nombre público del agricultor cuando existe un perfil asociado.
 - `POST /api/v1/reservas` exige comprador y recibe `{ "productoId": 1, "cantidad_kg": 20 }`. Un bloqueo de escritura protege el inventario contra reservas simultáneas; insuficiencia responde 409.
 - Para comprar varias ofertas en una sola operación, `POST /api/v1/reservas/carrito` recibe `{"items":[{"productoId":1,"cantidad_kg":20},{"productoId":2,"cantidad_kg":5}]}`. Consolida filas duplicadas, crea un pedido por agricultor y descuenta todo el inventario dentro de una única transacción; si una línea no tiene stock, no se confirma ninguna.
 - El agricultor confirma con `POST /api/v1/reservas/{id}/confirmar`, registra el alistamiento con `POST /api/v1/reservas/{id}/preparar` y programa con `POST /api/v1/despachos`, que requiere `pedidoId`, `fecha_programada`, `franjaHoraria` y ruta opcional.

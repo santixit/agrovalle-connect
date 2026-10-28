@@ -40,6 +40,8 @@ public class SecurityConfiguration {
                 .permitAll()
             .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/productos")
                 .hasAuthority("SCOPE_AGRICULTOR")
+            .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/productos/mias")
+                .hasAuthority("SCOPE_AGRICULTOR")
             .requestMatchers(org.springframework.http.HttpMethod.PATCH,
                 "/api/v1/productos/*/estado").hasAuthority("SCOPE_AGRICULTOR")
             .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/contactos")

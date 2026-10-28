@@ -10,11 +10,11 @@ test('agricultor publica una cosecha y comprador reserva desde el navegador', as
   const farmName = `Finca E2E ${suffix}`;
 
   await page.goto('/');
-  await page.locator('#registro-details summary').click();
   await page.locator('#registro-form [name="nombre"]').fill(`Agricultor ${suffix}`);
   await page.locator('#registro-form [name="correo"]').fill(farmerEmail);
   await page.locator('#registro-form [name="contrasena"]').fill(password);
   await page.locator('#registro-form [name="cedula"]').fill(suffix);
+  await page.locator('#registro-form [name="telefono"]').fill('3001234567');
   await page.locator('#registro-form [name="ubicacion_valle"]').fill('Dagua');
   await page.locator('#registro-form button').click();
   await expect(page.locator('#auth-status')).toContainText('Cuenta creada.');
@@ -43,11 +43,12 @@ test('agricultor publica una cosecha y comprador reserva desde el navegador', as
   await expect(page.locator('#catalogo article').filter({ hasText: productName })).toBeVisible();
 
   await page.locator('#salir').click();
-  await page.locator('#registro-details summary').click();
   await page.locator('#registro-form [name="tipo"]').selectOption('COMPRADOR');
   await page.locator('#registro-form [name="nombre"]').fill(`Comprador ${suffix}`);
   await page.locator('#registro-form [name="correo"]').fill(buyerEmail);
   await page.locator('#registro-form [name="contrasena"]').fill(password);
+  await page.locator('#registro-form [name="cedula"]').fill(`${suffix}B`);
+  await page.locator('#registro-form [name="telefono"]').fill('3001234568');
   await page.locator('#registro-form button').click();
   await expect(page.locator('#auth-status')).toContainText('Cuenta creada.');
 

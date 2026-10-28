@@ -47,8 +47,8 @@ public class AgricultorService {
       usuario = usuarioRepository.save(usuarioFactory.crearAgricultor(correo,
           request.contrasena()));
     }
-    Agricultor agricultor = new Agricultor(usuario, request.nombre().trim(),
-        cedula, request.ubicacionValle().trim());
+    Agricultor agricultor = new Agricultor(usuario, request.nombre().trim(), cedula,
+        request.tipoDocumento(), request.telefono(), request.ubicacionValle().trim());
     return AgricultorResponse.from(agricultorRepository.save(agricultor));
   }
 

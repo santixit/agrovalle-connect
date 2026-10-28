@@ -19,6 +19,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /** Handles catalog search requests. */
 @Validated
@@ -42,6 +43,11 @@ public class ProductoController {
     return catalogoProductoService.buscar(municipio, categoria);
   }
 
+  @GetMapping("/mias")
+  public List<ProductoResponse> buscarMias(@AuthenticationPrincipal Jwt jwt) {
+    return catalogoProductoService.buscarDelAgricultor(Long.valueOf(jwt.getSubject()));
+  }
+
   @PostMapping
   public ResponseEntity<ProductoResponse> publicar(@AuthenticationPrincipal Jwt jwt,
       @Valid @RequestBody PublicarProductoRequest request) {
@@ -53,7 +59,7 @@ public class ProductoController {
 
   @GetMapping("/{id}")
   public ResponseEntity<co.edu.uniajc.agrovalle.api.dto.OfertaDetalleResponse> consultarDetalle(
-      @org.springframework.web.bind.annotation.PathVariable Long id) {
+      @PathVariable Long id) {
     return ResponseEntity.ok(catalogoProductoService.consultarDetalle(id));
   }
 

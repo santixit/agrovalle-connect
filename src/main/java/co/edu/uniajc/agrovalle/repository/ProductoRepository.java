@@ -20,6 +20,8 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
 
   List<Producto> findByActivoTrue();
 
+  List<Producto> findByAgricultor_Usuario_IdOrderByCreadoEnDesc(Long usuarioId);
+
   List<Producto> findByActivoTrueAndMunicipioIgnoreCase(String municipio);
 
   List<Producto> findByActivoTrueAndCategoriaIgnoreCase(String categoria);

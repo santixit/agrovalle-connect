@@ -32,8 +32,8 @@ public class CompradorService {
     }
     Usuario usuario = usuarioRepository.save(usuarioFactory.crearComprador(correo,
         request.contrasena()));
-    Comprador comprador = new Comprador(usuario, request.nombre().trim(), request.telefono(),
-        request.tipoComercio());
+    Comprador comprador = new Comprador(usuario, request.nombre().trim(), request.tipoDocumento(),
+        request.cedula(), request.telefono(), request.tipoComercio());
     return CompradorResponse.from(compradorRepository.save(comprador));
   }
 }
