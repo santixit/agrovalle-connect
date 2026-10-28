@@ -14,6 +14,7 @@ test('agricultor publica una cosecha y comprador reserva desde el navegador', as
   await page.locator('#registro-form [name="correo"]').fill(farmerEmail);
   await page.locator('#registro-form [name="contrasena"]').fill(password);
   await page.locator('#registro-form [name="cedula"]').fill(suffix);
+  await page.locator('#registro-form [name="telefono"]').fill('3001234567');
   await page.locator('#registro-form [name="ubicacion_valle"]').fill('Dagua');
   await page.locator('#registro-form button').click();
   await expect(page.locator('#auth-status')).toContainText('Cuenta creada.');
@@ -46,6 +47,8 @@ test('agricultor publica una cosecha y comprador reserva desde el navegador', as
   await page.locator('#registro-form [name="nombre"]').fill(`Comprador ${suffix}`);
   await page.locator('#registro-form [name="correo"]').fill(buyerEmail);
   await page.locator('#registro-form [name="contrasena"]').fill(password);
+  await page.locator('#registro-form [name="cedula"]').fill(`${suffix}B`);
+  await page.locator('#registro-form [name="telefono"]').fill('3001234568');
   await page.locator('#registro-form button').click();
   await expect(page.locator('#auth-status')).toContainText('Cuenta creada.');
 
