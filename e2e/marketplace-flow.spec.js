@@ -10,7 +10,6 @@ test('agricultor publica una cosecha y comprador reserva desde el navegador', as
   const farmName = `Finca E2E ${suffix}`;
 
   await page.goto('/');
-  await page.locator('#registro-details summary').click();
   await page.locator('#registro-form [name="nombre"]').fill(`Agricultor ${suffix}`);
   await page.locator('#registro-form [name="correo"]').fill(farmerEmail);
   await page.locator('#registro-form [name="contrasena"]').fill(password);
@@ -43,7 +42,6 @@ test('agricultor publica una cosecha y comprador reserva desde el navegador', as
   await expect(page.locator('#catalogo article').filter({ hasText: productName })).toBeVisible();
 
   await page.locator('#salir').click();
-  await page.locator('#registro-details summary').click();
   await page.locator('#registro-form [name="tipo"]').selectOption('COMPRADOR');
   await page.locator('#registro-form [name="nombre"]').fill(`Comprador ${suffix}`);
   await page.locator('#registro-form [name="correo"]').fill(buyerEmail);
