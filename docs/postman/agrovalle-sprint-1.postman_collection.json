@@ -17,7 +17,7 @@
         "header": [{ "key": "Content-Type", "value": "application/json" }],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"nombre\": \"Ana Ruiz\",\n  \"cedula\": \"{{testCedula}}\",\n  \"ubicacion_valle\": \"Dagua\"\n}",
+          "raw": "{\n  \"nombre\": \"Ana Ruiz\",\n  \"tipoDocumento\": \"CC\",\n  \"cedula\": \"{{testCedula}}\",\n  \"telefono\": \"3001234567\",\n  \"ubicacion_valle\": \"Dagua\"\n}",
           "options": { "raw": { "language": "json" } }
         },
         "url": "{{baseUrl}}/api/v1/auth/register"

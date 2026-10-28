@@ -28,21 +28,37 @@ public class Agricultor {
   @Column(nullable = false, unique = true, length = 30)
   private String cedula;
 
+  @Column(name = "tipo_documento", length = 30)
+  private String tipoDocumento;
+
+  @Column(length = 30)
+  private String telefono;
+
   @Column(nullable = false, length = 80)
   private String municipio;
 
   protected Agricultor() { }
 
   public Agricultor(String nombre, String cedula, String municipio) {
-    this.nombre = nombre;
-    this.cedula = cedula;
-    this.municipio = municipio;
+    this(null, nombre, cedula, null, null, municipio);
+  }
+
+  public Agricultor(String nombre, String cedula, String tipoDocumento, String telefono,
+      String municipio) {
+    this(null, nombre, cedula, tipoDocumento, telefono, municipio);
   }
 
   public Agricultor(Usuario usuario, String nombre, String cedula, String municipio) {
+    this(usuario, nombre, cedula, null, null, municipio);
+  }
+
+  public Agricultor(Usuario usuario, String nombre, String cedula, String tipoDocumento,
+      String telefono, String municipio) {
     this.usuario = usuario;
     this.nombre = nombre;
     this.cedula = cedula;
+    this.tipoDocumento = tipoDocumento;
+    this.telefono = telefono;
     this.municipio = municipio;
   }
 
@@ -60,6 +76,14 @@ public class Agricultor {
 
   public String getCedula() {
     return cedula;
+  }
+
+  public String getTipoDocumento() {
+    return tipoDocumento;
+  }
+
+  public String getTelefono() {
+    return telefono;
   }
 
   public String getMunicipio() {

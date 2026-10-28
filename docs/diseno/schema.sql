@@ -1,4 +1,4 @@
--- Snapshot de referencia derivado de Flyway V1-V4 para evaluacion del Sprint de Diseno.
+-- Snapshot de referencia derivado de Flyway V1-V6 para evaluacion del Sprint de Diseno.
 -- No se ejecuta en el arranque. La fuente de verdad son las migraciones versionadas.
 -- Para una base vacia, use Flyway; no ejecute este archivo sobre una BD ya migrada.
 
@@ -50,6 +50,11 @@ CREATE TABLE compradores (
     tipo_comercio VARCHAR(80),
     creado_en TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE agricultores ADD COLUMN tipo_documento VARCHAR(30);
+ALTER TABLE agricultores ADD COLUMN telefono VARCHAR(30);
+ALTER TABLE compradores ADD COLUMN tipo_documento VARCHAR(30);
+ALTER TABLE compradores ADD COLUMN cedula VARCHAR(30);
 
 CREATE TABLE fincas (
     id BIGSERIAL PRIMARY KEY,

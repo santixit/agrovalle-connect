@@ -10,7 +10,7 @@
 <body>
   <header>
     <div class="hero site-header">
-      <a class="brand" href="#catalogo-seccion" aria-label="AgroValle Connect, inicio"><span aria-hidden="true">🌱</span><span>AgroValle</span></a>
+      <a class="brand" href="#inicio-seccion" aria-label="AgroValle Connect, inicio"><span aria-hidden="true">🌱</span><span>AgroValle</span></a>
       <form id="catalog-search-form" class="catalog-search" role="search">
         <label class="sr-only" for="catalog-query">Buscar producto o municipio</label>
         <span aria-hidden="true" class="search-icon">⌕</span>
@@ -18,7 +18,8 @@
       </form>
       <a id="header-login" class="header-login" href="#acceso-seccion">Ingresar</a>
       <nav aria-label="Navegación principal">
-        <a href="#catalogo-seccion">Explorar cosechas</a>
+        <a href="#inicio-seccion">Inicio</a>
+        <a href="#catalogo-seccion">Catálogo</a>
         <a id="carrito-link" href="#carrito-seccion" hidden>Mi carrito <span id="carrito-count">0</span></a>
         <a href="#precios-seccion">Precios regionales</a>
         <a href="#acceso-seccion">Mi cuenta</a>
@@ -26,47 +27,88 @@
     </div>
   </header>
   <main>
+    <section id="inicio-seccion" class="home-hero" aria-labelledby="inicio-titulo">
+      <h1 id="inicio-titulo">Compra cosechas frescas directo del productor</h1>
+      <p>Agricultores del Valle del Cauca publican sus cosechas; tú las reservas sin intermediarios y sigues la entrega.</p>
+      <div class="actions">
+        <a class="button-link" href="#catalogo-seccion">Ver catálogo de cosechas</a>
+        <a class="button-link secondary" href="#catalogo-seccion">Reservar productos</a>
+      </div>
+      <div class="home-shortcuts">
+        <p>Consulta la trazabilidad de tus entregas <a href="#cuenta-panel">Ver mis entregas</a></p>
+        <p>¿Eres agricultor? Publica tu cosecha y recibe contactos <a href="#acceso-seccion">Registrarme como productor</a></p>
+      </div>
+    </section>
     <section id="acceso-seccion" aria-labelledby="acceso-titulo">
-      <h2 id="acceso-titulo">Acceso</h2>
-      <p class="section-intro">Ingresa para publicar, reservar y seguir tus pedidos.</p>
-      <form id="login-form" class="form-grid">
-        <div id="login-fields" class="form-grid">
-          <label>Correo<input name="correo" type="email" required autocomplete="username"></label>
-          <label>Contraseña<input name="contrasena" type="password" required autocomplete="current-password"></label>
-          <button>Iniciar sesión</button>
+      <div class="auth-layout">
+        <div class="auth-card">
+          <h2 id="acceso-titulo">Iniciar sesión</h2>
+          <form id="login-form" class="form-grid">
+            <div id="login-fields" class="form-grid">
+              <label>Correo<input name="correo" type="email" required autocomplete="username" placeholder="nombre@correo.com"></label>
+              <label>Contraseña<input name="contrasena" type="password" required autocomplete="current-password" placeholder="Contraseña"></label>
+              <button>Iniciar sesión</button>
+            </div>
+          </form>
+          <button type="button" id="salir" class="secondary" hidden>Cerrar sesión</button>
         </div>
-      </form>
-      <button type="button" id="salir" class="secondary" hidden>Cerrar sesión</button>
-      <details id="registro-details">
-        <summary>Crear cuenta</summary>
+        <div id="registro-details" class="auth-card">
+          <h2>Crear cuenta</h2>
         <form id="registro-form" class="form-grid">
-          <label>Tipo de cuenta<select name="tipo"><option value="AGRICULTOR">Agricultor</option><option value="COMPRADOR">Comprador</option></select></label>
-          <label>Nombre<input name="nombre" maxlength="120" required></label>
-          <label>Correo<input name="correo" type="email" maxlength="254" required></label>
-          <label>Contraseña<input name="contrasena" type="password" minlength="10" maxlength="72" required></label>
-          <label data-farmer>Documento<input name="cedula" maxlength="30"></label>
+          <label>Nombre completo<input name="nombre" maxlength="120" required autocomplete="name"></label>
+          <label>Tipo de documento<select name="tipoDocumento"><option value="CC">Cédula</option><option value="CE">Cédula de extranjería</option><option value="PASAPORTE">Pasaporte</option><option value="NIT">NIT</option></select></label>
+          <label>Número de documento<input name="cedula" maxlength="30" required></label>
+          <label>Teléfono<input name="telefono" type="tel" maxlength="30" required autocomplete="tel"></label>
+          <label>Rol de usuario<select name="tipo"><option value="AGRICULTOR">Agricultor</option><option value="COMPRADOR">Comprador</option></select></label>
           <label data-farmer>Municipio<input name="ubicacion_valle" maxlength="80"></label>
-          <label data-buyer hidden>Teléfono<input name="telefono" maxlength="30"></label>
           <label data-buyer hidden>Tipo de comercio<input name="tipoComercio" maxlength="80"></label>
-          <button>Crear cuenta</button>
+          <label>Correo<input name="correo" type="email" maxlength="254" required autocomplete="email"></label>
+          <label>Contraseña<input name="contrasena" type="password" minlength="10" maxlength="72" required autocomplete="new-password"></label>
+          <button>Registrarme</button>
         </form>
-      </details>
+        </div>
+      </div>
       <p id="auth-status" class="status" role="status"></p>
     </section>
 
     <section id="agricultor-panel" hidden aria-labelledby="publicar-titulo">
+      <div class="dashboard-layout">
+        <aside class="dashboard-sidebar"><h2>Cuenta del agricultor</h2>
+          <a href="#agricultor-panel">Inicio</a><a href="#actividad-status" data-dashboard-action="notificaciones">Mensajes de contacto</a>
+          <a href="#publicar-titulo">Productos publicados</a><a href="#actividad-status" data-dashboard-action="pedidos">Pedidos</a>
+          <a href="#actividad-status" data-dashboard-action="pedidos">Seguimiento de entregas</a><a href="#catalogo-seccion">Ofertas y catálogo</a>
+          <a href="#precios-seccion">Consulta de precios</a><a href="#acceso-seccion">Mi cuenta</a>
+        </aside>
+        <div class="dashboard-content">
+          <h2>Panel del agricultor</h2>
+          <div class="metric-grid"><article class="metric-card"><span>Mensajes de contacto</span><strong id="farmer-contact-count">—</strong></article>
+            <article class="metric-card"><span>Productos publicados</span><strong id="farmer-product-count">—</strong></article>
+            <article class="metric-card"><span>Pedidos activos</span><strong id="farmer-order-count">—</strong></article>
+            <article class="metric-card"><span>Seguimiento de entregas</span><strong id="farmer-delivery-count">—</strong></article>
+          </div>
+          <h3>Trazabilidad de entregas</h3>
+          <div class="metric-grid metric-grid-small"><article class="metric-card"><span>Pendientes por enviar</span><strong id="farmer-pending-count">—</strong></article>
+            <article class="metric-card"><span>En curso</span><strong id="farmer-course-count">—</strong></article>
+            <article class="metric-card"><span>Entregadas</span><strong id="farmer-delivered-count">—</strong></article>
+            <article class="metric-card"><span>Con retraso</span><strong>—</strong></article>
+          </div>
+          <div class="dashboard-publish"><strong>Publica una nueva cosecha</strong><a class="button-link" href="#publicar-titulo">Publicar producto</a></div>
+          <div class="dashboard-price"><h3>Alza de precios (consulta rápida)</h3><p id="price-trend-status">Consulta el <a href="#precios-seccion">promedio regional</a> desde el catálogo.</p></div>
+          <p id="farmer-dashboard-status" class="status" role="status"></p>
+        </div>
+      </div>
       <div class="publish-layout">
         <div class="publish-form-panel">
           <h2 id="publicar-titulo">Publicar cosecha</h2>
           <p class="section-intro">Comparte la disponibilidad de tu finca con compradores de la región.</p>
           <form id="producto-form" class="publish-form">
             <label>Finca<select name="fincaId" id="finca-select"><option value="">Selecciona una finca</option></select></label>
-            <label>Producto<input name="nombre" maxlength="120" required></label>
+          <label>Producto y variedad<input name="nombre" maxlength="120" required></label>
             <label>Categoría<input name="categoria" maxlength="80" required></label>
             <label>Municipio<input name="municipio" maxlength="80" required></label>
-            <label>Cantidad total (kg)<input name="cantidadKg" type="number" min="0.01" step="0.01" required></label>
-            <label>Precio unitario por kg (COP)<input name="precioPorKg" type="number" min="0.01" step="0.01" required></label>
-            <label>Fecha disponible<input name="fecha_cosecha" type="date" required><span class="hint">Debe ser hoy o una fecha futura.</span></label>
+          <label>Cantidad total y unidad de medida<input name="cantidadKg" type="number" min="0.01" step="0.01" required placeholder="Cantidad en kg"></label>
+          <label>Precio por unidad de medida (COP)<input name="precioPorKg" type="number" min="0.01" step="0.01" required placeholder="$ por kg"></label>
+          <label>Fecha de cosecha<input name="fecha_cosecha" type="date" required><span class="hint">Debe ser hoy o una fecha futura.</span></label>
             <div class="publish-actions">
               <input type="button" id="guardar-borrador" class="secondary" value="Guardar borrador">
               <button type="submit">Publicar</button>
@@ -97,7 +139,7 @@
     <section id="catalogo-seccion" aria-labelledby="catalogo-titulo">
       <div class="catalog-heading">
         <div>
-          <h2 id="catalogo-titulo">Últimas novedades</h2>
+          <h2 id="catalogo-titulo">Cosechas recientes</h2>
           <p class="section-intro">Cosechas frescas de productores del Valle del Cauca.</p>
         </div>
       </div>
@@ -106,11 +148,12 @@
           <h3>Filtros</h3>
           <form id="buscar-form" class="filters">
             <label>Municipio<input name="municipio" maxlength="80" placeholder="Todos los municipios"></label>
+            <label>Productor o comerciante<input name="productor" maxlength="120" placeholder="Todos"></label>
             <label>Categoría<input name="categoria" maxlength="80" placeholder="Todas las categorías"></label>
             <button>Aplicar filtros</button>
             <button type="button" id="limpiar" class="secondary">Ver todo</button>
           </form>
-          <div class="price-widget">
+          <div id="precios-seccion" class="price-widget">
             <h3>Precio regional</h3>
             <p>Compara el promedio de ventas completadas por categoría.</p>
             <form id="precios-form">
@@ -153,13 +196,21 @@
     </section>
 
     <section id="admin-panel" hidden>
-      <h2>Reporte administrativo</h2>
-      <form id="reporte-form">
-        <label>Desde<input name="desde" type="date" required></label>
-        <label>Hasta<input name="hasta" type="date" required></label>
-        <button>Generar reporte</button>
-      </form>
-      <p id="reporte-status" class="status" role="status"></p>
+      <div class="dashboard-layout">
+        <aside class="dashboard-sidebar"><h2>Administración</h2><a href="#admin-panel">Resumen</a><a href="#admin-users">Gestión de usuarios</a>
+          <a href="#reporte-form">Reporte de cosechas</a><a href="#reporte-form">Reporte de clientes</a><a href="#reporte-form">Reporte de usuarios</a><a href="#reporte-form">Actividad de la comunidad</a></aside>
+        <div class="dashboard-content"><h2>Resumen general</h2>
+          <div class="metric-grid"><article class="metric-card"><span>Usuarios del periodo</span><strong id="admin-user-count">—</strong></article>
+            <article class="metric-card"><span>Productores</span><strong id="admin-farmer-count">—</strong></article>
+            <article class="metric-card"><span>Clientes</span><strong id="admin-client-count">—</strong></article>
+            <article class="metric-card"><span>Cosechas del periodo</span><strong id="admin-harvest-count">—</strong></article>
+          </div>
+          <article id="admin-users" class="admin-users"><h3>Gestión de usuarios (productores y clientes)</h3><p>La API actual ofrece reportes de actividad; la gestión individual y el bloqueo de cuentas aún no están disponibles.</p></article>
+          <h3>Reportes de acceso rápido</h3>
+          <form id="reporte-form" class="report-form"><label>Desde<input name="desde" type="date" required></label><label>Hasta<input name="hasta" type="date" required></label><button>Consultar actividad</button></form>
+          <p id="reporte-status" class="status" role="status"></p>
+        </div>
+      </div>
     </section>
   </main>
   <dialog id="producto-dialog" class="product-dialog" aria-labelledby="detalle-titulo">
@@ -209,7 +260,7 @@
       return body;
     }
     function actualizarPaneles() {
-      byId('header-login').textContent = token ? 'Mi cuenta' : 'Ingresar';
+      byId('header-login').textContent = token && rol !== 'COMPRADOR' ? 'Cerrar sesión' : token ? 'Mi cuenta' : 'Ingresar';
       byId('login-fields').hidden = Boolean(token);
       byId('registro-details').hidden = Boolean(token);
       byId('salir').hidden = !token;
@@ -219,7 +270,26 @@
       byId('carrito-seccion').hidden = rol !== 'COMPRADOR';
       byId('carrito-link').hidden = rol !== 'COMPRADOR';
       renderCarrito();
-      if (rol === 'AGRICULTOR') cargarFincas();
+      if (rol === 'AGRICULTOR') { cargarFincas(); cargarPanelAgricultor(); }
+      if (rol === 'ADMIN') cargarReporteAdmin();
+    }
+    async function cargarPanelAgricultor() {
+      try {
+        const [messages, products, orders] = await Promise.all([
+          request('/notificaciones/mias'), request('/productos/mias'), request('/reservas/pendientes')
+        ]);
+        const contacts = messages.filter((item) => item.tipo === 'CONTACTO' && !item.leida).length;
+        const active = orders.length;
+        const pending = orders.filter((item) => item.estado === 'PENDIENTE' || item.estado === 'CONFIRMADO').length;
+        const inCourse = orders.filter((item) => item.estado === 'EN_DESPACHO').length;
+        byId('farmer-contact-count').textContent = String(contacts);
+        byId('farmer-product-count').textContent = String(products.length);
+        byId('farmer-order-count').textContent = String(active);
+        byId('farmer-delivery-count').textContent = String(inCourse);
+        byId('farmer-pending-count').textContent = String(pending);
+        byId('farmer-course-count').textContent = String(inCourse);
+        byId('farmer-delivered-count').textContent = '—';
+      } catch (error) { tell('farmer-dashboard-status', error.message); }
     }
     byId('login-form').addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -235,6 +305,10 @@
       } catch (error) { tell('auth-status', error.message); }
     });
     byId('salir').addEventListener('click', () => { token = null; rol = null; vistaActividad = null; carrito.clear(); actualizarPaneles(); tell('auth-status', 'Sesión cerrada.'); });
+    byId('header-login').addEventListener('click', (event) => {
+      if (!token || rol === 'COMPRADOR') return;
+      event.preventDefault(); byId('salir').click();
+    });
     const registroForm = byId('registro-form');
     function actualizarCamposRegistro(tipo) {
       document.querySelectorAll('[data-farmer]').forEach((field) => {
@@ -244,6 +318,7 @@
       document.querySelectorAll('[data-buyer]').forEach((field) => {
         field.hidden = tipo !== 'COMPRADOR';
       });
+      registroForm.elements.namedItem('ubicacion_valle').required = tipo === 'AGRICULTOR';
     }
     actualizarCamposRegistro(registroForm.elements.namedItem('tipo').value);
     registroForm.addEventListener('change', (event) => {
@@ -261,7 +336,6 @@
         tell('auth-status', 'Cuenta creada. Ya puedes iniciar sesión.');
         form.reset();
         actualizarCamposRegistro(form.elements.namedItem('tipo').value);
-        byId('registro-details').open = false;
       } catch (error) { tell('auth-status', error.message); }
     });
     async function cargarFincas() {
@@ -510,8 +584,12 @@
       try {
         const query = byId('catalog-query').value.trim().toLocaleLowerCase('es');
         const allProducts = await request(`/productos${params.size ? `?${params}` : ''}`);
-        const products = query ? allProducts.filter((product) =>
-          `${product.nombre} ${product.municipio} ${product.categoria}`.toLocaleLowerCase('es').includes(query)) : allProducts;
+        const producer = (byId('buscar-form').elements.namedItem('productor')?.value || '').trim().toLocaleLowerCase('es');
+        const products = allProducts.filter((product) => {
+          const matchesQuery = !query || `${product.nombre} ${product.municipio} ${product.categoria} ${product.agricultor || ''}`.toLocaleLowerCase('es').includes(query);
+          const matchesProducer = !producer || (product.agricultor || '').toLocaleLowerCase('es').includes(producer);
+          return matchesQuery && matchesProducer;
+        });
         if (products.length === 0) {
           const empty = document.createElement('p'); empty.className = 'empty-state';
           empty.textContent = 'No encontramos cosechas con esos filtros. Prueba con otro municipio o categoría.';
@@ -643,12 +721,37 @@
     }, 15000);
     byId('reporte-form').addEventListener('submit', async (event) => {
       event.preventDefault();
-      const { desde, hasta } = formData(event.currentTarget);
+      await cargarReporteAdmin();
+    });
+    async function cargarReporteAdmin() {
+      const fields = byId('reporte-form').elements;
+      if (!fields.namedItem('desde').value || !fields.namedItem('hasta').value) {
+        const hasta = todayInBogota();
+        const inicio = new Date(`${hasta}T12:00:00-05:00`);
+        inicio.setDate(inicio.getDate() - 29);
+        fields.namedItem('desde').value = inicio.toISOString().slice(0, 10);
+        fields.namedItem('hasta').value = hasta;
+      }
+      const { desde, hasta } = formData(byId('reporte-form'));
       try {
         const report = await request(`/admin/reportes/actividad?desde=${encodeURIComponent(desde)}&hasta=${encodeURIComponent(hasta)}`);
-        tell('reporte-status', `Usuarios: ${report.usuariosRegistrados} · Ofertas: ${report.ofertasPublicadas} · Contactos: ${report.contactosRegistrados}`);
+        byId('admin-user-count').textContent = String(report.usuariosRegistrados);
+        byId('admin-harvest-count').textContent = String(report.ofertasPublicadas);
+        byId('admin-farmer-count').textContent = '—';
+        byId('admin-client-count').textContent = '—';
+        tell('reporte-status', `Del ${report.desde} al ${report.hasta}: ${report.usuariosRegistrados} usuarios, ${report.ofertasPublicadas} cosechas y ${report.contactosRegistrados} contactos.`);
       } catch (error) { tell('reporte-status', error.message); }
-    });
+    }
+    document.querySelectorAll('[data-dashboard-action]').forEach((link) => link.addEventListener('click', async () => {
+      if (link.dataset.dashboardAction === 'pedidos') await cargarPedidos();
+      else {
+        try {
+          const items = await request('/notificaciones/mias');
+          byId('actividad').replaceChildren(...items.map((item) => Object.assign(document.createElement('p'), { textContent: `${item.tipo} · ${item.mensaje}` })));
+          tell('actividad-status', `${items.filter((item) => item.tipo === 'CONTACTO').length} mensaje(s) de contacto.`);
+        } catch (error) { tell('actividad-status', error.message); }
+      }
+    }));
     buscar();
   </script>
 </body>

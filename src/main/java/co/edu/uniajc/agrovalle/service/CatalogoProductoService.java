@@ -37,6 +37,11 @@ public class CatalogoProductoService {
     return productos.stream().map(ProductoResponse::from).toList();
   }
 
+  public List<ProductoResponse> buscarDelAgricultor(Long usuarioId) {
+    return productoRepository.findByAgricultor_Usuario_IdOrderByCreadoEnDesc(usuarioId)
+        .stream().map(ProductoResponse::from).toList();
+  }
+
   public OfertaDetalleResponse consultarDetalle(Long id) {
     Producto producto = productoRepository.findById(id).filter(Producto::isActivo)
         .orElseThrow(() -> new ProductoNoEncontradoException(id));

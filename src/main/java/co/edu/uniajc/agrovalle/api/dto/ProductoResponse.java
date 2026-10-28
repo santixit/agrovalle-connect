@@ -9,11 +9,12 @@ import java.time.LocalDate;
 public record ProductoResponse(Long id, String nombre, String categoria,
     String municipio, @JsonProperty("cantidad_kg") BigDecimal cantidadKg,
     @JsonProperty("precio_por_kg") BigDecimal precioPorKg,
-    @JsonProperty("fecha_cosecha") LocalDate fechaCosecha) {
+    @JsonProperty("fecha_cosecha") LocalDate fechaCosecha, String agricultor) {
 
   public static ProductoResponse from(Producto producto) {
     return new ProductoResponse(producto.getId(), producto.getNombre(),
         producto.getCategoria(), producto.getMunicipio(), producto.getCantidadKg(),
-        producto.getPrecioPorKg(), producto.getFechaCosecha());
+        producto.getPrecioPorKg(), producto.getFechaCosecha(),
+        producto.getAgricultor() == null ? null : producto.getAgricultor().getNombre());
   }
 }

@@ -8,6 +8,8 @@ import jakarta.validation.constraints.Size;
 public record RegistroAgricultorRequest(
     @NotBlank @Size(max = 120) String nombre,
     @NotBlank @Size(max = 30) String cedula,
+    @Size(max = 30) String tipoDocumento,
+    @Size(max = 30) String telefono,
     @JsonProperty("ubicacion_valle") @NotBlank @Size(max = 80) String ubicacionValle,
     @jakarta.validation.constraints.Email @Size(max = 254) String correo,
     @Size(min = 10, max = 72) String contrasena) { }

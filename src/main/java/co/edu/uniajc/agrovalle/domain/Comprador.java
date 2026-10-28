@@ -27,6 +27,12 @@ public class Comprador {
   @Column(nullable = false, length = 120)
   private String nombre;
 
+  @Column(name = "tipo_documento", length = 30)
+  private String tipoDocumento;
+
+  @Column(length = 30)
+  private String cedula;
+
   @Column(length = 30)
   private String telefono;
 
@@ -39,8 +45,15 @@ public class Comprador {
   protected Comprador() { }
 
   public Comprador(Usuario usuario, String nombre, String telefono, String tipoComercio) {
+    this(usuario, nombre, null, null, telefono, tipoComercio);
+  }
+
+  public Comprador(Usuario usuario, String nombre, String tipoDocumento, String cedula,
+      String telefono, String tipoComercio) {
     this.usuario = usuario;
     this.nombre = nombre;
+    this.tipoDocumento = tipoDocumento;
+    this.cedula = cedula;
     this.telefono = telefono;
     this.tipoComercio = tipoComercio;
   }
@@ -59,6 +72,14 @@ public class Comprador {
 
   public String getTelefono() {
     return telefono;
+  }
+
+  public String getTipoDocumento() {
+    return tipoDocumento;
+  }
+
+  public String getCedula() {
+    return cedula;
   }
 
   public String getTipoComercio() {
