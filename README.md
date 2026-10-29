@@ -18,9 +18,9 @@ Para pequeños y medianos productores del Valle del Cauca que necesitan vender s
 | Integrante | Rol / responsabilidad |
 |---|---|
 | Danny Alexander Gómez | Scrum Master / facilitación |
-| Michelle Guerrero Arboleda | Product Owner / gestión del Product Backlog |
+| Michelle Guerrero Arboleda | Developer |
 | Starlin Gómez Asprilla | Developer / pruebas y calidad |
-| Raúl Santiago Carrillo Hernández | Developer / desarrollo backend |
+| Raúl Santiago Carrillo Hernández | Product Owner / gestión del Product Backlog |
 
 ## Estado funcional
 
