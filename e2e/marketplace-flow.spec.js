@@ -29,11 +29,13 @@ test('agricultor publica una cosecha y comprador reserva desde el navegador', as
   await page.locator('#finca-form [name="direccion"]').fill('Vereda de prueba');
   await page.locator('#finca-form button').click();
   await expect(page.locator('#farm-status')).toHaveText('Finca registrada correctamente.');
-  await page.locator('#finca-select').selectOption({ label: `${farmName} · Dagua` });
+  await page.locator('#parcela-select').selectOption({
+    label: `${farmName} · GENERAL · Dagua`,
+  });
 
   await page.locator('#producto-form [name="nombre"]').fill(productName);
   await page.locator('#producto-form [name="categoria"]').fill('Frutas');
-  await page.locator('#producto-form [name="municipio"]').fill('Dagua');
+  await expect(page.locator('#producto-form [name="municipio"]')).toHaveValue('Dagua');
   await page.locator('#producto-form [name="cantidadKg"]').fill('150');
   await page.locator('#producto-form [name="precioPorKg"]').fill('2000');
   await page.locator('#producto-form [name="fecha_cosecha"]')
