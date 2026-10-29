@@ -22,6 +22,7 @@
 
 ## CI y cobertura
 
+- [Integración continua de Sesión 10](integracion-continua-sesion10.md): workflow y tres quality gates, simulación de fallo con recuperación verde y PR #61 en espera de aprobación por pares.
 - [Captura de GitHub Actions #86](ci-run-main-77b5141.png): ejecución verde en `main`, commit `77b5141`, con el título neutral `AgroValle Connect - CI (push | main)`.
 - [Captura del reporte HTML JaCoCo #83](jacoco-main-6c19aae.png): 89% instrucciones, 63% ramas y 91% líneas para el mismo commit.
 - [Reporte HTML completo](../entrega-segundo-corte/jacoco-main-6c19aae/index.html) y [artefacto original de GitHub Actions](https://github.com/santixit/agrovalle-connect/actions/runs/40816952882/artifacts/12873380141).
