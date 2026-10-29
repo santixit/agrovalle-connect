@@ -1,19 +1,24 @@
 erDiagram
-    USUARIOS o|--o| AGRICULTORES : "perfil agricultor opcional"
-    USUARIOS ||--o| COMPRADORES : "perfil comprador"
-    AGRICULTORES ||--o{ FINCAS : posee
-    AGRICULTORES o|--o{ PRODUCTOS : publica
-    FINCAS o|--o{ PRODUCTOS : origen_opcional
+    FINCAS ||--o{ PARCELAS : contiene
+    AGRICULTORES ||--o{ PARCELAS : responsable_actual
+    PARCELAS ||--o{ PRODUCTO_UBICACION : origen
+    PRODUCTOS ||--|| PRODUCTO_UBICACION : tiene_ubicacion
+    AGRICULTORES o|--o{ PRODUCTO_UBICACION : titular_sin_finca
+    PRODUCTOS ||--o{ TRANSFERENCIAS_PRODUCTO : historial
+    AGRICULTORES ||--o{ TRANSFERENCIAS_PRODUCTO : anterior
+    AGRICULTORES ||--o{ TRANSFERENCIAS_PRODUCTO : nuevo
+    COMPRADORES ||--o{ CONTACTOS : inicia
+    PRODUCTOS ||--o{ CONTACTOS : consulta
+    AGRICULTORES ||--o{ CONTACTOS : destinatario_historico
+    USUARIOS ||--o| AGRICULTORES : perfil
+    USUARIOS ||--o| COMPRADORES : perfil
+    AGRICULTORES ||--o{ FINCAS : registra
     COMPRADORES ||--o{ PEDIDOS : realiza
     PEDIDOS ||--|{ DETALLE_PEDIDO : contiene
-    PRODUCTOS ||--o{ DETALLE_PEDIDO : aparece_en
-    COMPRADORES ||--o{ CONTACTOS : inicia
-    AGRICULTORES ||--o{ CONTACTOS : atiende
-    PRODUCTOS ||--o{ CONTACTOS : consulta
-    COMPRADORES }o--o{ PRODUCTOS : "marca favorito"
-    USUARIOS ||--o{ NOTIFICACIONES : recibe
-    PRODUCTOS ||--o{ TRANSACCIONES_PRECIO : genera
+    PRODUCTOS ||--o{ DETALLE_PEDIDO : vendido_en
     PEDIDOS ||--o| DESPACHOS : coordina
     PEDIDOS ||--o{ EVENTOS_TRAZABILIDAD : registra
-
-%% La relacion M:N de favoritos lleva el atributo fecha_guardado y se implementa como tabla puente en el DER fisico.
+    USUARIOS ||--o{ NOTIFICACIONES : recibe
+    COMPRADORES ||--o{ FAVORITOS : guarda
+    PRODUCTOS ||--o{ FAVORITOS : marcado
+    PRODUCTOS ||--o{ TRANSACCIONES_PRECIO : genera

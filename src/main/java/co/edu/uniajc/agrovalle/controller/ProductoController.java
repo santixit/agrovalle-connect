@@ -3,6 +3,9 @@ package co.edu.uniajc.agrovalle.controller;
 import co.edu.uniajc.agrovalle.api.dto.ProductoResponse;
 import co.edu.uniajc.agrovalle.service.CatalogoProductoService;
 import co.edu.uniajc.agrovalle.service.GestionProductoService;
+import co.edu.uniajc.agrovalle.service.TransferenciaProductoService;
+import co.edu.uniajc.agrovalle.api.dto.TransferirProductoRequest;
+import co.edu.uniajc.agrovalle.api.dto.TransferenciaProductoResponse;
 import co.edu.uniajc.agrovalle.api.dto.PublicarProductoRequest;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.Valid;
@@ -29,11 +32,14 @@ public class ProductoController {
 
   private final CatalogoProductoService catalogoProductoService;
   private final GestionProductoService gestionProductoService;
+  private final TransferenciaProductoService transferenciaProductoService;
 
   public ProductoController(CatalogoProductoService catalogoProductoService,
-      GestionProductoService gestionProductoService) {
+      GestionProductoService gestionProductoService,
+      TransferenciaProductoService transferenciaProductoService) {
     this.catalogoProductoService = catalogoProductoService;
     this.gestionProductoService = gestionProductoService;
+    this.transferenciaProductoService = transferenciaProductoService;
   }
 
   @GetMapping
@@ -70,5 +76,17 @@ public class ProductoController {
     return ResponseEntity.ok(gestionProductoService.actualizarEstado(
         Long.valueOf(jwt.getSubject()),
         id, request));
+  }
+
+  @PostMapping("/{id}/transferencias")
+  public List<TransferenciaProductoResponse> transferir(@AuthenticationPrincipal Jwt jwt,
+      @PathVariable Long id, @Valid @RequestBody TransferirProductoRequest request) {
+    return transferenciaProductoService.transferir(Long.valueOf(jwt.getSubject()), id,
+        request.nuevoAgricultorId());
+  }
+
+  @GetMapping("/{id}/transferencias")
+  public List<TransferenciaProductoResponse> historialTransferencias(@PathVariable Long id) {
+    return transferenciaProductoService.historial(id);
   }
 }

@@ -6,8 +6,10 @@ import co.edu.uniajc.agrovalle.api.dto.PublicarProductoRequest;
 import co.edu.uniajc.agrovalle.domain.Agricultor;
 import co.edu.uniajc.agrovalle.domain.EstadoProducto;
 import co.edu.uniajc.agrovalle.domain.Producto;
+import co.edu.uniajc.agrovalle.domain.Parcela;
 import co.edu.uniajc.agrovalle.repository.AgricultorRepository;
 import co.edu.uniajc.agrovalle.repository.FincaRepository;
+import co.edu.uniajc.agrovalle.repository.ParcelaRepository;
 import co.edu.uniajc.agrovalle.repository.ProductoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,24 +21,61 @@ public class GestionProductoService {
 
   private final ProductoRepository productoRepository;
   private final AgricultorRepository agricultorRepository;
+  private final ParcelaRepository parcelaRepository;
   private final FincaRepository fincaRepository;
 
   public GestionProductoService(ProductoRepository productoRepository,
-      AgricultorRepository agricultorRepository, FincaRepository fincaRepository) {
+      AgricultorRepository agricultorRepository, ParcelaRepository parcelaRepository,
+      FincaRepository fincaRepository) {
     this.productoRepository = productoRepository;
     this.agricultorRepository = agricultorRepository;
+    this.parcelaRepository = parcelaRepository;
     this.fincaRepository = fincaRepository;
   }
 
   public ProductoResponse publicar(Long usuarioId, PublicarProductoRequest request) {
     Agricultor agricultor = agricultorRepository.findByUsuario_Id(usuarioId)
         .orElseThrow(() -> new AgricultorNoEncontradoException(usuarioId));
-    co.edu.uniajc.agrovalle.domain.Finca finca = request.fincaId() == null ? null
-        : fincaRepository.findByIdAndAgricultor_Id(request.fincaId(), agricultor.getId())
+    if (request.parcelaId() != null && request.fincaId() != null) {
+      throw new IllegalArgumentException("Indica una parcela, no una parcela y finca a la vez");
+    }
+    Parcela parcela = null;
+    if (request.parcelaId() != null) {
+      parcela = parcelaRepository.findByIdAndAgricultorResponsableActual_Id(
+          request.parcelaId(), agricultor.getId())
+          .orElseThrow(() -> new IllegalArgumentException(
+              "La parcela no existe o no está a tu cargo"));
+    } else if (request.fincaId() != null) {
+      if (parcelaRepository == null) {
+        fincaRepository.findByIdAndAgricultor_Id(request.fincaId(), agricultor.getId())
             .orElseThrow(() -> new FincaNoEncontradaException(request.fincaId()));
-    Producto producto = new Producto(agricultor, finca, request.nombre().trim(),
-        request.categoria().trim(), request.municipio().trim(), request.cantidadKg(),
-        request.precioPorKg(), request.fechaCosecha());
+        throw new IllegalArgumentException("La finca no tiene una parcela disponible");
+      }
+      var parcelas = parcelaRepository.findByFinca_IdAndAgricultorResponsableActual_IdOrderByCodigoAsc(
+          request.fincaId(), agricultor.getId());
+      if (parcelas.size() != 1) {
+        throw new IllegalArgumentException(parcelas.isEmpty()
+            ? "La finca no existe o no tienes parcelas a tu cargo"
+            : "Selecciona una parcela específica para publicar el producto");
+      }
+      parcela = parcelas.get(0);
+    }
+    Producto producto;
+    if (parcela != null) {
+      if (request.municipio() != null && !request.municipio().isBlank()
+          && !parcela.getFinca().getMunicipio().equalsIgnoreCase(request.municipio().trim())) {
+        throw new IllegalArgumentException("El municipio debe coincidir con el de la finca");
+      }
+      producto = Producto.enParcela(parcela, request.nombre().trim(), request.categoria().trim(),
+          request.cantidadKg(), request.precioPorKg(), request.fechaCosecha());
+    } else {
+      if (request.municipio() == null || request.municipio().isBlank()) {
+        throw new IllegalArgumentException("Escribe el municipio para un producto sin finca");
+      }
+      producto = Producto.sinFinca(agricultor, request.municipio().trim(),
+          request.nombre().trim(), request.categoria().trim(), request.cantidadKg(),
+          request.precioPorKg(), request.fechaCosecha());
+    }
     return ProductoResponse.from(productoRepository.save(producto));
   }
 

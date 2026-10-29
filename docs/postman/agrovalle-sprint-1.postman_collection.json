@@ -5,35 +5,55 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "baseUrl", "value": "http://localhost:8080" },
-    { "key": "farmerId", "value": "1" },
-    { "key": "testCedula", "value": "ID-DE-PRUEBA-001" }
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "farmerId",
+      "value": "1"
+    },
+    {
+      "key": "testCedula",
+      "value": "ID-DE-PRUEBA-001"
+    }
   ],
   "item": [
     {
       "name": "HU-01 - Registrar agricultor",
       "request": {
         "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "body": {
           "mode": "raw",
           "raw": "{\n  \"nombre\": \"Ana Ruiz\",\n  \"tipoDocumento\": \"CC\",\n  \"cedula\": \"{{testCedula}}\",\n  \"telefono\": \"3001234567\",\n  \"ubicacion_valle\": \"Dagua\"\n}",
-          "options": { "raw": { "language": "json" } }
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
         },
         "url": "{{baseUrl}}/api/v1/auth/register"
       },
-      "event": [{
-        "listen": "test",
-        "script": {
-          "type": "text/javascript",
-          "exec": [
-            "pm.test('El agricultor se crea con HTTP 201', function () { pm.response.to.have.status(201); });",
-            "const body = pm.response.json();",
-            "if (body.id) pm.collectionVariables.set('farmerId', body.id);",
-            "pm.test('La respuesta no expone la cedula', function () { pm.expect(body).not.to.have.property('cedula'); });"
-          ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('El agricultor se crea con HTTP 201', function () { pm.response.to.have.status(201); });",
+              "const body = pm.response.json();",
+              "if (body.id) pm.collectionVariables.set('farmerId', body.id);",
+              "pm.test('La respuesta no expone la cedula', function () { pm.expect(body).not.to.have.property('cedula'); });"
+            ]
+          }
         }
-      }]
+      ]
     },
     {
       "name": "HU-07 - Consultar perfil",
@@ -42,16 +62,18 @@
         "header": [],
         "url": "{{baseUrl}}/api/v1/productores/{{farmerId}}"
       },
-      "event": [{
-        "listen": "test",
-        "script": {
-          "type": "text/javascript",
-          "exec": [
-            "pm.test('El perfil existe y responde HTTP 200', function () { pm.response.to.have.status(200); });",
-            "pm.test('El perfil incluye nombre y ubicacion', function () { const body = pm.response.json(); pm.expect(body.nombre).to.be.a('string'); pm.expect(body.ubicacion_valle).to.be.a('string'); });"
-          ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('El perfil existe y responde HTTP 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('El perfil incluye nombre y ubicacion', function () { const body = pm.response.json(); pm.expect(body.nombre).to.be.a('string'); pm.expect(body.ubicacion_valle).to.be.a('string'); });"
+            ]
+          }
         }
-      }]
+      ]
     },
     {
       "name": "HU-04 - Filtrar frutas de Dagua",
@@ -60,16 +82,121 @@
         "header": [],
         "url": "{{baseUrl}}/api/v1/productos?municipio=Dagua&categoria=Frutas"
       },
-      "event": [{
-        "listen": "test",
-        "script": {
-          "type": "text/javascript",
-          "exec": [
-            "pm.test('El catalogo responde HTTP 200', function () { pm.response.to.have.status(200); });",
-            "pm.test('La respuesta es un arreglo de ofertas coincidentes', function () { const rows = pm.response.json(); pm.expect(rows).to.be.an('array'); rows.forEach(function (row) { pm.expect(row.municipio.toLowerCase()).to.eql('dagua'); pm.expect(row.categoria.toLowerCase()).to.eql('frutas'); }); });"
-          ]
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('El catalogo responde HTTP 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('La respuesta es un arreglo de ofertas coincidentes', function () { const rows = pm.response.json(); pm.expect(rows).to.be.an('array'); rows.forEach(function (row) { pm.expect(row.municipio.toLowerCase()).to.eql('dagua'); pm.expect(row.categoria.toLowerCase()).to.eql('frutas'); }); });"
+            ]
+          }
         }
-      }]
+      ]
+    },
+    {
+      "name": "Parcelas y transferencias (modelo 3FN)",
+      "item": [
+        {
+          "name": "Mis parcelas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/parcelas/mias"
+          }
+        },
+        {
+          "name": "Crear parcela",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"codigo\": \"Parcela norte\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/v1/fincas/{{fincaId}}/parcelas"
+          }
+        },
+        {
+          "name": "Publicar producto en parcela",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Mango\",\n  \"categoria\": \"Frutas\",\n  \"parcelaId\": {{parcelaId}},\n  \"cantidadKg\": 10,\n  \"precioPorKg\": 2500,\n  \"fecha_cosecha\": \"2026-11-01\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/v1/productos"
+          }
+        },
+        {
+          "name": "Transferir producto/parcela",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nuevoAgricultorId\": {{nuevoAgricultorId}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{baseUrl}}/api/v1/productos/{{productoId}}/transferencias"
+          }
+        },
+        {
+          "name": "Historial de transferencias",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/productos/{{productoId}}/transferencias"
+          }
+        }
+      ]
     }
   ]
 }

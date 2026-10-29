@@ -13,21 +13,23 @@
 - Se trabajó con los mockups corregidos y se conservaron sus fuentes y exportaciones para comparar el diseño con las vistas implementadas.
 - Se documentaron Strategy para el cálculo demostrativo de fletes y los flujos UML relacionados.
 - Se organizó la evidencia Kanban distinguiendo conteos observables de métricas que no pueden calcularse con snapshots incompletos.
+- El 2026-10-29 se hizo una comprobación complementaria de solo lectura en staging: la página, salud y catálogo respondieron HTTP 200. Queda una guía reproducible y un guion para explicarla, sin presentarla como una ceremonia Sprint Review previa.
 
 ## Dificultades observadas
 
-- Las fuentes de código y pruebas locales coinciden con `main` en `6c19aae`, pero la documentación y los exports del paquete continúan locales. La ejecución CI #83 respalda el código; no publica ni valida los documentos aún no integrados.
+- El paquete de documentación ya se integró a `main` con los PR #59, #60 y #61. El run #97 pasó para el commit actual `59e3256` y publicó el reporte JaCoCo; esta rama local ya incorpora la captura correspondiente a #97 en el PDF.
 - Algunas capacidades de los mockups, como guardar fotos y consultar historial regional por periodos, no están respaldadas completamente por la API actual.
 - Faltan eventos Kanban fechados suficientes para calcular métricas de flujo como lead time, cycle time y throughput.
-- La revisión de 3FN depende de confirmar reglas de dominio que no están expresadas en las restricciones actuales del esquema.
+- La implementación de 3FN ya está en esta rama local, pero requiere revisión de equipo y pruebas antes de integrar.
+- El Product Owner definió el 2026-10-29 que cada parcela debe tener registro propio vinculado a finca y agricultor responsable, que el producto puede asociarse a ella y que cada transferencia del producto conserve producto, agricultor anterior, nuevo agricultor y fecha. También definió que el municipio del producto coincida con el de la finca cuando esté asociado, que debe conservarse el agricultor destinatario del contacto al momento del contacto y que pueden existir productos sin finca si el sistema lo permite. Flyway V7 y el código local ahora modelan parcelas y transferencias, derivan el municipio desde finca y mantienen municipio/titular para productos sin finca. La migración y código aún no están publicados.
 
 ## Seguimiento del Product Owner
 
 | Acción | Comprobación |
 |---|---|
-| Alinear los cambios que se presentarán y validar CI en el commit final de `main`. | Enlace al run y reporte JaCoCo del mismo commit. |
+| Alinear los cambios que se presentarán y validar CI en el commit final de `main`. | [Actions #97](https://github.com/santixit/agrovalle-connect/actions/runs/40875809295) y artefacto JaCoCo del mismo commit. |
 | Actualizar el tablero al cierre y conservar una captura fechada. | Tarjetas del Sprint actualizadas y límites WIP visibles. |
-| Explicar en la demostración qué funciones son visuales y cuáles tienen soporte de API. | Comparación breve entre mockups y endpoints disponibles. |
+| Explicar en la demostración qué funciones son visuales y cuáles tienen soporte de API. | [Recorrido técnico complementario en staging](evidencias/demo-staging-sprint2-2026-10-29.md), de solo lectura; repetir la comprobación en vivo durante la presentación. |
 | Mantener explícitas las métricas no calculables y las decisiones de dominio pendientes. | Revisión del checklist y del análisis de normalización. |
 
 Estas acciones son el seguimiento que asume el Product Owner; el equipo no las ha confirmado como acuerdos de una retrospectiva colectiva.

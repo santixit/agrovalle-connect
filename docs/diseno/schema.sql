@@ -1,4 +1,4 @@
--- Snapshot consolidado de referencia de las migraciones Flyway V1-V6.
+-- Snapshot consolidado de referencia de las migraciones Flyway V1-V7.
 -- Solo lectura: no ejecutar junto con Flyway ni usar como migración.
 
 -- ============================================================================
@@ -202,3 +202,56 @@ ALTER TABLE agricultores ADD COLUMN telefono VARCHAR(30);
 
 ALTER TABLE compradores ADD COLUMN tipo_documento VARCHAR(30);
 ALTER TABLE compradores ADD COLUMN cedula VARCHAR(30);
+
+
+-- ============================================================================
+-- V7__normalizar_parcelas_y_transferencias.sql
+-- ============================================================================
+CREATE TABLE parcelas (
+    id BIGSERIAL PRIMARY KEY,
+    finca_id BIGINT NOT NULL REFERENCES fincas (id) ON DELETE CASCADE,
+    codigo VARCHAR(80) NOT NULL,
+    agricultor_responsable_actual_id BIGINT NOT NULL REFERENCES agricultores (id),
+    creada_en TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_parcela_codigo_finca UNIQUE (finca_id, codigo)
+);
+
+CREATE INDEX idx_parcelas_responsable_actual
+    ON parcelas (agricultor_responsable_actual_id);
+
+CREATE TABLE producto_ubicacion (
+    id BIGSERIAL PRIMARY KEY,
+    producto_id BIGINT NOT NULL UNIQUE REFERENCES productos (id) ON DELETE CASCADE,
+    parcela_id BIGINT NULL REFERENCES parcelas (id),
+    agricultor_sin_finca_id BIGINT NULL REFERENCES agricultores (id),
+    municipio_sin_finca VARCHAR(80) NULL,
+    CONSTRAINT ck_producto_ubicacion_origen CHECK (
+        (parcela_id IS NOT NULL AND agricultor_sin_finca_id IS NULL
+            AND municipio_sin_finca IS NULL)
+        OR (parcela_id IS NULL AND municipio_sin_finca IS NOT NULL)
+    )
+);
+
+CREATE INDEX idx_producto_ubicacion_parcela ON producto_ubicacion (parcela_id);
+CREATE INDEX idx_producto_ubicacion_municipio_sin_finca
+    ON producto_ubicacion (municipio_sin_finca);
+
+CREATE TABLE transferencias_producto (
+    id BIGSERIAL PRIMARY KEY,
+    producto_id BIGINT NOT NULL REFERENCES productos (id),
+    agricultor_anterior_id BIGINT NOT NULL REFERENCES agricultores (id),
+    agricultor_nuevo_id BIGINT NOT NULL REFERENCES agricultores (id),
+    fecha_transferencia TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT ck_transferencia_agricultores_distintos
+        CHECK (agricultor_anterior_id <> agricultor_nuevo_id)
+);
+
+CREATE INDEX idx_transferencias_producto_fecha
+    ON transferencias_producto (producto_id, fecha_transferencia, id);
+
+-- V7 migra los productos existentes a parcelas/ubicaciones antes de eliminar
+-- las columnas redundantes de productos.
+DROP INDEX idx_productos_municipio_categoria_activo;
+ALTER TABLE productos DROP COLUMN finca_id;
+ALTER TABLE productos DROP COLUMN agricultor_id;
+ALTER TABLE productos DROP COLUMN municipio;
