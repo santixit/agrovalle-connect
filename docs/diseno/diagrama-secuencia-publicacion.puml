@@ -1,0 +1,33 @@
+@startuml AgroValle_Sequence_HU02
+box "HU-02 Publicacion de cosecha"
+actor Agricultor
+participant "ProductoController" as PC
+participant "GestionProductoService" as PS
+participant "AgricultorRepository" as AR2
+participant "FincaRepository" as FR
+participant "ProductoRepository" as PR
+database PostgreSQL as DB2
+
+Agricultor -> PC: POST /api/v1/productos\nBearer JWT + PublicarProductoRequest
+PC -> PC: validar @Valid
+PC -> PS: publicar(usuarioId, request)
+PS -> AR2: findByUsuario_Id(usuarioId)
+AR2 -> DB2: SELECT agricultor autenticado
+DB2 --> AR2: agricultor
+AR2 --> PS: Agricultor
+opt fincaId enviado
+  PS -> FR: findByIdAndAgricultor_Id(fincaId, agricultorId)
+  FR -> DB2: SELECT finca propia
+  DB2 --> FR: Finca o no encontrada
+  FR --> PS: resultado
+end
+PS -> PS: construir Producto
+PS -> PR: save(producto)
+PR -> DB2: INSERT productos
+DB2 --> PR: producto persistido
+PR --> PS: Producto
+PS -> PS: ProductoResponse.from(producto)
+PS --> PC: respuesta publica
+PC --> Agricultor: 201 Created + Location
+end box
+@enduml

@@ -2,7 +2,7 @@
 
 ## Alcance y fuente de verdad
 
-Los DER entregados son propuestas de dominio. El esquema operativo se define en las migraciones Flyway V1-V4 y se resume en [schema.sql](schema.sql), junto con los modelos canonicos [conceptual](modelo-entidad-relacion.mmd) y [fisico](modelo-datos-der.mmd). Esta comparacion no modifica la base ni declara aprobadas las diferencias del negocio.
+Los DER entregados son propuestas de dominio. El esquema operativo se define en las migraciones Flyway V1-V6 y se resume en [schema.sql](schema.sql), junto con los modelos canónicos [conceptual](modelo-entidad-relacion.mmd) y [físico](modelo-datos-der.mmd). Esta comparación no modifica la base ni declara aprobadas las diferencias del negocio.
 
 | Elemento de la propuesta | Estado implementado | Correspondencia / diferencia |
 |---|---|---|
@@ -12,7 +12,8 @@ Los DER entregados son propuestas de dominio. El esquema operativo se define en 
 | Categoria | Campo de texto de `productos` | No existe tabla catalogo `categorias` ni FK `categoriaId`. |
 | Producto y Oferta | `productos` + `pedidos` / `detalle_pedido` | `productos` describe el articulo; la disponibilidad y venta se materializan en pedidos y detalles. No hay entidad `ofertas` separada. |
 | Reserva | `pedidos` + `detalle_pedido` | Una reserva no tiene tabla propia: el pedido y sus lineas representan la solicitud y cantidades. |
-| Despacho y trazabilidad | `despachos`, `eventos_trazabilidad` | Hay despacho y eventos asociados al pedido; no equivalen a un historial de estado de oferta. |
+| Despacho y trazabilidad | `despachos`, `eventos_trazabilidad` | El despacho conserva destino, peso total y costo de flete (V5), y los eventos se asocian al pedido; no equivalen a un historial de estado de oferta. |
+| Datos de contacto y documento | Agricultores y compradores | V6 añade tipo de documento y teléfono a agricultores y tipo de documento y cédula a compradores. |
 | HistorialEstadoOferta | Sin tabla equivalente | No se persiste una bitacora especifica de cambios de estado de oferta. |
 | PrecioRegion | `transacciones_precio` y consulta de precio regional | La consulta promedia hasta 50 transacciones recientes de las ultimas 24 horas por categoria; no hay tabla `precio_region` ni municipio en las transacciones del esquema actual. |
 | Favorito, contacto y notificacion | `favoritos`, `contactos`, `notificaciones` | Entidades presentes con sus propias FK; ver migraciones para restricciones exactas. |

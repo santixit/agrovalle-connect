@@ -167,9 +167,11 @@ gitGraph
 - [Políticas Kanban, límites WIP y métricas de flujo](docs/kanban-policies.md)
 - [Estrategia de pruebas, pirámide y TDD](docs/estrategia-pruebas.md)
 - [Planificación Sprint 1](docs/sprint-1-planning.md)
-- [Propuesta técnica para revisión de Sprint 2](docs/sprint-2-planning.md), pendiente de validación del equipo y sin afirmar que esa iteración haya sido planificada o ejecutada.
+- [Alcance reconstruido de Sprint 2](docs/sprint-2-planning.md): el equipo confirma que la iteración comenzó; la fecha, el objetivo y la selección formal de historias siguen pendientes de documentar.
 - [Registro de coordinación asíncrona](docs/bitacora-daily-scrum.md)
 - [Evidencia funcional del Sprint 1](docs/sprint-1-review.md), [registro retrospectivo](docs/sprint-1-retrospective.md)
+- [Checklist de cierre de la entrega del Segundo Corte](docs/entrega-segundo-corte/README.md), con estado de evidencia y pendientes de confirmación.
+- [Índice de evidencias](docs/evidencias/README.md), incluida la [disponibilidad de métricas Kanban](docs/evidencias/kanban-metricas-sesion7.md)
 - [Colección Postman inicial](docs/postman/agrovalle-sprint-1.postman_collection.json)
 - [Diagramas UML](docs/uml/README.md)
 - [Sprint de diseno y artefactos de arquitectura](docs/diseno/README.md)

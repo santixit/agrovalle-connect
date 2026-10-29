@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FincaService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">agrovalle-connect</a> &gt; <a href="index.source.html" class="el_package">co.edu.uniajc.agrovalle.service</a> &gt; <span class="el_source">FincaService.java</span></div><h1>FincaService.java</h1><pre class="source lang-java linenums">package co.edu.uniajc.agrovalle.service;
+
+import co.edu.uniajc.agrovalle.api.dto.FincaResponse;
+import co.edu.uniajc.agrovalle.api.dto.RegistroFincaRequest;
+import co.edu.uniajc.agrovalle.domain.Agricultor;
+import co.edu.uniajc.agrovalle.domain.Finca;
+import co.edu.uniajc.agrovalle.repository.AgricultorRepository;
+import co.edu.uniajc.agrovalle.repository.FincaRepository;
+import java.util.List;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+public class FincaService {
+  private final AgricultorRepository agricultorRepository;
+  private final FincaRepository fincaRepository;
+
+<span class="fc" id="L18">  public FincaService(AgricultorRepository agricultorRepository, FincaRepository fincaRepository) {</span>
+<span class="fc" id="L19">    this.agricultorRepository = agricultorRepository;</span>
+<span class="fc" id="L20">    this.fincaRepository = fincaRepository;</span>
+<span class="fc" id="L21">  }</span>
+
+  @Transactional
+  public FincaResponse registrar(Long usuarioId, RegistroFincaRequest request) {
+<span class="fc" id="L25">    Agricultor agricultor = agricultorRepository.findByUsuario_Id(usuarioId)</span>
+<span class="pc" id="L26">        .orElseThrow(() -&gt; new AgricultorNoEncontradoException(usuarioId));</span>
+<span class="fc" id="L27">    return FincaResponse.from(fincaRepository.save(new Finca(agricultor,</span>
+<span class="fc" id="L28">        request.nombre().trim(), request.municipio().trim(), request.direccion().trim())));</span>
+  }
+
+  @Transactional(readOnly = true)
+  public List&lt;FincaResponse&gt; listar(Long usuarioId) {
+<span class="nc" id="L33">    Agricultor agricultor = agricultorRepository.findByUsuario_Id(usuarioId)</span>
+<span class="nc" id="L34">        .orElseThrow(() -&gt; new AgricultorNoEncontradoException(usuarioId));</span>
+<span class="nc" id="L35">    return fincaRepository.findByAgricultor_IdAndActivaTrueOrderByNombreAsc(agricultor.getId())</span>
+<span class="nc" id="L36">        .stream().map(FincaResponse::from).toList();</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

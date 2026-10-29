@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FavoritoService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">agrovalle-connect</a> &gt; <a href="index.source.html" class="el_package">co.edu.uniajc.agrovalle.service</a> &gt; <span class="el_source">FavoritoService.java</span></div><h1>FavoritoService.java</h1><pre class="source lang-java linenums">package co.edu.uniajc.agrovalle.service;
+
+import co.edu.uniajc.agrovalle.api.dto.FavoritoResponse;
+import co.edu.uniajc.agrovalle.domain.Comprador;
+import co.edu.uniajc.agrovalle.domain.Favorito;
+import co.edu.uniajc.agrovalle.domain.Producto;
+import co.edu.uniajc.agrovalle.repository.CompradorRepository;
+import co.edu.uniajc.agrovalle.repository.FavoritoRepository;
+import co.edu.uniajc.agrovalle.repository.ProductoRepository;
+import java.util.List;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+public class FavoritoService {
+  private final CompradorRepository compradorRepository;
+  private final ProductoRepository productoRepository;
+  private final FavoritoRepository favoritoRepository;
+
+  public FavoritoService(CompradorRepository compradorRepository,
+<span class="fc" id="L21">      ProductoRepository productoRepository, FavoritoRepository favoritoRepository) {</span>
+<span class="fc" id="L22">    this.compradorRepository = compradorRepository;</span>
+<span class="fc" id="L23">    this.productoRepository = productoRepository;</span>
+<span class="fc" id="L24">    this.favoritoRepository = favoritoRepository;</span>
+<span class="fc" id="L25">  }</span>
+
+  @Transactional
+  public void agregar(Long usuarioId, Long productoId) {
+<span class="fc" id="L29">    Comprador comprador = buscarComprador(usuarioId);</span>
+<span class="fc" id="L30">    Producto producto = productoRepository.findById(productoId).filter(Producto::isActivo)</span>
+<span class="pc" id="L31">        .orElseThrow(() -&gt; new ProductoNoEncontradoException(productoId));</span>
+<span class="pc bpc" id="L32" title="1 of 2 branches missed.">    if (!favoritoRepository.existsByComprador_IdAndProducto_Id(comprador.getId(), productoId)) {</span>
+<span class="fc" id="L33">      favoritoRepository.save(new Favorito(comprador, producto));</span>
+    }
+<span class="fc" id="L35">  }</span>
+
+  @Transactional
+  public void quitar(Long usuarioId, Long productoId) {
+<span class="nc" id="L39">    Comprador comprador = buscarComprador(usuarioId);</span>
+<span class="nc" id="L40">    favoritoRepository.findByComprador_IdAndProducto_Id(comprador.getId(), productoId)</span>
+<span class="nc" id="L41">        .ifPresent(favoritoRepository::delete);</span>
+<span class="nc" id="L42">  }</span>
+
+  @Transactional(readOnly = true)
+  public List&lt;FavoritoResponse&gt; listar(Long usuarioId) {
+<span class="fc" id="L46">    Comprador comprador = buscarComprador(usuarioId);</span>
+<span class="fc" id="L47">    return favoritoRepository.findByComprador_IdOrderByCreadoEnDesc(comprador.getId()).stream()</span>
+<span class="fc" id="L48">        .map(FavoritoResponse::from).toList();</span>
+  }
+
+  private Comprador buscarComprador(Long usuarioId) {
+<span class="fc" id="L52">    return compradorRepository.findByUsuario_Id(usuarioId)</span>
+<span class="fc" id="L53">        .orElseThrow(CompradorNoEncontradoException::new);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

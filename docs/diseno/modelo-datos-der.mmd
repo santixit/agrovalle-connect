@@ -12,6 +12,8 @@ erDiagram
         BIGINT usuario_id FK_UQ
         VARCHAR nombre
         VARCHAR cedula UK
+        VARCHAR tipo_documento
+        VARCHAR telefono
         VARCHAR municipio
     }
     COMPRADORES {
@@ -21,6 +23,8 @@ erDiagram
         VARCHAR telefono
         VARCHAR tipo_comercio
         TIMESTAMP creado_en
+        VARCHAR tipo_documento
+        VARCHAR cedula
     }
     FINCAS {
         BIGINT id PK
@@ -67,6 +71,9 @@ erDiagram
         VARCHAR franja_horaria
         VARCHAR ruta
         TIMESTAMP creado_en
+        VARCHAR municipio_destino
+        NUMERIC peso_total_kg
+        NUMERIC costo_flete
     }
     EVENTOS_TRAZABILIDAD {
         BIGINT id PK
