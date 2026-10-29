@@ -33,7 +33,7 @@ Revisé de nuevo el [GitHub Project](https://github.com/users/santixit/projects/
 
 ## Estado del paquete local y pendientes reales de cierre
 
-El PDF de trabajo ya está generado en [`Grupo01_Entrega_Segundo_Corte_AgroValle.pdf`](Grupo01_Entrega_Segundo_Corte_AgroValle.pdf). Incluye portada institucional sin números de documento, resumen ejecutivo de dos páginas, enlaces públicos, capturas de CI y JaCoCo, y un apéndice con los 7 wireframes, los 7 mockups y los 6 diagramas de secuencia recibidos. Los exports UML de PlantUML son material técnico complementario y se identifican por separado. El script que lo genera es [`build_delivery_pdf.py`](build_delivery_pdf.py).
+El PDF de trabajo está en [`Grupo01_Entrega_Segundo_Corte_AgroValle.pdf`](Grupo01_Entrega_Segundo_Corte_AgroValle.pdf). Tiene cinco páginas: portada institucional, resumen ejecutivo de dos páginas, evidencia de CI verde y reporte de cobertura JaCoCo. No incluye wireframes, mockups ni diagramas. El script que lo genera es [`build_delivery_pdf.py`](build_delivery_pdf.py).
 
 | Pendiente | Qué hace falta | Responsable de confirmarlo |
 |---|---|---|
@@ -44,7 +44,7 @@ El PDF de trabajo ya está generado en [`Grupo01_Entrega_Segundo_Corte_AgroValle
 | CI de `main` | Actions #86 está verde para `77b5141`; el código y las pruebas son iguales a los del commit cubierto por JaCoCo #83 (`6c19aae`). El paquete de documentación y exports ya está integrado en `main` por el PR #59. | Evidencia vigente para `main` tras integrar PR #59; la captura muestra el título actualizado sin `codex` |
 | Cobertura JaCoCo | El artefacto #83 muestra instrucciones 89%, ramas 63% y líneas 91% para `6c19aae`; esas métricas siguen representando el mismo código y pruebas presentes en `main` `77b5141`. | Evidencia vigente para el código de ese commit; renovar si cambia código fuente o pruebas |
 | Revisión por pares y protección de `main` | La regla activa `main-protection` exige Pull Request, una aprobación y el check `Build, tests, Checkstyle and JaCoCo`; además, bloquea borrado y force-push. | Configurada en GitHub; las aprobaciones se solicitan por PR |
-| Resumen ejecutivo y PDF único | Incluidos en el PDF local: resumen de dos páginas, portada, enlaces, evidencia de pipeline y cobertura. | PDF actualizado localmente con Actions #86; pendiente de publicar en una actualización documental |
+| Resumen ejecutivo y PDF único | Incluidos en el PDF local: resumen de dos páginas, portada, enlaces a `main` y GitHub Project con WIP, evidencia de pipeline verde y cobertura. | Actualización preparada en PR #60; pendiente de revisión e integración |
 
 ## Métricas que no se deben inventar
 
