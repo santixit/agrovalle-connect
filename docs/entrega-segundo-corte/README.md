@@ -33,7 +33,7 @@ Revisé de nuevo el [GitHub Project](https://github.com/users/santixit/projects/
 
 ## Estado del paquete local y pendientes reales de cierre
 
-El PDF de trabajo ya está generado en [`Grupo01_Entrega_Segundo_Corte_AgroValle.pdf`](Grupo01_Entrega_Segundo_Corte_AgroValle.pdf). Incluye portada institucional sin números de documento, resumen ejecutivo de dos páginas, enlaces públicos y capturas de CI y JaCoCo. El script que lo genera es [`build_delivery_pdf.py`](build_delivery_pdf.py). Se mantiene local para revisión.
+El PDF de trabajo ya está generado en [`Grupo01_Entrega_Segundo_Corte_AgroValle.pdf`](Grupo01_Entrega_Segundo_Corte_AgroValle.pdf). Incluye portada institucional sin números de documento, resumen ejecutivo de dos páginas, enlaces públicos, capturas de CI y JaCoCo, y un apéndice con los 7 wireframes, los 7 mockups y los 6 diagramas de secuencia recibidos. Los exports UML de PlantUML son material técnico complementario y se identifican por separado. El script que lo genera es [`build_delivery_pdf.py`](build_delivery_pdf.py).
 
 | Pendiente | Qué hace falta | Responsable de confirmarlo |
 |---|---|---|

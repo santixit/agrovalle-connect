@@ -22,7 +22,7 @@ Este paquete documenta el diseno arquitectonico del sistema AgroValle Connect y 
 
 La consigna de esta guia exige terminar HU-01, HU-07 y HU-04 en Sprint 1. Se conserva la capacidad de 10 SP ya acordada (5 + 2 + 3). El equipo confirmó posteriormente que Sprint 2 comenzó; su fecha, objetivo y alcance formal siguen pendientes de registrar.
 
-No se preparo un PDF unico de entrega. Los artefactos quedan separados en esta carpeta y en `docs/ieee29148-req01.md`, como indica la guia, para revisarlos y versionarlos en GitHub.
+Los artefactos fuente del Sprint de Diseño permanecen separados y versionados en esta carpeta y en `docs/ieee29148-req01.md`, como indica la guía. El PDF único de entrega del Segundo Corte incorpora un apartado de Diseño y Arquitectura con los 7 wireframes, 7 mockups y 6 diagramas de secuencia recibidos; este PDF no reemplaza las fuentes editables ni el resto de los artefactos de diseño.
 
 ## Prototipos entregados
 

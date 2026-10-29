@@ -1,15 +1,21 @@
 from pathlib import Path
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER, TA_LEFT
-from reportlab.lib.pagesizes import letter
+from reportlab.lib.pagesizes import letter, landscape
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak, Image, Table, TableStyle, KeepTogether
-from reportlab.pdfbase.pdfmetrics import stringWidth
+from reportlab.pdfgen import canvas
+from reportlab.lib.utils import ImageReader
+from pypdf import PdfReader, PdfWriter
 from xml.sax.saxutils import escape
 
 root = Path(r'C:\Users\Administrator\Desktop\agrovalle-connect')
 out = root / 'docs' / 'entrega-segundo-corte' / 'Grupo01_Entrega_Segundo_Corte_AgroValle.pdf'
+temp_dir = root / 'tmp' / 'pdfs'
+temp_dir.mkdir(parents=True, exist_ok=True)
+base_pdf = temp_dir / 'segundo-corte-base.pdf'
+appendix_pdf = temp_dir / 'segundo-corte-diseno.pdf'
 navy = colors.HexColor('#16324F')
 teal = colors.HexColor('#2C7A7B')
 light = colors.HexColor('#EAF1F5')
@@ -38,7 +44,7 @@ def link(label, url):
 def footer(canvas, doc):
     return
 
-doc = SimpleDocTemplate(str(out), pagesize=letter, rightMargin=0.72*inch, leftMargin=0.72*inch, topMargin=0.66*inch, bottomMargin=0.76*inch, title='Grupo 1 - Entrega Segundo Corte - AgroValle Connect', author='Grupo 1 - 6303B', subject='Resumen ejecutivo y evidencia CI/JaCoCo del Sprint 2')
+doc = SimpleDocTemplate(str(base_pdf), pagesize=letter, rightMargin=0.72*inch, leftMargin=0.72*inch, topMargin=0.66*inch, bottomMargin=0.76*inch, title='Grupo 1 - Entrega Segundo Corte - AgroValle Connect', author='Grupo 1 - 6303B', subject='Resumen ejecutivo y evidencia CI/JaCoCo del Sprint 2')
 story = []
 # Cover
 story += [Spacer(1, 0.48*inch), P('INSTITUCIÓN UNIVERSITARIA ANTONIO JOSÉ CAMACHO', 'CoverInstitution'), P('Facultad de Ingeniería<br/>Programa de Ingeniería de Sistemas<br/>Ingeniería de Software II | Período 2-2026', 'CoverCourse'), Spacer(1, 0.65*inch)]
@@ -46,12 +52,12 @@ story += [P('SEGUNDO CORTE', 'CoverTitle'), P('Entrega del proyecto integrador',
 coverdata = [[P('<b>Grupo / célula</b>', 'Tablex'), P('Grupo 1 — 6303B', 'Tablex')], [P('<b>Integrantes</b>', 'Tablex'), P('Danny Alexander Gómez<br/>Michelle Guerrero Arboleda<br/>Starlin Gómez Asprilla<br/>Raúl Santiago Carrillo Hernández', 'Tablex')], [P('<b>Sprint</b>', 'Tablex'), P('Sprint 2 | periodo de referencia: 19–29 de octubre de 2026', 'Tablex')]]
 t = Table(coverdata, colWidths=[1.35*inch, 4.8*inch], hAlign='CENTER')
 t.setStyle(TableStyle([('BACKGROUND',(0,0),(0,-1),light),('BOX',(0,0),(-1,-1),0.7,colors.HexColor('#C7D2DC')),('INNERGRID',(0,0),(-1,-1),0.4,colors.HexColor('#D6DEE5')),('VALIGN',(0,0),(-1,-1),'TOP'),('LEFTPADDING',(0,0),(-1,-1),10),('RIGHTPADDING',(0,0),(-1,-1),10),('TOPPADDING',(0,0),(-1,-1),9),('BOTTOMPADDING',(0,0),(-1,-1),9)]))
-story += [t, Spacer(1, 0.5*inch), P('Resumen ejecutivo y evidencia técnica', 'Centerx'), Spacer(1, 0.15*inch), P('Estado de evidencia: CI y JaCoCo corresponden al commit 6c19aae de main. El árbol local de código y pruebas coincide con ese main; los documentos y exports del paquete siguen locales.', 'Smallx'), PageBreak()]
+story += [t, Spacer(1, 0.5*inch), P('Resumen ejecutivo y evidencia técnica', 'Centerx'), Spacer(1, 0.15*inch), P('Estado de evidencia: CI y JaCoCo corresponden al commit 6c19aae de main. Este PDF incorpora las pantallas y secuencias entregadas por el equipo; las fuentes también se incluyen en el paquete del repositorio.', 'Smallx'), PageBreak()]
 # Executive summary page 2
-story += [P('Resumen ejecutivo del Sprint 2', 'H1x'), P('<b>Periodo de referencia:</b> 19–29 de octubre de 2026. El inicio se reconstruyó desde el primer registro local fechado y el cierre fue indicado por el Product Owner; no son fechas de una ceremonia formal.', 'Bodyx'), P('<b>Objetivo reconstruido:</b> alinear el incremento con los mockups corregidos y dejar documentados los flujos principales, la estrategia demostrativa de fletes, UML, modelo de datos, CI y Kanban, distinguiendo lo integrado de lo que falta validar.', 'Bodyx'), P('Resultados y trabajo seleccionado', 'H2x')]
-story += [bullet(f'<b>Interfaz y pruebas de navegador.</b> Se integraron los mockups corregidos del marketplace y se alineó el flujo E2E con los campos actuales. {link("PR #52", "https://github.com/santixit/agrovalle-connect/pull/52")}.'), bullet(f'<b>Estrategia de fletes.</b> Se incorporó Strategy para tarifas demostrativas por municipio, seleccionadas por peso/destino; los valores no son tarifas comerciales validadas. {link("PR #51", "https://github.com/santixit/agrovalle-connect/pull/51")}.'), bullet('<b>Arquitectura y diseño.</b> Se organizaron fuentes editables y exports locales de UML de componentes, despliegue y secuencia, junto con DER y snapshot SQL consolidado desde Flyway V1–V6.'), bullet(f'<b>Gestión del trabajo.</b> El tablero muestra issues reales, sin borradores: 3/3 en In Progress, 2/2 en Code Review / Testing y 14 en Done. {link("GitHub Project", "https://github.com/users/santixit/projects/3/views/1")}.'), P('Calidad técnica observada', 'H2x'), bullet(f'La ejecución {link("GitHub Actions #83", "https://github.com/santixit/agrovalle-connect/actions/runs/40816952882")} terminó en verde para `main`, commit `6c19aae` (Java, Checkstyle, JaCoCo y E2E). El artefacto JaCoCo del mismo run informa 89% de instrucciones, 63% de ramas y 91% de líneas.'), bullet('La documentación de pruebas conserva evidencia del ciclo TDD Red–Green–Refactor y de pruebas unitarias/integración; la evidencia detallada de TDD corresponde a su propio cambio y no se atribuye automáticamente a cada archivo del incremento.'), PageBreak()]
+story += [P('Resumen ejecutivo del Sprint 2', 'H1x'), P('<b>Periodo de referencia:</b> 19–29 de octubre de 2026. El inicio se reconstruyó desde el primer registro local fechado y el cierre fue indicado por el Product Owner; no son fechas de una ceremonia formal.', 'Bodyx'), P('<b>Objetivo reconstruido:</b> alinear el incremento con los wireframes y mockups corregidos, y dejar documentados los flujos principales enviados por el equipo, la estrategia demostrativa de fletes, el modelo de datos, CI y Kanban, distinguiendo lo integrado de lo que falta validar.', 'Bodyx'), P('Resultados y trabajo seleccionado', 'H2x')]
+story += [bullet(f'<b>Interfaz y pruebas de navegador.</b> Se integraron los mockups corregidos del marketplace y se alineó el flujo E2E con los campos actuales. {link("PR #52", "https://github.com/santixit/agrovalle-connect/pull/52")}.'), bullet('<b>Diseño recibido.</b> El apéndice incluye los 7 wireframes, 7 mockups y 6 diagramas de secuencia que entregó el equipo.'), bullet(f'<b>Estrategia de fletes.</b> Se incorporó Strategy para tarifas demostrativas por municipio, seleccionadas por peso/destino; los valores no son tarifas comerciales validadas. {link("PR #51", "https://github.com/santixit/agrovalle-connect/pull/51")}.'), bullet('<b>UML técnico complementario.</b> Los exports de componentes, despliegue y secuencias PlantUML son diagramas técnicos derivados de sus fuentes; son distintos de las secuencias visuales que entregó el equipo.'), bullet(f'<b>Gestión del trabajo.</b> El tablero muestra issues reales, sin borradores: 3/3 en In Progress, 2/2 en Code Review / Testing y 14 en Done. {link("GitHub Project", "https://github.com/users/santixit/projects/3/views/1")}.'), P('Calidad técnica observada', 'H2x'), bullet(f'La ejecución {link("GitHub Actions #83", "https://github.com/santixit/agrovalle-connect/actions/runs/40816952882")} terminó en verde para `main`, commit `6c19aae` (Java, Checkstyle, JaCoCo y E2E). El artefacto JaCoCo del mismo run informa 89% de instrucciones, 63% de ramas y 91% de líneas.'), bullet('La documentación de pruebas conserva evidencia del ciclo TDD Red–Green–Refactor y de pruebas unitarias/integración; la evidencia detallada de TDD corresponde a su propio cambio y no se atribuye automáticamente a cada archivo del incremento.'), PageBreak()]
 # Executive summary page 3
-story += [P('Aprendizajes, límites y cierre', 'H1x'), P('Patrones y refactorización', 'H2x'), P('La evidencia de código mapea SRP a la separación entre catálogo y gestión de productos; OCP y LSP a estrategias de flete intercambiables; ISP al contrato reducido de cálculo de flete; y DIP a la abstracción de cálculo de descuentos inyectada en reservas. Es un mapeo acotado a ejemplos concretos, no una afirmación de que todo el sistema cumpla cada principio de forma uniforme. Strategy se usa en fletes/descuentos y Observer en eventos de notificación.', 'Bodyx'), P('Aprendizajes observables', 'H2x'), bullet('La interfaz debe distinguir lo que solo es visual de lo que la API realmente persiste o expone; por ejemplo, la vista previa de fotografía sigue siendo local y algunas consultas de historial no tienen soporte completo.'), bullet('Los snapshots Kanban permiten reportar conteos y WIP en fechas observadas, pero no calcular de forma fiable throughput, lead time, cycle time, CFD o Ley de Little sin eventos fechados completos.'), bullet('La revisión y la retrospectiva se registran como documentos asíncronos preparados por el Product Owner. El equipo confirmó que el resumen representa el trabajo y que no tiene comentarios adicionales; no se inventa una ceremonia ni consenso sobre cada propuesta.'), P('Estado del incremento', 'H2x'), bullet('<b>Modelo de datos.</b> El issue #46 registra conservar el esquema actual y dejar los catálogos normalizados como mejora futura. El snapshot SQL resume Flyway V1–V6, que sigue siendo la fuente ejecutable. La revisión describe las dependencias que el DDL sí expresa y deja las reglas de dominio no codificadas como alcance por validar; no se propone una migración sin una decisión de dominio.'), bullet('<b>Calidad técnica.</b> Actions #83 terminó en verde para el código y las pruebas de `main` en `6c19aae`; el reporte JaCoCo del mismo commit muestra 89% de instrucciones, 63% de ramas y 91% de líneas. La evidencia está incluida en estas páginas.'), bullet('<b>Paquete documental.</b> Esta copia reúne resumen, enlaces, CI y JaCoCo. Las fuentes y exports de diseño se conservan localmente para revisión, según lo solicitado; al integrarlos en `main`, se podrá enlazar el commit documental y revisar el workflow asociado.'), P('Enlaces: ' + link('repositorio main', 'https://github.com/santixit/agrovalle-connect/tree/main') + ' | ' + link('GitHub Project', 'https://github.com/users/santixit/projects/3/views/1') + ' | ' + link('PR #53 (roles del equipo)', 'https://github.com/santixit/agrovalle-connect/pull/53'), 'Smallx'), PageBreak()]
+story += [P('Aprendizajes, límites y cierre', 'H1x'), P('Patrones y refactorización', 'H2x'), P('La evidencia de código mapea SRP a la separación entre catálogo y gestión de productos; OCP y LSP a estrategias de flete intercambiables; ISP al contrato reducido de cálculo de flete; y DIP a la abstracción de cálculo de descuentos inyectada en reservas. Es un mapeo acotado a ejemplos concretos, no una afirmación de que todo el sistema cumpla cada principio de forma uniforme. Strategy se usa en fletes/descuentos y Observer en eventos de notificación.', 'Bodyx'), P('Aprendizajes observables', 'H2x'), bullet('La interfaz debe distinguir lo que solo es visual de lo que la API realmente persiste o expone; por ejemplo, la vista previa de fotografía sigue siendo local y algunas consultas de historial no tienen soporte completo.'), bullet('Los snapshots Kanban permiten reportar conteos y WIP en fechas observadas, pero no calcular de forma fiable throughput, lead time, cycle time, CFD o Ley de Little sin eventos fechados completos.'), bullet('La revisión y la retrospectiva se registran como documentos asíncronos preparados por el Product Owner. El equipo confirmó que el resumen representa el trabajo y que no tiene comentarios adicionales; no se inventa una ceremonia ni consenso sobre cada propuesta.'), P('Estado del incremento', 'H2x'), bullet('<b>Modelo de datos.</b> El issue #46 registra conservar el esquema actual y dejar los catálogos normalizados como mejora futura. El snapshot SQL resume Flyway V1–V6, que sigue siendo la fuente ejecutable. La revisión describe las dependencias que el DDL sí expresa y deja las reglas de dominio no codificadas como alcance por validar; no se propone una migración sin una decisión de dominio.'), bullet('<b>Calidad técnica.</b> Actions #83 terminó en verde para el código y las pruebas de `main` en `6c19aae`; el reporte JaCoCo del mismo commit muestra 89% de instrucciones, 63% de ramas y 91% de líneas. La evidencia está incluida en estas páginas.'), bullet('<b>Paquete documental.</b> Esta copia reúne resumen, evidencias CI/JaCoCo y las 20 láminas de diseño recibidas. Las fuentes PNG/JPG también permanecen en el repositorio.'), P('Enlaces: ' + link('repositorio main', 'https://github.com/santixit/agrovalle-connect/tree/main') + ' | ' + link('GitHub Project', 'https://github.com/users/santixit/projects/3/views/1') + ' | ' + link('PR #53 (roles del equipo)', 'https://github.com/santixit/agrovalle-connect/pull/53'), 'Smallx'), PageBreak()]
 # CI evidence page
 story += [P('Evidencia de Integración Continua', 'H1x'), P(f'GitHub Actions #83 — estado <b>Success</b> — commit <b>6c19aae</b> en `main`. La ejecución incluye Build, tests, Checkstyle y JaCoCo, además de despliegue a staging. {link("Abrir ejecución", "https://github.com/santixit/agrovalle-connect/actions/runs/40816952882")}.', 'Bodyx'), Spacer(1, 0.15*inch)]
 ci = Image(str(root/'docs/evidencias/ci-run-83.png'))
@@ -68,5 +74,90 @@ t.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),light),('BOX',(0,0),(-1,-1),0.
 story += [t, Spacer(1, 0.15*inch), P('Las cifras cumplen los umbrales configurados para el commit de `main` indicado. El código y las pruebas locales coinciden con ese commit; la cobertura no incluye los documentos ni exports que siguen locales.', 'Smallx')]
 
 doc.build(story, onFirstPage=footer, onLaterPages=footer)
+
+design_pages = [
+    ('Wireframe - Inicio', 'mockups/ui-wireframe-inicio.png'),
+    ('Wireframe - Catálogo', 'mockups/ui-wireframe-catalogo.png'),
+    ('Wireframe - Detalles', 'mockups/ui-wireframe-detalle.png'),
+    ('Wireframe - Registro', 'mockups/ui-wireframe-registro.png'),
+    ('Wireframe - Publicar', 'mockups/ui-wireframe-publicar.png'),
+    ('Wireframe - Panel agricultor', 'mockups/ui-wireframe-panel-agricultor.png'),
+    ('Wireframe - Panel administrador', 'mockups/ui-wireframe-panel-administrador.png'),
+    ('Mockup - Inicio', 'mockups/ui-mockup-inicio.png'),
+    ('Mockup - Catálogo', 'mockups/ui-mockup-catalogo.png'),
+    ('Mockup - Detalles', 'mockups/ui-mockup-detalle.png'),
+    ('Mockup - Registro', 'mockups/ui-mockup-registro.png'),
+    ('Mockup - Publicar', 'mockups/ui-mockup-publicar.png'),
+    ('Mockup - Panel agricultor', 'mockups/ui-mockup-panel-agricultor.png'),
+    ('Mockup - Panel administrador', 'mockups/ui-mockup-panel-administrador.png'),
+    ('Secuencia - Registro de agricultor', 'secuencias/secuencia-registro-agricultor.jpg'),
+    ('Secuencia - Inicio de sesión y publicación', 'secuencias/secuencia-iniciar-sesion-y-publicar.jpg'),
+    ('Secuencia - Reserva de comprador', 'secuencias/secuencia-reserva-comprador.jpg'),
+    ('Secuencia - Contacto al agricultor', 'secuencias/secuencia-contacto-agricultor.jpg'),
+    ('Secuencia - Programación de despacho', 'secuencias/secuencia-programar-despacho.jpg'),
+    ('Secuencia - Registro de producto (referencia anterior)', 'secuencias/secuencia-registro-producto-referencia.jpg'),
+]
+page_width, page_height = landscape(letter)
+pdf_canvas = canvas.Canvas(str(appendix_pdf), pagesize=(page_width, page_height), pageCompression=1)
+pdf_canvas.setTitle('Wireframes, mockups y secuencias recibidos - Grupo 1')
+pdf_canvas.setFillColor(colors.black)
+pdf_canvas.setFont('Helvetica-Bold', 22)
+pdf_canvas.drawString(0.7*inch, page_height - 1.05*inch, 'Diseño y arquitectura')
+pdf_canvas.setFont('Helvetica', 11)
+pdf_canvas.setFillColor(colors.HexColor('#1F2933'))
+overview = [
+    'Esta sección organiza los artefactos gráficos de modelado y prototipado que entregó el equipo,',
+    'según la guía del Sprint de Diseño y Arquitectura de AgroValle Connect.',
+    '',
+    'Prototipos de interfaz',
+    '• 7 wireframes de baja fidelidad y 7 mockups de alta fidelidad: inicio, catálogo, detalle,',
+    '  registro, publicación, panel del agricultor y panel del administrador.',
+    '',
+    'Diagramas de secuencia recibidos',
+    '• Registro de agricultor; inicio de sesión y publicación; reserva; contacto; despacho;',
+    '  y una referencia anterior del registro de producto.',
+    '',
+    'Las imagenes se reproducen en las paginas siguientes y sus fuentes se conservan en',
+    'docs/diseno/mockups/ y docs/diseno/secuencias/. Los UML generados desde PlantUML',
+    'son artefactos técnicos complementarios, separados de estas láminas recibidas.',
+]
+y = page_height - 1.65*inch
+for line in overview:
+    if line:
+        pdf_canvas.drawString(0.7*inch, y, line)
+    y -= 0.29*inch
+pdf_canvas.showPage()
+for title, relative_path in design_pages:
+    image_path = root / 'docs' / 'diseno' / relative_path
+    pdf_canvas.setFont('Helvetica-Bold', 15)
+    pdf_canvas.setFillColor(colors.black)
+    pdf_canvas.drawString(0.5*inch, page_height - 0.45*inch, title)
+    pdf_canvas.setFont('Helvetica', 8)
+    pdf_canvas.setFillColor(muted)
+    pdf_canvas.drawString(0.5*inch, page_height - 0.62*inch, 'Lámina fuente recibida del equipo')
+    image = ImageReader(str(image_path))
+    image_width, image_height = image.getSize()
+    max_width = page_width - inch
+    max_height = page_height - 1.05*inch
+    scale = min(max_width / image_width, max_height / image_height)
+    drawn_width, drawn_height = image_width * scale, image_height * scale
+    x = (page_width - drawn_width) / 2
+    y = (page_height - 0.78*inch - drawn_height) / 2
+    pdf_canvas.drawImage(image, x, y, width=drawn_width, height=drawn_height, preserveAspectRatio=True, mask='auto')
+    pdf_canvas.showPage()
+pdf_canvas.save()
+
+writer = PdfWriter()
+base_reader = PdfReader(str(base_pdf))
+for page in base_reader.pages[:3]:
+    writer.add_page(page)
+writer.append_pages_from_reader(PdfReader(str(appendix_pdf)))
+for page in base_reader.pages[3:]:
+    writer.add_page(page)
+writer.add_metadata({'/Title': 'Grupo 1 - Entrega Segundo Corte - AgroValle Connect', '/Author': 'Grupo 1 - 6303B'})
+with out.open('wb') as stream:
+    writer.write(stream)
+base_pdf.unlink()
+appendix_pdf.unlink()
 print(out)
 print(f'bytes={out.stat().st_size}')

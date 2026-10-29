@@ -1,6 +1,8 @@
-# Exportaciones de diagramas UML
+# Exportaciones de UML técnico
 
-Estos archivos se generaron desde las fuentes PlantUML editables de la carpeta padre:
+Estos exports se generaron desde las fuentes PlantUML editables de la carpeta padre. Representan componentes, despliegue y flujos técnicos seleccionados del backend; no sustituyen las imágenes de wireframes/mockups ni los seis diagramas de secuencia recibidos del equipo, que se conservan por separado en [`../mockups/`](../mockups/) y [`../secuencias/`](../secuencias/).
+
+Archivos generados:
 
 - [Componentes](../diagrama-componentes.puml): [PNG](uml-componentes.png).
 - [Despliegue](../diagrama-despliegue.puml): [PNG](uml-despliegue.png).
