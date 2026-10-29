@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SecurityConfiguration.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">agrovalle-connect</a> &gt; <a href="index.source.html" class="el_package">co.edu.uniajc.agrovalle.config</a> &gt; <span class="el_source">SecurityConfiguration.java</span></div><h1>SecurityConfiguration.java</h1><pre class="source lang-java linenums">package co.edu.uniajc.agrovalle.config;
+
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import com.nimbusds.jose.jwk.source.ImmutableSecret;
+
+@Configuration
+public class SecurityConfiguration {
+
+  private final SecretKey jwtKey;
+
+<span class="fc" id="L26">  public SecurityConfiguration(@Value(&quot;${app.jwt.secret}&quot;) String secret) {</span>
+<span class="fc" id="L27">    byte[] bytes = java.util.Base64.getDecoder().decode(secret);</span>
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">    if (bytes.length &lt; 32) {</span>
+<span class="nc" id="L29">      throw new IllegalArgumentException(&quot;JWT_SECRET debe contener al menos 32 bytes en Base64&quot;);</span>
+    }
+<span class="fc" id="L31">    this.jwtKey = new SecretKeySpec(bytes, &quot;HmacSHA256&quot;);</span>
+<span class="fc" id="L32">  }</span>
+
+  @Bean
+  SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+<span class="fc" id="L36">    return http.csrf(csrf -&gt; csrf.disable())</span>
+<span class="fc" id="L37">        .sessionManagement(session -&gt; session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))</span>
+<span class="fc" id="L38">        .authorizeHttpRequests(authorize -&gt; authorize</span>
+<span class="fc" id="L39">            .requestMatchers(&quot;/&quot;, &quot;/index.html&quot;, &quot;/favicon.ico&quot;, &quot;/assets/**&quot;, &quot;/styles.css&quot;)</span>
+<span class="fc" id="L40">                .permitAll()</span>
+<span class="fc" id="L41">            .requestMatchers(org.springframework.http.HttpMethod.POST, &quot;/api/v1/productos&quot;)</span>
+<span class="fc" id="L42">                .hasAuthority(&quot;SCOPE_AGRICULTOR&quot;)</span>
+<span class="fc" id="L43">            .requestMatchers(org.springframework.http.HttpMethod.GET, &quot;/api/v1/productos/mias&quot;)</span>
+<span class="fc" id="L44">                .hasAuthority(&quot;SCOPE_AGRICULTOR&quot;)</span>
+<span class="fc" id="L45">            .requestMatchers(org.springframework.http.HttpMethod.POST,</span>
+<span class="fc" id="L46">                &quot;/api/v1/productos/*/transferencias&quot;).hasAuthority(&quot;SCOPE_AGRICULTOR&quot;)</span>
+<span class="fc" id="L47">            .requestMatchers(org.springframework.http.HttpMethod.GET, &quot;/api/v1/parcelas/mias&quot;)</span>
+<span class="fc" id="L48">                .hasAuthority(&quot;SCOPE_AGRICULTOR&quot;)</span>
+<span class="fc" id="L49">            .requestMatchers(org.springframework.http.HttpMethod.PATCH,</span>
+<span class="fc" id="L50">                &quot;/api/v1/productos/*/estado&quot;).hasAuthority(&quot;SCOPE_AGRICULTOR&quot;)</span>
+<span class="fc" id="L51">            .requestMatchers(org.springframework.http.HttpMethod.POST, &quot;/api/v1/contactos&quot;)</span>
+<span class="fc" id="L52">                .hasAuthority(&quot;SCOPE_COMPRADOR&quot;)</span>
+<span class="fc" id="L53">            .requestMatchers(org.springframework.http.HttpMethod.POST, &quot;/api/v1/reservas&quot;)</span>
+<span class="fc" id="L54">                .hasAuthority(&quot;SCOPE_COMPRADOR&quot;)</span>
+<span class="fc" id="L55">            .requestMatchers(org.springframework.http.HttpMethod.POST, &quot;/api/v1/reservas/carrito&quot;)</span>
+<span class="fc" id="L56">                .hasAuthority(&quot;SCOPE_COMPRADOR&quot;)</span>
+<span class="fc" id="L57">            .requestMatchers(org.springframework.http.HttpMethod.GET, &quot;/api/v1/reservas/mias&quot;)</span>
+<span class="fc" id="L58">                .hasAuthority(&quot;SCOPE_COMPRADOR&quot;)</span>
+<span class="fc" id="L59">            .requestMatchers(org.springframework.http.HttpMethod.GET, &quot;/api/v1/reservas/pendientes&quot;)</span>
+<span class="fc" id="L60">                .hasAuthority(&quot;SCOPE_AGRICULTOR&quot;)</span>
+<span class="fc" id="L61">            .requestMatchers(org.springframework.http.HttpMethod.POST,</span>
+                &quot;/api/v1/reservas/*/confirmar&quot;, &quot;/api/v1/reservas/*/preparar&quot;,
+                &quot;/api/v1/despachos&quot;)
+<span class="fc" id="L64">                .hasAuthority(&quot;SCOPE_AGRICULTOR&quot;)</span>
+<span class="fc" id="L65">            .requestMatchers(org.springframework.http.HttpMethod.PATCH,</span>
+                &quot;/api/v1/despachos/*/en-ruta&quot;, &quot;/api/v1/despachos/*/entregado&quot;)
+<span class="fc" id="L67">                .hasAuthority(&quot;SCOPE_AGRICULTOR&quot;)</span>
+<span class="fc" id="L68">            .requestMatchers(org.springframework.http.HttpMethod.GET,</span>
+<span class="fc" id="L69">                &quot;/api/v1/reservas/*/trazabilidad&quot;).hasAuthority(&quot;SCOPE_COMPRADOR&quot;)</span>
+<span class="fc" id="L70">            .requestMatchers(&quot;/api/v1/favoritos/**&quot;).hasAuthority(&quot;SCOPE_COMPRADOR&quot;)</span>
+<span class="fc" id="L71">            .requestMatchers(&quot;/api/v1/admin/**&quot;).hasAuthority(&quot;SCOPE_ADMIN&quot;)</span>
+<span class="fc" id="L72">            .requestMatchers(&quot;/api/v1/fincas/**&quot;).hasAuthority(&quot;SCOPE_AGRICULTOR&quot;)</span>
+<span class="fc" id="L73">            .requestMatchers(org.springframework.http.HttpMethod.POST,</span>
+<span class="fc" id="L74">                &quot;/api/v1/auth/register/comprador&quot;).permitAll()</span>
+<span class="fc" id="L75">            .requestMatchers(&quot;/api/v1/auth/**&quot;, &quot;/api/v1/health&quot;, &quot;/api/v1/productores/**&quot;,</span>
+<span class="fc" id="L76">                &quot;/api/v1/productos/**&quot;, &quot;/api/v1/precios/**&quot;).permitAll()</span>
+<span class="fc" id="L77">            .anyRequest().authenticated())</span>
+<span class="fc" id="L78">        .oauth2ResourceServer(resource -&gt; resource.jwt(Customizer.withDefaults()))</span>
+<span class="fc" id="L79">        .build();</span>
+  }
+
+  @Bean
+  PasswordEncoder passwordEncoder() {
+<span class="fc" id="L84">    return new BCryptPasswordEncoder();</span>
+  }
+
+  @Bean
+  JwtDecoder jwtDecoder() {
+<span class="fc" id="L89">    return NimbusJwtDecoder.withSecretKey(jwtKey).macAlgorithm(MacAlgorithm.HS256).build();</span>
+  }
+
+  @Bean
+  JwtEncoder jwtEncoder() {
+<span class="fc" id="L94">    return new NimbusJwtEncoder(new ImmutableSecret&lt;&gt;(jwtKey));</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

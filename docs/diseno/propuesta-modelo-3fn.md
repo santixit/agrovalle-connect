@@ -1,6 +1,6 @@
 # Modelo 3FN: fincas, parcelas y productos
 
-**Estado:** implementado localmente en Flyway V7 y en las entidades, servicios y API. La compilación Java pasó. Las pruebas no se ejecutaron y los cambios no se han publicado.
+**Estado:** implementado en Flyway V7 y en las entidades, servicios y API, e integrado en `main`. Actions #103 ejecutó las pruebas y controles de calidad sobre el commit `a7e2097`.
 
 ## Reglas implementadas
 

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TransferenciaProductoService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">agrovalle-connect</a> &gt; <a href="index.source.html" class="el_package">co.edu.uniajc.agrovalle.service</a> &gt; <span class="el_source">TransferenciaProductoService.java</span></div><h1>TransferenciaProductoService.java</h1><pre class="source lang-java linenums">package co.edu.uniajc.agrovalle.service;
+
+import co.edu.uniajc.agrovalle.api.dto.TransferenciaProductoResponse;
+import co.edu.uniajc.agrovalle.domain.Agricultor;
+import co.edu.uniajc.agrovalle.domain.Parcela;
+import co.edu.uniajc.agrovalle.domain.Producto;
+import co.edu.uniajc.agrovalle.domain.TransferenciaProducto;
+import co.edu.uniajc.agrovalle.repository.AgricultorRepository;
+import co.edu.uniajc.agrovalle.repository.ParcelaRepository;
+import co.edu.uniajc.agrovalle.repository.ProductoRepository;
+import co.edu.uniajc.agrovalle.repository.TransferenciaProductoRepository;
+import java.util.List;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+public class TransferenciaProductoService {
+  private final AgricultorRepository agricultorRepository;
+  private final ProductoRepository productoRepository;
+  private final ParcelaRepository parcelaRepository;
+  private final TransferenciaProductoRepository transferenciaRepository;
+
+  public TransferenciaProductoService(AgricultorRepository agricultorRepository,
+      ProductoRepository productoRepository, ParcelaRepository parcelaRepository,
+<span class="fc" id="L25">      TransferenciaProductoRepository transferenciaRepository) {</span>
+<span class="fc" id="L26">    this.agricultorRepository = agricultorRepository;</span>
+<span class="fc" id="L27">    this.productoRepository = productoRepository;</span>
+<span class="fc" id="L28">    this.parcelaRepository = parcelaRepository;</span>
+<span class="fc" id="L29">    this.transferenciaRepository = transferenciaRepository;</span>
+<span class="fc" id="L30">  }</span>
+
+  @Transactional
+  public List&lt;TransferenciaProductoResponse&gt; transferir(Long usuarioId, Long productoId,
+      Long nuevoAgricultorId) {
+<span class="fc" id="L35">    Agricultor actor = agricultorRepository.findByUsuario_Id(usuarioId)</span>
+<span class="fc" id="L36">        .orElseThrow(() -&gt; new AgricultorNoEncontradoException(usuarioId));</span>
+<span class="fc" id="L37">    Agricultor nuevo = agricultorRepository.findById(nuevoAgricultorId)</span>
+<span class="fc" id="L38">        .orElseThrow(() -&gt; new IllegalArgumentException(&quot;El nuevo agricultor no existe&quot;));</span>
+<span class="fc" id="L39">    Producto producto = productoRepository.buscarParaActualizar(productoId)</span>
+<span class="fc" id="L40">        .orElseThrow(() -&gt; new ProductoNoEncontradoException(productoId));</span>
+<span class="fc" id="L41">    Parcela parcela = producto.getParcela();</span>
+    List&lt;Producto&gt; afectados;
+    Agricultor anterior;
+<span class="fc bfc" id="L44" title="All 2 branches covered.">    if (parcela != null) {</span>
+<span class="fc" id="L45">      parcela = parcelaRepository.buscarParaActualizar(parcela.getId())</span>
+<span class="fc" id="L46">          .orElseThrow(() -&gt; new IllegalStateException(&quot;La parcela ya no está disponible&quot;));</span>
+<span class="fc" id="L47">      anterior = parcela.getAgricultorResponsableActual();</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">      if (!anterior.getId().equals(actor.getId())) {</span>
+<span class="fc" id="L49">        throw new OfertaNoPropiaException(productoId);</span>
+      }
+<span class="fc" id="L51">      afectados = productoRepository.findByParcelaId(parcela.getId());</span>
+<span class="fc" id="L52">      parcela.transferirResponsabilidadA(nuevo);</span>
+    } else {
+<span class="fc" id="L54">      anterior = producto.getAgricultor();</span>
+<span class="pc bpc" id="L55" title="1 of 4 branches missed.">      if (anterior == null || !anterior.getId().equals(actor.getId())) {</span>
+<span class="fc" id="L56">        throw new OfertaNoPropiaException(productoId);</span>
+      }
+<span class="fc" id="L58">      producto.getUbicacion().transferirTitularSinFinca(nuevo);</span>
+<span class="fc" id="L59">      afectados = List.of(producto);</span>
+    }
+<span class="fc" id="L61">    return afectados.stream().map(afectado -&gt; TransferenciaProductoResponse.from(</span>
+<span class="fc" id="L62">        transferenciaRepository.save(new TransferenciaProducto(afectado, anterior, nuevo))))</span>
+<span class="fc" id="L63">        .toList();</span>
+  }
+
+  @Transactional(readOnly = true)
+  public List&lt;TransferenciaProductoResponse&gt; historial(Long productoId) {
+<span class="fc bfc" id="L68" title="All 2 branches covered.">    if (!productoRepository.existsById(productoId)) {</span>
+<span class="fc" id="L69">      throw new ProductoNoEncontradoException(productoId);</span>
+    }
+<span class="fc" id="L71">    return transferenciaRepository.findByProducto_IdOrderByFechaTransferenciaAscIdAsc(productoId)</span>
+<span class="fc" id="L72">        .stream().map(TransferenciaProductoResponse::from).toList();</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

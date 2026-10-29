@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReservaService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">agrovalle-connect</a> &gt; <a href="index.source.html" class="el_package">co.edu.uniajc.agrovalle.service</a> &gt; <span class="el_source">ReservaService.java</span></div><h1>ReservaService.java</h1><pre class="source lang-java linenums">package co.edu.uniajc.agrovalle.service;
+
+import co.edu.uniajc.agrovalle.api.dto.ReservaRequest;
+import co.edu.uniajc.agrovalle.api.dto.ReservaResponse;
+import co.edu.uniajc.agrovalle.api.dto.ReservaCarritoRequest;
+import co.edu.uniajc.agrovalle.api.dto.CarritoReservaResponse;
+import co.edu.uniajc.agrovalle.api.dto.PedidoResumenResponse;
+import co.edu.uniajc.agrovalle.domain.Comprador;
+import co.edu.uniajc.agrovalle.domain.DetallePedido;
+import co.edu.uniajc.agrovalle.domain.EstadoPedido;
+import co.edu.uniajc.agrovalle.domain.EventoTrazabilidad;
+import co.edu.uniajc.agrovalle.domain.Pedido;
+import co.edu.uniajc.agrovalle.domain.Producto;
+import co.edu.uniajc.agrovalle.domain.ReglasDisponibilidad;
+import co.edu.uniajc.agrovalle.domain.StockInsuficienteException;
+import co.edu.uniajc.agrovalle.domain.EstadoProducto;
+import co.edu.uniajc.agrovalle.domain.Agricultor;
+import co.edu.uniajc.agrovalle.api.dto.ReservaItemRequest;
+import co.edu.uniajc.agrovalle.repository.CompradorRepository;
+import co.edu.uniajc.agrovalle.repository.EventoTrazabilidadRepository;
+import co.edu.uniajc.agrovalle.repository.PedidoRepository;
+import co.edu.uniajc.agrovalle.repository.ProductoRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+@Service
+public class ReservaService {
+  private final CompradorRepository compradorRepository;
+  private final ProductoRepository productoRepository;
+  private final PedidoRepository pedidoRepository;
+  private final EventoTrazabilidadRepository eventoRepository;
+  private final ReglasDisponibilidad reglasDisponibilidad;
+  private final CalculadorDescuentoAgricola calculadorDescuentoAgricola;
+
+  public ReservaService(CompradorRepository compradorRepository,
+      ProductoRepository productoRepository, PedidoRepository pedidoRepository,
+      EventoTrazabilidadRepository eventoRepository, ReglasDisponibilidad reglasDisponibilidad,
+<span class="fc" id="L43">      CalculadorDescuentoAgricola calculadorDescuentoAgricola) {</span>
+<span class="fc" id="L44">    this.compradorRepository = compradorRepository;</span>
+<span class="fc" id="L45">    this.productoRepository = productoRepository;</span>
+<span class="fc" id="L46">    this.pedidoRepository = pedidoRepository;</span>
+<span class="fc" id="L47">    this.eventoRepository = eventoRepository;</span>
+<span class="fc" id="L48">    this.reglasDisponibilidad = reglasDisponibilidad;</span>
+<span class="fc" id="L49">    this.calculadorDescuentoAgricola = calculadorDescuentoAgricola;</span>
+<span class="fc" id="L50">  }</span>
+
+  @Transactional
+  public ReservaResponse reservar(Long usuarioId, ReservaRequest request) {
+<span class="fc" id="L54">    Comprador comprador = compradorRepository.findByUsuario_Id(usuarioId)</span>
+<span class="fc" id="L55">        .orElseThrow(CompradorNoEncontradoException::new);</span>
+<span class="fc" id="L56">    Producto producto = productoRepository.buscarParaActualizar(request.productoId())</span>
+<span class="pc" id="L57">        .orElseThrow(() -&gt; new ProductoNoEncontradoException(request.productoId()));</span>
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">    if (!producto.isActivo()) {</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">      throw new StockInsuficienteException(producto.getCantidadKg() == null</span>
+<span class="nc" id="L60">          ? java.math.BigDecimal.ZERO : producto.getCantidadKg());</span>
+    }
+<span class="fc" id="L62">    reglasDisponibilidad.validarReserva(request.cantidadKg(), producto.getCantidadKg());</span>
+<span class="fc" id="L63">    producto.actualizarCantidad(producto.getCantidadKg().subtract(request.cantidadKg()));</span>
+<span class="fc" id="L64">    BigDecimal precioPorKg = calculadorDescuentoAgricola.calcularPrecioUnitario(</span>
+<span class="fc" id="L65">        request.cantidadKg(), producto.getPrecioPorKg());</span>
+<span class="fc" id="L66">    Pedido pedido = new Pedido(comprador);</span>
+<span class="fc" id="L67">    pedido.agregarDetalle(new DetallePedido(producto, request.cantidadKg(),</span>
+        precioPorKg));
+<span class="fc" id="L69">    Pedido guardado = pedidoRepository.save(pedido);</span>
+<span class="fc" id="L70">    eventoRepository.save(new EventoTrazabilidad(guardado, EstadoPedido.PENDIENTE,</span>
+<span class="fc" id="L71">        &quot;Reserva creada para la oferta &quot; + producto.getNombre()));</span>
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">    if (producto.getEstado() != EstadoProducto.AGOTADO) {</span>
+<span class="fc" id="L73">      producto.cambiarEstado(EstadoProducto.DISPONIBLE);</span>
+    }
+<span class="fc" id="L75">    return new ReservaResponse(guardado.getId(), guardado.getEstado().name(), producto.getId(),</span>
+<span class="fc" id="L76">        request.cantidadKg(), precioPorKg);</span>
+  }
+
+  @Transactional
+  public CarritoReservaResponse reservarCarrito(Long usuarioId,
+      ReservaCarritoRequest request) {
+<span class="fc" id="L82">    Comprador comprador = compradorRepository.findByUsuario_Id(usuarioId)</span>
+<span class="fc" id="L83">        .orElseThrow(CompradorNoEncontradoException::new);</span>
+<span class="fc" id="L84">    Map&lt;Long, BigDecimal&gt; cantidades = new TreeMap&lt;&gt;();</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">    for (ReservaItemRequest item : request.items()) {</span>
+<span class="fc" id="L86">      cantidades.merge(item.productoId(), item.cantidadKg(), BigDecimal::add);</span>
+<span class="fc" id="L87">    }</span>
+
+<span class="fc" id="L89">    Map&lt;Long, List&lt;Producto&gt;&gt; porAgricultor = new TreeMap&lt;&gt;();</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">    for (Map.Entry&lt;Long, BigDecimal&gt; entrada : cantidades.entrySet()) {</span>
+<span class="fc" id="L91">      Producto producto = productoRepository.buscarParaActualizar(entrada.getKey())</span>
+<span class="pc" id="L92">          .orElseThrow(() -&gt; new ProductoNoEncontradoException(entrada.getKey()));</span>
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">      if (!producto.isActivo()) {</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">        throw new StockInsuficienteException(producto.getCantidadKg() == null</span>
+<span class="nc" id="L95">            ? BigDecimal.ZERO : producto.getCantidadKg());</span>
+      }
+<span class="fc" id="L97">      reglasDisponibilidad.validarReserva(entrada.getValue(), producto.getCantidadKg());</span>
+<span class="fc" id="L98">      Agricultor agricultor = producto.getAgricultor();</span>
+<span class="pc bpc" id="L99" title="2 of 4 branches missed.">      if (agricultor == null || agricultor.getUsuario() == null</span>
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">          || agricultor.getUsuario().getId() == null) {</span>
+<span class="nc" id="L101">        throw new TransicionPedidoInvalidaException();</span>
+      }
+<span class="fc" id="L103">      porAgricultor.computeIfAbsent(agricultor.getUsuario().getId(), ignored -&gt; new ArrayList&lt;&gt;())</span>
+<span class="fc" id="L104">          .add(producto);</span>
+<span class="fc" id="L105">    }</span>
+
+<span class="fc" id="L107">    List&lt;PedidoResumenResponse&gt; pedidos = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">    for (List&lt;Producto&gt; ofertas : porAgricultor.values()) {</span>
+<span class="fc" id="L109">      Pedido pedido = new Pedido(comprador);</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">      for (Producto producto : ofertas) {</span>
+<span class="fc" id="L111">        BigDecimal cantidad = cantidades.get(producto.getId());</span>
+<span class="fc" id="L112">        producto.actualizarCantidad(producto.getCantidadKg().subtract(cantidad));</span>
+<span class="fc" id="L113">        BigDecimal precioPorKg = calculadorDescuentoAgricola.calcularPrecioUnitario(</span>
+<span class="fc" id="L114">            cantidad, producto.getPrecioPorKg());</span>
+<span class="fc" id="L115">        pedido.agregarDetalle(new DetallePedido(producto, cantidad, precioPorKg));</span>
+<span class="fc" id="L116">      }</span>
+<span class="fc" id="L117">      Pedido guardado = pedidoRepository.save(pedido);</span>
+<span class="fc" id="L118">      eventoRepository.save(new EventoTrazabilidad(guardado, EstadoPedido.PENDIENTE,</span>
+          &quot;Reserva creada desde el carrito de compra&quot;));
+<span class="fc" id="L120">      pedidos.add(PedidoResumenResponse.from(guardado));</span>
+<span class="fc" id="L121">    }</span>
+<span class="fc" id="L122">    return new CarritoReservaResponse(List.copyOf(pedidos));</span>
+  }
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductoUbicacion.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">agrovalle-connect</a> &gt; <a href="index.source.html" class="el_package">co.edu.uniajc.agrovalle.domain</a> &gt; <span class="el_source">ProductoUbicacion.java</span></div><h1>ProductoUbicacion.java</h1><pre class="source lang-java linenums">package co.edu.uniajc.agrovalle.domain;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = &quot;producto_ubicacion&quot;)
+public class ProductoUbicacion {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  @OneToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = &quot;producto_id&quot;, nullable = false, unique = true)
+  private Producto producto;
+
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+  @JoinColumn(name = &quot;parcela_id&quot;)
+  private Parcela parcela;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = &quot;agricultor_sin_finca_id&quot;)
+  private Agricultor agricultorSinFinca;
+
+  @Column(name = &quot;municipio_sin_finca&quot;, length = 80)
+  private String municipioSinFinca;
+
+<span class="fc" id="L38">  protected ProductoUbicacion() { }</span>
+
+  private ProductoUbicacion(Producto producto, Parcela parcela,
+<span class="fc" id="L41">      Agricultor agricultorSinFinca, String municipioSinFinca) {</span>
+<span class="fc" id="L42">    this.producto = producto;</span>
+<span class="fc" id="L43">    this.parcela = parcela;</span>
+<span class="fc" id="L44">    this.agricultorSinFinca = agricultorSinFinca;</span>
+<span class="fc" id="L45">    this.municipioSinFinca = municipioSinFinca;</span>
+<span class="fc" id="L46">  }</span>
+
+  public static ProductoUbicacion enParcela(Producto producto, Parcela parcela) {
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">    if (parcela == null) {</span>
+<span class="nc" id="L50">      throw new IllegalArgumentException(&quot;La parcela es obligatoria&quot;);</span>
+    }
+<span class="fc" id="L52">    return new ProductoUbicacion(producto, parcela, null, null);</span>
+  }
+
+  public static ProductoUbicacion sinFinca(Producto producto, Agricultor agricultor,
+      String municipio) {
+<span class="pc bpc" id="L57" title="2 of 4 branches missed.">    if (municipio == null || municipio.isBlank()) {</span>
+<span class="nc" id="L58">      throw new IllegalArgumentException(&quot;El municipio es obligatorio para un producto sin finca&quot;);</span>
+    }
+<span class="fc" id="L60">    return new ProductoUbicacion(producto, null, agricultor, municipio.trim());</span>
+  }
+
+  public Long getId() {
+<span class="nc" id="L64">    return id;</span>
+  }
+
+  public Producto getProducto() {
+<span class="nc" id="L68">    return producto;</span>
+  }
+
+  public Parcela getParcela() {
+<span class="fc" id="L72">    return parcela;</span>
+  }
+
+  public Agricultor getAgricultorActual() {
+<span class="fc bfc" id="L76" title="All 2 branches covered.">    return parcela == null ? agricultorSinFinca : parcela.getAgricultorResponsableActual();</span>
+  }
+
+  public String getMunicipio() {
+<span class="fc bfc" id="L80" title="All 2 branches covered.">    return parcela == null ? municipioSinFinca : parcela.getFinca().getMunicipio();</span>
+  }
+
+  public String getNombreFinca() {
+<span class="nc bnc" id="L84" title="All 2 branches missed.">    return parcela == null ? null : parcela.getFinca().getNombre();</span>
+  }
+
+  public String getCodigoParcela() {
+<span class="nc bnc" id="L88" title="All 2 branches missed.">    return parcela == null ? null : parcela.getCodigo();</span>
+  }
+
+  public Agricultor getAgricultorSinFinca() {
+<span class="nc" id="L92">    return agricultorSinFinca;</span>
+  }
+
+  public void transferirTitularSinFinca(Agricultor agricultorNuevo) {
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">    if (parcela != null) {</span>
+<span class="nc" id="L97">      throw new IllegalStateException(&quot;El titular se administra desde la parcela&quot;);</span>
+    }
+<span class="fc" id="L99">    agricultorSinFinca = agricultorNuevo;</span>
+<span class="fc" id="L100">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

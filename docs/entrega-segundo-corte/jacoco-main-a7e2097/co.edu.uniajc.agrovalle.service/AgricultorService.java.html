@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AgricultorService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">agrovalle-connect</a> &gt; <a href="index.source.html" class="el_package">co.edu.uniajc.agrovalle.service</a> &gt; <span class="el_source">AgricultorService.java</span></div><h1>AgricultorService.java</h1><pre class="source lang-java linenums">package co.edu.uniajc.agrovalle.service;
+
+import co.edu.uniajc.agrovalle.api.dto.AgricultorResponse;
+import co.edu.uniajc.agrovalle.api.dto.RegistroAgricultorRequest;
+import co.edu.uniajc.agrovalle.domain.Agricultor;
+import co.edu.uniajc.agrovalle.domain.Usuario;
+import co.edu.uniajc.agrovalle.domain.UsuarioFactory;
+import co.edu.uniajc.agrovalle.repository.AgricultorRepository;
+import co.edu.uniajc.agrovalle.repository.UsuarioRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+/** Coordinates farmer registration and profile queries. */
+@Service
+@Transactional(readOnly = true)
+public class AgricultorService {
+
+  private final AgricultorRepository agricultorRepository;
+  private final UsuarioRepository usuarioRepository;
+  private final UsuarioFactory usuarioFactory;
+
+  public AgricultorService(AgricultorRepository agricultorRepository,
+<span class="fc" id="L23">      UsuarioRepository usuarioRepository, UsuarioFactory usuarioFactory) {</span>
+<span class="fc" id="L24">    this.agricultorRepository = agricultorRepository;</span>
+<span class="fc" id="L25">    this.usuarioRepository = usuarioRepository;</span>
+<span class="fc" id="L26">    this.usuarioFactory = usuarioFactory;</span>
+<span class="fc" id="L27">  }</span>
+
+  @Transactional
+  public AgricultorResponse registrar(RegistroAgricultorRequest request) {
+<span class="fc" id="L31">    String cedula = request.cedula().trim();</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">    if (agricultorRepository.existsByCedula(cedula)) {</span>
+<span class="fc" id="L33">      throw new CedulaDuplicadaException(cedula);</span>
+    }
+<span class="pc bpc" id="L35" title="1 of 6 branches missed.">    if ((request.correo() == null) != (request.contrasena() == null)) {</span>
+<span class="nc" id="L36">      throw new DatosCuentaInvalidosException();</span>
+    }
+<span class="fc" id="L38">    Usuario usuario = null;</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">    if (request.correo() != null) {</span>
+<span class="fc" id="L40">      String correo = request.correo().trim().toLowerCase(java.util.Locale.ROOT);</span>
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">      if (correo.isBlank()) {</span>
+<span class="nc" id="L42">        throw new DatosCuentaInvalidosException();</span>
+      }
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">      if (usuarioRepository.existsByCorreoIgnoreCase(correo)) {</span>
+<span class="nc" id="L45">        throw new CorreoDuplicadoException(correo);</span>
+      }
+<span class="fc" id="L47">      usuario = usuarioRepository.save(usuarioFactory.crearAgricultor(correo,</span>
+<span class="fc" id="L48">          request.contrasena()));</span>
+    }
+<span class="fc" id="L50">    Agricultor agricultor = new Agricultor(usuario, request.nombre().trim(), cedula,</span>
+<span class="fc" id="L51">        request.tipoDocumento(), request.telefono(), request.ubicacionValle().trim());</span>
+<span class="fc" id="L52">    return AgricultorResponse.from(agricultorRepository.save(agricultor));</span>
+  }
+
+  public AgricultorResponse consultar(Long id) {
+<span class="fc" id="L56">    Agricultor agricultor = agricultorRepository.findById(id)</span>
+<span class="fc" id="L57">        .orElseThrow(() -&gt; new AgricultorNoEncontradoException(id));</span>
+<span class="fc" id="L58">    return AgricultorResponse.from(agricultor);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

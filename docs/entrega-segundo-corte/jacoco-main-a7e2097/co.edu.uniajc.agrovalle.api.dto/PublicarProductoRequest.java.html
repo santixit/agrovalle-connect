@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PublicarProductoRequest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">agrovalle-connect</a> &gt; <a href="index.source.html" class="el_package">co.edu.uniajc.agrovalle.api.dto</a> &gt; <span class="el_source">PublicarProductoRequest.java</span></div><h1>PublicarProductoRequest.java</h1><pre class="source lang-java linenums">package co.edu.uniajc.agrovalle.api.dto;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+<span class="fc" id="L13">public record PublicarProductoRequest(</span>
+    @NotBlank(message = &quot;Escribe el nombre del producto&quot;)
+    @Size(max = 120, message = &quot;El nombre del producto no puede superar 120 caracteres&quot;)
+    String nombre,
+    @NotBlank(message = &quot;Selecciona o escribe la categoría&quot;)
+    @Size(max = 80, message = &quot;La categoría no puede superar 80 caracteres&quot;)
+    String categoria,
+    @Size(max = 80, message = &quot;El municipio no puede superar 80 caracteres&quot;)
+    String municipio,
+    @NotNull(message = &quot;Indica la cantidad disponible&quot;)
+    @Positive(message = &quot;La cantidad debe ser mayor que cero&quot;)
+    BigDecimal cantidadKg,
+    @NotNull(message = &quot;Indica el precio por kilogramo&quot;)
+    @DecimalMin(value = &quot;0.01&quot;, message = &quot;El precio por kilogramo debe ser mayor que cero&quot;)
+    BigDecimal precioPorKg,
+    @NotNull(message = &quot;Selecciona la fecha de cosecha&quot;)
+    @FutureOrPresent(message = &quot;La fecha de cosecha debe ser hoy o posterior&quot;)
+    @JsonProperty(&quot;fecha_cosecha&quot;) LocalDate fechaCosecha,
+    Long fincaId,
+    Long parcelaId) {
+  public PublicarProductoRequest(String nombre, String categoria, String municipio,
+      BigDecimal cantidadKg, BigDecimal precioPorKg, LocalDate fechaCosecha, Long fincaId) {
+<span class="fc" id="L35">    this(nombre, categoria, municipio, cantidadKg, precioPorKg, fechaCosecha, fincaId, null);</span>
+<span class="fc" id="L36">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>
