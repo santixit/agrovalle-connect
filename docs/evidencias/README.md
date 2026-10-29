@@ -22,8 +22,8 @@
 
 ## CI y cobertura
 
-- [Captura de GitHub Actions #83](ci-run-83.png): ejecución verde en `main`, commit `6c19aae`.
+- [Captura de GitHub Actions #86](ci-run-main-77b5141.png): ejecución verde en `main`, commit `77b5141`, con el título neutral `AgroValle Connect - CI (push | main)`.
 - [Captura del reporte HTML JaCoCo #83](jacoco-main-6c19aae.png): 89% instrucciones, 63% ramas y 91% líneas para el mismo commit.
 - [Reporte HTML completo](../entrega-segundo-corte/jacoco-main-6c19aae/index.html) y [artefacto original de GitHub Actions](https://github.com/santixit/agrovalle-connect/actions/runs/40816952882/artifacts/12873380141).
 
-El run y JaCoCo acreditan el código/pruebas de `main` en `6c19aae`, cuyo árbol de fuentes coincide con el local. Los documentos y exports locales no están incluidos en esa ejecución ni publicados en `main`.
+Actions #86 acredita que `main` pasó Build, tests, Checkstyle, JaCoCo y despliegue en `77b5141`. Las métricas de cobertura provienen del JaCoCo #83 para `6c19aae`; no cambiaron el código ni las pruebas entre ambos commits. El paquete documental y los exports están publicados en `main` mediante PR #59.
