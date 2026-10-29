@@ -1,6 +1,7 @@
 package co.edu.uniajc.agrovalle.domain;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -8,8 +9,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -25,22 +25,15 @@ public class Producto {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "agricultor_id")
-  private Agricultor agricultor;
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "finca_id")
-  private Finca finca;
+  @OneToOne(mappedBy = "producto", fetch = FetchType.LAZY,
+      cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
+  private ProductoUbicacion ubicacion;
 
   @Column(nullable = false, length = 120)
   private String nombre;
 
   @Column(nullable = false, length = 80)
   private String categoria;
-
-  @Column(nullable = false, length = 80)
-  private String municipio;
 
   @Column(nullable = false)
   private boolean activo;
@@ -66,23 +59,58 @@ public class Producto {
   public Producto(String nombre, String categoria, String municipio, boolean activo) {
     this.nombre = nombre;
     this.categoria = categoria;
-    this.municipio = municipio;
+    this.setUbicacion(ProductoUbicacion.sinFinca(this, null, municipio));
     this.activo = activo;
     this.estado = activo ? EstadoProducto.DISPONIBLE : EstadoProducto.AGOTADO;
   }
 
   public Producto(Agricultor agricultor, Finca finca, String nombre, String categoria, String municipio,
       BigDecimal cantidadKg, BigDecimal precioPorKg, LocalDate fechaCosecha) {
-    this.agricultor = agricultor;
-    this.finca = finca;
     this.nombre = nombre;
     this.categoria = categoria;
-    this.municipio = municipio;
+    if (finca == null) {
+      this.setUbicacion(ProductoUbicacion.sinFinca(this, agricultor, municipio));
+    } else {
+      this.setUbicacion(ProductoUbicacion.enParcela(this,
+          new Parcela(finca, "LEGACY", agricultor)));
+    }
     this.cantidadKg = cantidadKg;
     this.precioPorKg = precioPorKg;
     this.fechaCosecha = fechaCosecha;
     this.activo = true;
     this.estado = EstadoProducto.DISPONIBLE;
+  }
+
+  public static Producto enParcela(Parcela parcela, String nombre, String categoria,
+      BigDecimal cantidadKg, BigDecimal precioPorKg, LocalDate fechaCosecha) {
+    Producto producto = new Producto();
+    producto.nombre = nombre;
+    producto.categoria = categoria;
+    producto.cantidadKg = cantidadKg;
+    producto.precioPorKg = precioPorKg;
+    producto.fechaCosecha = fechaCosecha;
+    producto.activo = true;
+    producto.estado = EstadoProducto.DISPONIBLE;
+    producto.setUbicacion(ProductoUbicacion.enParcela(producto, parcela));
+    return producto;
+  }
+
+  public static Producto sinFinca(Agricultor agricultor, String municipio, String nombre,
+      String categoria, BigDecimal cantidadKg, BigDecimal precioPorKg, LocalDate fechaCosecha) {
+    Producto producto = new Producto();
+    producto.nombre = nombre;
+    producto.categoria = categoria;
+    producto.cantidadKg = cantidadKg;
+    producto.precioPorKg = precioPorKg;
+    producto.fechaCosecha = fechaCosecha;
+    producto.activo = true;
+    producto.estado = EstadoProducto.DISPONIBLE;
+    producto.setUbicacion(ProductoUbicacion.sinFinca(producto, agricultor, municipio));
+    return producto;
+  }
+
+  private void setUbicacion(ProductoUbicacion nuevaUbicacion) {
+    this.ubicacion = nuevaUbicacion;
   }
 
   public Long getId() {
@@ -98,7 +126,7 @@ public class Producto {
   }
 
   public String getMunicipio() {
-    return municipio;
+    return ubicacion == null ? null : ubicacion.getMunicipio();
   }
 
   public boolean isActivo() {
@@ -106,11 +134,20 @@ public class Producto {
   }
 
   public Finca getFinca() {
-    return finca;
+    return ubicacion == null || ubicacion.getParcela() == null
+        ? null : ubicacion.getParcela().getFinca();
   }
 
   public Agricultor getAgricultor() {
-    return agricultor;
+    return ubicacion == null ? null : ubicacion.getAgricultorActual();
+  }
+
+  public Parcela getParcela() {
+    return ubicacion == null ? null : ubicacion.getParcela();
+  }
+
+  public ProductoUbicacion getUbicacion() {
+    return ubicacion;
   }
 
   public BigDecimal getCantidadKg() {

@@ -17,7 +17,11 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
   List<Pedido> buscarDelComprador(@Param("usuarioId") Long usuarioId);
 
   @Query("select distinct p from Pedido p join fetch p.detalles d join fetch d.producto pr "
-      + "where pr.agricultor.usuario.id = :usuarioId and p.estado in :estados "
+      + "join pr.ubicacion u left join u.parcela parcela "
+      + "left join parcela.agricultorResponsableActual responsable "
+      + "left join u.agricultorSinFinca independiente "
+      + "where (responsable.usuario.id = :usuarioId or independiente.usuario.id = :usuarioId) "
+      + "and p.estado in :estados "
       + "order by p.creadoEn asc")
   List<Pedido> buscarParaAgricultor(@Param("usuarioId") Long usuarioId,
       @Param("estados") Collection<EstadoPedido> estados);

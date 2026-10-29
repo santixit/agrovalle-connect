@@ -22,9 +22,11 @@
 
 ## CI y cobertura
 
-- [Integración continua de Sesión 10](integracion-continua-sesion10.md): workflow y tres quality gates, simulación de fallo con recuperación verde y PR #61 en espera de aprobación por pares.
+- [Integración continua de Sesión 10](integracion-continua-sesion10.md): workflow y tres quality gates, simulación de fallo, corrección, aprobación y merge del PR #61; CI verde en el commit final de `main`.
+- [Demostración técnica complementaria de staging (2026-10-29)](demo-staging-sprint2-2026-10-29.md): página, salud y catálogo verificados con solicitudes GET; incluye límites y guion reproducible.
+- [GitHub Actions #97 en `main`](https://github.com/santixit/agrovalle-connect/actions/runs/40875809295): Success para el commit final `59e3256`; incluye el job de calidad, despliegue a staging y [artefacto JaCoCo del mismo run](https://github.com/santixit/agrovalle-connect/actions/runs/40875809295/artifacts/12897992950). La [captura visual #97](ci-run-main-59e3256.png) corresponde al mismo run y commit.
 - [Captura de GitHub Actions #86](ci-run-main-77b5141.png): ejecución verde en `main`, commit `77b5141`, con el título neutral `AgroValle Connect - CI (push | main)`.
 - [Captura del reporte HTML JaCoCo #83](jacoco-main-6c19aae.png): 89% instrucciones, 63% ramas y 91% líneas para el mismo commit.
 - [Reporte HTML completo](../entrega-segundo-corte/jacoco-main-6c19aae/index.html) y [artefacto original de GitHub Actions](https://github.com/santixit/agrovalle-connect/actions/runs/40816952882/artifacts/12873380141).
 
-Actions #86 acredita que `main` pasó Build, tests, Checkstyle, JaCoCo y despliegue en `77b5141`. Las métricas de cobertura provienen del JaCoCo #83 para `6c19aae`; no cambiaron el código ni las pruebas entre ambos commits. El paquete documental y los exports están publicados en `main` mediante PR #59.
+Actions #97 acredita que el `main` actual pasó Build, tests, Checkstyle, JaCoCo y despliegue en `59e3256`. Las métricas de cobertura 89% de instrucciones, 63% de ramas y 91% de líneas provienen del HTML JaCoCo #83 para `6c19aae`; se verificó que no cambiaron el código ni las pruebas hasta `59e3256`. El paquete documental y los exports están publicados en `main` mediante los PR #59, #60 y #61.

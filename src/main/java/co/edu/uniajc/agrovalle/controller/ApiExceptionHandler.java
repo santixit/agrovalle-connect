@@ -90,6 +90,12 @@ public class ApiExceptionHandler {
     return ResponseEntity.badRequest().body(Map.of("error", exception.getMessage()));
   }
 
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<Map<String, String>> argumentoInvalido(
+      IllegalArgumentException exception) {
+    return ResponseEntity.badRequest().body(Map.of("error", exception.getMessage()));
+  }
+
   @ExceptionHandler(EstadoProductoInvalidoException.class)
   public ResponseEntity<Map<String, String>> estadoProductoInvalido(
       EstadoProductoInvalidoException exception) {

@@ -24,9 +24,8 @@ public class CatalogoProductoService {
     String categoriaNormalizada = normalizarFiltro(categoria);
     List<Producto> productos;
     if (municipioNormalizado != null && categoriaNormalizada != null) {
-      productos = productoRepository
-          .findByActivoTrueAndMunicipioIgnoreCaseAndCategoriaIgnoreCase(
-              municipioNormalizado, categoriaNormalizada);
+      productos = productoRepository.findByActivoTrueAndMunicipioIgnoreCaseAndCategoriaIgnoreCase(
+          municipioNormalizado, categoriaNormalizada);
     } else if (municipioNormalizado != null) {
       productos = productoRepository.findByActivoTrueAndMunicipioIgnoreCase(municipioNormalizado);
     } else if (categoriaNormalizada != null) {

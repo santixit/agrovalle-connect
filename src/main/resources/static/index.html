@@ -102,7 +102,7 @@
           <h2 id="publicar-titulo">Publicar cosecha</h2>
           <p class="section-intro">Comparte la disponibilidad de tu finca con compradores de la región.</p>
           <form id="producto-form" class="publish-form">
-            <label>Finca<select name="fincaId" id="finca-select"><option value="">Selecciona una finca</option></select></label>
+            <label>Parcela (opcional)<select name="parcelaId" id="parcela-select"><option value="">Sin finca asociada</option></select></label>
           <label>Producto y variedad<input name="nombre" maxlength="120" required></label>
             <label>Categoría<input name="categoria" maxlength="80" required></label>
             <label>Municipio<input name="municipio" maxlength="80" required></label>
@@ -126,6 +126,11 @@
               <label>Municipio<input name="municipio" maxlength="80" required></label>
               <label>Dirección o vereda<input name="direccion" maxlength="200" required></label>
               <button>Registrar finca</button>
+            </form>
+            <form id="parcela-form" class="farm-form">
+              <label>Finca para la nueva parcela<select name="fincaId" id="parcela-finca-select" required><option value="">Selecciona una finca</option></select></label>
+              <label>Código de parcela<input name="codigo" maxlength="80" required placeholder="Ej. Parcela norte"></label>
+              <button>Registrar parcela</button>
             </form>
             <p id="farm-status" class="status" role="status"></p>
           </section>
@@ -342,17 +347,23 @@
       try {
         const fincas = await request('/fincas');
         fincasRegistradas = fincas;
-        const select = byId('finca-select');
+        const farmSelect = byId('parcela-finca-select');
+        farmSelect.replaceChildren(new Option('Selecciona una finca', ''));
+        fincas.forEach((finca) => farmSelect.add(new Option(`${finca.nombre} · ${finca.municipio}`, finca.id)));
+        const parcelas = await request('/parcelas/mias');
+        const select = byId('parcela-select');
         select.replaceChildren(new Option('Sin finca asociada', ''));
-        fincas.forEach((finca) => {
-          const option = new Option(`${finca.nombre} · ${finca.municipio}`, finca.id);
-          option.dataset.municipio = finca.municipio;
+        parcelas.forEach((parcela) => {
+          const option = new Option(`${parcela.finca} · ${parcela.codigo} · ${parcela.municipio}`, parcela.id);
+          option.dataset.municipio = parcela.municipio;
           select.add(option);
         });
         const draft = JSON.parse(localStorage.getItem(draftKey) || 'null');
-        if (draft?.fincaId) select.value = draft.fincaId;
+        if (draft?.parcelaId) select.value = draft.parcelaId;
         const selectedMunicipality = select.selectedOptions[0]?.dataset.municipio;
-        if (selectedMunicipality) byId('producto-form').elements.namedItem('municipio').value = selectedMunicipality;
+        const municipalityField = byId('producto-form').elements.namedItem('municipio');
+        if (selectedMunicipality) municipalityField.value = selectedMunicipality;
+        municipalityField.readOnly = Boolean(selectedMunicipality);
         renderFincas();
       } catch (error) { tell('farm-status', error.message); }
     }
@@ -371,9 +382,12 @@
         more.textContent = mostrarTodasFincas ? 'Ver menos' : 'Ver más';
     }
     byId('ver-mas-fincas').addEventListener('click', () => { mostrarTodasFincas = !mostrarTodasFincas; renderFincas(); });
-    byId('finca-select').addEventListener('change', (event) => {
+    byId('parcela-select').addEventListener('change', (event) => {
       const municipality = event.currentTarget.selectedOptions[0]?.dataset.municipio;
-      if (municipality) byId('producto-form').elements.namedItem('municipio').value = municipality;
+      const field = byId('producto-form').elements.namedItem('municipio');
+      field.readOnly = Boolean(municipality);
+      if (municipality) field.value = municipality;
+      else field.value = '';
     });
     byId('finca-form').addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -382,12 +396,23 @@
         tell('farm-status', 'Finca registrada correctamente.'); form.reset(); await cargarFincas();
       } catch (error) { tell('farm-status', error.message); }
     });
+    byId('parcela-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const data = formData(form);
+      const fincaId = Number(data.fincaId);
+      delete data.fincaId;
+      try {
+        await request(`/fincas/${fincaId}/parcelas`, { method: 'POST', body: JSON.stringify(data) });
+        tell('farm-status', 'Parcela registrada correctamente.'); form.reset(); await cargarFincas();
+      } catch (error) { tell('farm-status', error.message); }
+    });
     byId('producto-form').addEventListener('submit', async (event) => {
       event.preventDefault();
       const form = event.currentTarget;
       const data = formData(form);
       data.cantidadKg = Number(data.cantidadKg); data.precioPorKg = Number(data.precioPorKg);
-      data.fincaId = data.fincaId ? Number(data.fincaId) : null;
+      data.parcelaId = data.parcelaId ? Number(data.parcelaId) : null;
       try { await request('/productos', { method: 'POST', body: JSON.stringify(data) });
         localStorage.removeItem(draftKey);
         tell('product-status', 'Oferta publicada correctamente.'); form.reset(); setHarvestDateMinimum();

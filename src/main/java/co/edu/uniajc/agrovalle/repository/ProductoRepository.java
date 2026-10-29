@@ -20,12 +20,50 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
 
   List<Producto> findByActivoTrue();
 
-  List<Producto> findByAgricultor_Usuario_IdOrderByCreadoEnDesc(Long usuarioId);
+  @Query("select p from Producto p join p.ubicacion u left join u.parcela parcela "
+      + "left join parcela.agricultorResponsableActual responsable "
+      + "left join u.agricultorSinFinca independiente "
+      + "where responsable.usuario.id = :usuarioId or independiente.usuario.id = :usuarioId "
+      + "order by p.creadoEn desc")
+  List<Producto> buscarDelAgricultor(@Param("usuarioId") Long usuarioId);
 
-  List<Producto> findByActivoTrueAndMunicipioIgnoreCase(String municipio);
+  @Query("select p from Producto p join p.ubicacion u left join u.parcela parcela "
+      + "left join parcela.agricultorResponsableActual responsable "
+      + "left join u.agricultorSinFinca independiente "
+      + "where responsable.usuario.id = :usuarioId or independiente.usuario.id = :usuarioId "
+      + "order by p.creadoEn desc")
+  List<Producto> findByAgricultor_Usuario_IdOrderByCreadoEnDesc(
+      @Param("usuarioId") Long usuarioId);
+
+  @Query("select p from Producto p join p.ubicacion u left join u.parcela parcela "
+      + "left join parcela.finca finca where p.activo = true "
+      + "and lower(coalesce(finca.municipio, u.municipioSinFinca)) = lower(:municipio)")
+  List<Producto> buscarActivosPorMunicipio(
+      @Param("municipio") String municipio);
+
+  @Query("select p from Producto p join p.ubicacion u left join u.parcela parcela "
+      + "left join parcela.finca finca where p.activo = true "
+      + "and lower(coalesce(finca.municipio, u.municipioSinFinca)) = lower(:municipio)")
+  List<Producto> findByActivoTrueAndMunicipioIgnoreCase(@Param("municipio") String municipio);
 
   List<Producto> findByActivoTrueAndCategoriaIgnoreCase(String categoria);
 
+  @Query("select p from Producto p join p.ubicacion u left join u.parcela parcela "
+      + "left join parcela.finca finca where p.activo = true "
+      + "and lower(coalesce(finca.municipio, u.municipioSinFinca)) = lower(:municipio) "
+      + "and lower(p.categoria) = lower(:categoria)")
+  List<Producto> buscarActivosPorMunicipioYCategoria(
+      @Param("municipio") String municipio,
+      @Param("categoria") String categoria);
+
+  @Query("select p from Producto p join p.ubicacion u left join u.parcela parcela "
+      + "left join parcela.finca finca where p.activo = true "
+      + "and lower(coalesce(finca.municipio, u.municipioSinFinca)) = lower(:municipio) "
+      + "and lower(p.categoria) = lower(:categoria)")
   List<Producto> findByActivoTrueAndMunicipioIgnoreCaseAndCategoriaIgnoreCase(
-      String municipio, String categoria);
+      @Param("municipio") String municipio, @Param("categoria") String categoria);
+
+  @Query("select p from Producto p join p.ubicacion u where u.parcela.id = :parcelaId")
+  List<Producto> findByParcelaId(
+      @Param("parcelaId") Long parcelaId);
 }

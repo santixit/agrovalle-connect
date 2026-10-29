@@ -42,6 +42,10 @@ public class SecurityConfiguration {
                 .hasAuthority("SCOPE_AGRICULTOR")
             .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/productos/mias")
                 .hasAuthority("SCOPE_AGRICULTOR")
+            .requestMatchers(org.springframework.http.HttpMethod.POST,
+                "/api/v1/productos/*/transferencias").hasAuthority("SCOPE_AGRICULTOR")
+            .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/parcelas/mias")
+                .hasAuthority("SCOPE_AGRICULTOR")
             .requestMatchers(org.springframework.http.HttpMethod.PATCH,
                 "/api/v1/productos/*/estado").hasAuthority("SCOPE_AGRICULTOR")
             .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/contactos")

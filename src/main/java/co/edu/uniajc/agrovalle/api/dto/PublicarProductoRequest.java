@@ -17,7 +17,6 @@ public record PublicarProductoRequest(
     @NotBlank(message = "Selecciona o escribe la categoría")
     @Size(max = 80, message = "La categoría no puede superar 80 caracteres")
     String categoria,
-    @NotBlank(message = "Escribe el municipio de origen")
     @Size(max = 80, message = "El municipio no puede superar 80 caracteres")
     String municipio,
     @NotNull(message = "Indica la cantidad disponible")
@@ -29,4 +28,10 @@ public record PublicarProductoRequest(
     @NotNull(message = "Selecciona la fecha de cosecha")
     @FutureOrPresent(message = "La fecha de cosecha debe ser hoy o posterior")
     @JsonProperty("fecha_cosecha") LocalDate fechaCosecha,
-    Long fincaId) { }
+    Long fincaId,
+    Long parcelaId) {
+  public PublicarProductoRequest(String nombre, String categoria, String municipio,
+      BigDecimal cantidadKg, BigDecimal precioPorKg, LocalDate fechaCosecha, Long fincaId) {
+    this(nombre, categoria, municipio, cantidadKg, precioPorKg, fechaCosecha, fincaId, null);
+  }
+}
