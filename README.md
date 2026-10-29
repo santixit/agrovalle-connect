@@ -13,11 +13,14 @@ Para pequeños y medianos productores del Valle del Cauca que necesitan vender s
 - Repositorio: [santixit/agrovalle-connect](https://github.com/santixit/agrovalle-connect)
 - Tablero Kanban: [Agrovalle-Kamba](https://github.com/users/santixit/projects/3/views/1)
 - Aplicación publicada en staging: [AgroValle Connect](https://agrovalle-connect-staging.onrender.com/)
-## Integrantes y metodología real de trabajo del equipo
+## Integrantes y roles
 
-El equipo trabaja de manera informal y asíncrona, principalmente mediante issues, mensajes, commits y Pull Requests. No realiza reuniones formales de Scrum ni mantiene roles fijos. Los nombres de roles Scrum que aparecieron en documentos anteriores se incluyeron como formato académico y no describen asignaciones efectivas. La priorización, revisión y coordinación se comparten; para cada tarea se puede acordar una persona que la impulse, sin convertir esa asignación puntual en un rol permanente. Los registros retrospectivos de Sprint 1 y Sesión 6 aclaran qué se puede verificar y qué debe validar el equipo.
-
-Integrantes registrados del proyecto: Danny Alexander Gomez, Michelle Guerrero Arboleda, Starlin Gomez Asprilla y Raul Santiago Carrillo Hernandez. Esta lista no asigna responsabilidades permanentes.
+| Integrante | Rol / responsabilidad |
+|---|---|
+| Danny Alexander Gómez | Scrum Master / facilitación |
+| Michelle Guerrero Arboleda | Developer |
+| Starlin Gómez Asprilla | Developer / pruebas y calidad |
+| Raúl Santiago Carrillo Hernández | Product Owner / gestión del Product Backlog |
 
 ## Estado funcional
 
