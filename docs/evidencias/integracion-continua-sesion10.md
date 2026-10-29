@@ -18,8 +18,11 @@ El 29 de octubre de 2026 se cambió temporalmente la expectativa de una prueba d
 
 - Ejecución roja: [GitHub Actions #91](https://github.com/santixit/agrovalle-connect/actions/runs/40873499803), commit `78362cf`, rama `feature/sesion10-ci`. El job falló en Maven con 51 pruebas, 1 fallo y 0 errores; Checkstyle, JaCoCo y E2E no se ejecutaron porque `clean verify` terminó en el test fallido.
 - PR de demostración: [#61](https://github.com/santixit/agrovalle-connect/pull/61), abierto contra `main`. GitHub marcó el check de CI como requerido y el merge quedó deshabilitado. La regla también exige al menos una aprobación, por lo que el autor no puede completar el merge.
+- Corrección local: se restauró la expectativa `1900.01`. `mvnw --batch-mode --no-transfer-progress clean verify` terminó con 51 pruebas aprobadas, 0 violaciones Checkstyle y todos los umbrales JaCoCo cumplidos.
+- CI verde: el check de Pull Request [#94](https://github.com/santixit/agrovalle-connect/actions/runs/40873938802) pasó en 1m51s. El evento `push` [#93](https://github.com/santixit/agrovalle-connect/actions/runs/40873934154) tuvo un primer intento con fallo al iniciar el servidor Playwright; el segundo intento pasó en 2m11s con el mismo commit `86cba9a`. Ambos generaron artefactos JaCoCo.
+- Revisión: se solicitó aprobación a DannyGomez02, integrante del equipo que ya ha revisado PRs del repositorio. La aprobación sigue pendiente.
 
-La aserción temporal se restauró a `1900.01` en esta misma rama. La verificación CI verde de la corrección y el estado de revisión por pares se registrarán cuando estén disponibles. No se considera completado el merge hasta que un compañero del equipo apruebe el PR.
+No se considera completado el merge hasta que un compañero del equipo apruebe el PR.
 
 ## Protección de `main`
 
