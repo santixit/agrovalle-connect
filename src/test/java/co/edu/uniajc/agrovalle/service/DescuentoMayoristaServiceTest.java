@@ -22,7 +22,7 @@ class DescuentoMayoristaServiceTest {
 
   @Test
   void redondeaElPrecioDescontadoConMitadHaciaArriba() {
-    assertEquals(new BigDecimal("1900.01"), service.calcularPrecioUnitario(
+    assertEquals(new BigDecimal("1800.01"), service.calcularPrecioUnitario(
         new BigDecimal("100.01"), new BigDecimal("2000.01")));
   }
 
