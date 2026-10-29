@@ -12,7 +12,7 @@ component "Servicios\n@Service / @Transactional" as Services
 component "Dominio\n@Entity / reglas / eventos" as Domain
 component "Repositorios\nSpring Data JPA" as Repositories
 database "PostgreSQL\nEsquema agrovalle_connect" as DB
-component "Flyway\nMigraciones V1-V4" as Flyway
+component "Flyway\nMigraciones V1-V6" as Flyway
 component "GitHub Actions\nBuild / Test / Checkstyle / JaCoCo" as CI
 
 Browser --> Web : HTTPS / archivos estaticos

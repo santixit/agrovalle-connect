@@ -9,7 +9,7 @@ La aplicacion es un monolito Spring Boot 3.3.4 sobre Java 17. El navegador consu
 | 1. Presentacion y API REST | Recibir HTTP, validar entradas, serializar DTO y responder codigos HTTP. | `src/main/resources/static/`; `controller/`; `api/dto/`; `ApiExceptionHandler`. |
 | 2. Servicio y dominio | Aplicar reglas, coordinar transacciones y expresar entidades/reglas del dominio. | `service/` y `domain/`; `@Service`, `@Transactional`, excepciones de dominio. |
 | 3. Repositorio y acceso a datos | Abstraer consultas y operaciones CRUD del almacenamiento. | `repository/`; interfaces Spring Data JPA. |
-| 4. Persistencia relacional | Guardar datos y restricciones con integridad transaccional. | PostgreSQL; `src/main/resources/db/migration/V1` a `V4`; entidades `@Entity`. |
+| 4. Persistencia relacional | Guardar datos y restricciones con integridad transaccional. | PostgreSQL; `src/main/resources/db/migration/V1` a `V6`; entidades `@Entity`. |
 
 ## Mapeo del DER a entidades JPA
 
@@ -56,7 +56,7 @@ La topologia vigente se representa en [diagrama-despliegue.puml](diagrama-despli
 
 ## Restricciones y trazabilidad
 
-- `schema.sql` en esta carpeta es una vista consolidada solo para lectura; Flyway V1-V4 son la autoridad ejecutable.
+- `schema.sql` en esta carpeta es una vista consolidada solo para lectura; Flyway V1-V6 son la autoridad ejecutable.
 - Los perfiles de agricultor historicos pueden no tener cuenta `Usuario`, por eso la relacion de cuenta es opcional.
 - Una oferta puede conservar municipio propio y una finca opcional para soportar registros historicos; el modelo no debe asumir que todo producto tiene finca.
 - Los detalles de pedido conservan precio y cantidad como instantanea de la transaccion, aunque cambien los datos actuales de la oferta.

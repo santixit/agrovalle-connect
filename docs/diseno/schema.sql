@@ -1,8 +1,9 @@
--- Snapshot de referencia derivado de Flyway V1-V6 para evaluacion del Sprint de Diseno.
--- No se ejecuta en el arranque. La fuente de verdad son las migraciones versionadas.
--- Para una base vacia, use Flyway; no ejecute este archivo sobre una BD ya migrada.
+-- Snapshot consolidado de referencia de las migraciones Flyway V1-V6.
+-- Solo lectura: no ejecutar junto con Flyway ni usar como migración.
 
--- ===== V1__create_agricultores_y_productos.sql =====
+-- ============================================================================
+-- V1__create_agricultores_y_productos.sql
+-- ============================================================================
 CREATE TABLE agricultores (
     id BIGSERIAL PRIMARY KEY,
     nombre VARCHAR(120) NOT NULL,
@@ -21,8 +22,9 @@ CREATE TABLE productos (
 CREATE INDEX idx_productos_municipio_categoria_activo
     ON productos (municipio, categoria, activo);
 
-
--- ===== V2__ampliar_modelo_integrador.sql =====
+-- ============================================================================
+-- V2__ampliar_modelo_integrador.sql
+-- ============================================================================
 -- Modelo relacional base para usuarios, oferta, ventas, contactos y trazabilidad.
 -- Las tablas de HU-01 y HU-04 existentes se conservan y amplían sin perder registros.
 
@@ -50,11 +52,6 @@ CREATE TABLE compradores (
     tipo_comercio VARCHAR(80),
     creado_en TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
-
-ALTER TABLE agricultores ADD COLUMN tipo_documento VARCHAR(30);
-ALTER TABLE agricultores ADD COLUMN telefono VARCHAR(30);
-ALTER TABLE compradores ADD COLUMN tipo_documento VARCHAR(30);
-ALTER TABLE compradores ADD COLUMN cedula VARCHAR(30);
 
 CREATE TABLE fincas (
     id BIGSERIAL PRIMARY KEY,
@@ -112,9 +109,6 @@ CREATE TABLE despachos (
     fecha_programada DATE NOT NULL,
     franja_horaria VARCHAR(80) NOT NULL,
     ruta VARCHAR(300),
-    municipio_destino VARCHAR(80),
-    peso_total_kg NUMERIC(12, 2),
-    costo_flete NUMERIC(12, 2),
     creado_en TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT ck_despachos_estado
         CHECK (estado IN ('PROGRAMADO', 'EN_RUTA', 'ENTREGADO', 'CANCELADO'))
@@ -172,16 +166,39 @@ CREATE TABLE transacciones_precio (
 CREATE INDEX idx_transacciones_precio_producto_fecha
     ON transacciones_precio (producto_id, ocurrida_en);
 
-
--- ===== V3__fecha_creacion_productos.sql =====
+-- ============================================================================
+-- V3__fecha_creacion_productos.sql
+-- ============================================================================
 ALTER TABLE productos ADD COLUMN creado_en TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
 CREATE INDEX idx_productos_creado_en ON productos (creado_en);
 
-
--- ===== V4__estado_en_ruta.sql =====
+-- ============================================================================
+-- V4__estado_en_ruta.sql
+-- ============================================================================
 ALTER TABLE pedidos DROP CONSTRAINT ck_pedidos_estado;
 
 ALTER TABLE pedidos ADD CONSTRAINT ck_pedidos_estado
     CHECK (estado IN ('PENDIENTE', 'CONFIRMADO', 'PREPARANDO', 'EN_DESPACHO',
                       'EN_RUTA', 'ENTREGADO', 'CANCELADO'));
+
+-- ============================================================================
+-- V5__agregar_calculo_flete_a_despachos.sql
+-- ============================================================================
+ALTER TABLE despachos
+    ADD COLUMN municipio_destino VARCHAR(80);
+
+ALTER TABLE despachos
+    ADD COLUMN peso_total_kg NUMERIC(12, 2);
+
+ALTER TABLE despachos
+    ADD COLUMN costo_flete NUMERIC(12, 2);
+
+-- ============================================================================
+-- V6__agregar_datos_de_contacto_y_documento.sql
+-- ============================================================================
+ALTER TABLE agricultores ADD COLUMN tipo_documento VARCHAR(30);
+ALTER TABLE agricultores ADD COLUMN telefono VARCHAR(30);
+
+ALTER TABLE compradores ADD COLUMN tipo_documento VARCHAR(30);
+ALTER TABLE compradores ADD COLUMN cedula VARCHAR(30);

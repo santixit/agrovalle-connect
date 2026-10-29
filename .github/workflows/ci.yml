@@ -1,4 +1,5 @@
 name: Continuous Integration
+run-name: AgroValle Connect - CI (${{ github.event_name }} | ${{ github.ref_name }})
 
 on:
   push:

@@ -22,7 +22,7 @@ La síntesis del [issue #46](https://github.com/santixit/agrovalle-connect/issue
 ## Artefactos revisados
 
 - [Mockups de interfaz](mockups-ui.pdf) y sus fuentes PNG en `mockups/`.
-- Modelos y DDL de referencia: `modelo-entidad-relacion.mmd`, `modelo-datos-der.mmd`, `schema.sql` y migraciones Flyway V1–V4.
+- Modelos y DDL de referencia: `modelo-entidad-relacion.mmd`, `modelo-datos-der.mmd`, `schema.sql` y migraciones Flyway V1–V6.
 - [Reconciliación entre DER propuesto e implementado](reconciliacion-der.md).
 - [Comparación Backlog/Sprint Planning](../evidencias/comparacion-historias-backlog-sprint1.md).
 

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Comprador.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">agrovalle-connect</a> &gt; <a href="index.source.html" class="el_package">co.edu.uniajc.agrovalle.domain</a> &gt; <span class="el_source">Comprador.java</span></div><h1>Comprador.java</h1><pre class="source lang-java linenums">package co.edu.uniajc.agrovalle.domain;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import java.time.LocalDateTime;
+
+/** Buyer profile linked to a role-bearing account. */
+@Entity
+@Table(name = &quot;compradores&quot;)
+public class Comprador {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  @OneToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = &quot;usuario_id&quot;, nullable = false, unique = true)
+  private Usuario usuario;
+
+  @Column(nullable = false, length = 120)
+  private String nombre;
+
+  @Column(name = &quot;tipo_documento&quot;, length = 30)
+  private String tipoDocumento;
+
+  @Column(length = 30)
+  private String cedula;
+
+  @Column(length = 30)
+  private String telefono;
+
+  @Column(name = &quot;tipo_comercio&quot;, length = 80)
+  private String tipoComercio;
+
+<span class="fc" id="L42">  @Column(name = &quot;creado_en&quot;, nullable = false)</span>
+<span class="fc" id="L43">  private LocalDateTime creadoEn = LocalDateTime.now();</span>
+
+<span class="fc" id="L45">  protected Comprador() { }</span>
+
+  public Comprador(Usuario usuario, String nombre, String telefono, String tipoComercio) {
+<span class="fc" id="L48">    this(usuario, nombre, null, null, telefono, tipoComercio);</span>
+<span class="fc" id="L49">  }</span>
+
+  public Comprador(Usuario usuario, String nombre, String tipoDocumento, String cedula,
+<span class="fc" id="L52">      String telefono, String tipoComercio) {</span>
+<span class="fc" id="L53">    this.usuario = usuario;</span>
+<span class="fc" id="L54">    this.nombre = nombre;</span>
+<span class="fc" id="L55">    this.tipoDocumento = tipoDocumento;</span>
+<span class="fc" id="L56">    this.cedula = cedula;</span>
+<span class="fc" id="L57">    this.telefono = telefono;</span>
+<span class="fc" id="L58">    this.tipoComercio = tipoComercio;</span>
+<span class="fc" id="L59">  }</span>
+
+  public Long getId() {
+<span class="fc" id="L62">    return id;</span>
+  }
+
+  public Usuario getUsuario() {
+<span class="fc" id="L66">    return usuario;</span>
+  }
+
+  public String getNombre() {
+<span class="fc" id="L70">    return nombre;</span>
+  }
+
+  public String getTelefono() {
+<span class="fc" id="L74">    return telefono;</span>
+  }
+
+  public String getTipoDocumento() {
+<span class="nc" id="L78">    return tipoDocumento;</span>
+  }
+
+  public String getCedula() {
+<span class="nc" id="L82">    return cedula;</span>
+  }
+
+  public String getTipoComercio() {
+<span class="fc" id="L86">    return tipoComercio;</span>
+  }
+
+  public LocalDateTime getCreadoEn() {
+<span class="fc" id="L90">    return creadoEn;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

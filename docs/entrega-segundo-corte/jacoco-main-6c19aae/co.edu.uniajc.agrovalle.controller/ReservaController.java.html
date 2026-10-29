@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReservaController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">agrovalle-connect</a> &gt; <a href="index.source.html" class="el_package">co.edu.uniajc.agrovalle.controller</a> &gt; <span class="el_source">ReservaController.java</span></div><h1>ReservaController.java</h1><pre class="source lang-java linenums">package co.edu.uniajc.agrovalle.controller;
+
+import co.edu.uniajc.agrovalle.api.dto.ReservaRequest;
+import co.edu.uniajc.agrovalle.api.dto.ReservaResponse;
+import co.edu.uniajc.agrovalle.api.dto.ReservaCarritoRequest;
+import co.edu.uniajc.agrovalle.api.dto.CarritoReservaResponse;
+import co.edu.uniajc.agrovalle.service.ReservaService;
+import jakarta.validation.Valid;
+import java.net.URI;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping(&quot;/api/v1/reservas&quot;)
+public class ReservaController {
+  private final ReservaService reservaService;
+
+<span class="fc" id="L24">  public ReservaController(ReservaService reservaService) {</span>
+<span class="fc" id="L25">    this.reservaService = reservaService;</span>
+<span class="fc" id="L26">  }</span>
+
+  @PostMapping
+  public ResponseEntity&lt;ReservaResponse&gt; reservar(@AuthenticationPrincipal Jwt jwt,
+      @Valid @RequestBody ReservaRequest request) {
+<span class="fc" id="L31">    ReservaResponse response = reservaService.reservar(Long.valueOf(jwt.getSubject()), request);</span>
+<span class="fc" id="L32">    return ResponseEntity.created(URI.create(&quot;/api/v1/reservas/&quot; + response.id()))</span>
+<span class="fc" id="L33">        .body(response);</span>
+  }
+
+  @PostMapping(&quot;/carrito&quot;)
+  public ResponseEntity&lt;CarritoReservaResponse&gt; reservarCarrito(
+      @AuthenticationPrincipal Jwt jwt, @Valid @RequestBody ReservaCarritoRequest request) {
+<span class="fc" id="L39">    CarritoReservaResponse response = reservaService.reservarCarrito(</span>
+<span class="fc" id="L40">        Long.valueOf(jwt.getSubject()), request);</span>
+<span class="fc" id="L41">    return ResponseEntity.status(HttpStatus.CREATED).body(response);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>
