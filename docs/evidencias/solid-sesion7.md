@@ -1,28 +1,51 @@
-# Evidencia SOLID — Sesion 7 y Sprint 2
+# Refactor SOLID antes/después — Sesión 7
 
-## Cambio verificable
+## Cambio evaluado
 
-El commit `89edf4f` (`feat: apply kanban solid and test strategy`), ya integrado en `main`, separo responsabilidades que antes estaban concentradas en `ProductoService`:
+El commit [`89edf4f`](https://github.com/santixit/agrovalle-connect/commit/89edf4f) separó dos responsabilidades que estaban juntas en `ProductoService`: consultar el catálogo y gestionar operaciones de escritura sobre productos. La separación principal demuestra **SRP (Single Responsibility Principle)** en este límite concreto; no certifica que todo el sistema cumpla SOLID.
 
-- `CatalogoProductoService` concentra consultas de catalogo.
-- `GestionProductoService` concentra operaciones de escritura y gestion transaccional.
-- `ProductoController` delega lectura y escritura en los servicios correspondientes.
-- `CatalogoProductoServiceTest` y `GestionProductoServiceTest` prueban los comportamientos aislados de ambos componentes.
+## Antes del cambio
 
-La separacion aplica principalmente **SRP**. El commit y los archivos son evidencia auditable; las pruebas agregadas son regresion del comportamiento existente y no se presentan como TDD retrospectivo.
+`ProductoService` concentraba responsabilidades y dependencias diferentes:
 
-## Mapeo de los cinco principios solicitado en el segundo corte
-
-| Principio | Ejemplo observable | Alcance de la evidencia |
+| Responsabilidad | Métodos que estaban en `ProductoService` | Dependencias asociadas |
 |---|---|---|
-| SRP | `CatalogoProductoService` atiende consultas; `GestionProductoService` publica y cambia estado; `ProductoController` delega en ambos. | Separacion concreta que reduce responsabilidades mezcladas en el servicio anterior. |
-| OCP | `CalculadorFleteService` recibe un mapa de `CalculadorFleteStrategy`; `FleteBugaStrategy`, `FleteDaguaStrategy` y `FleteTuluaStrategy` agregan tarifas municipales. | Para agregar un municipio soportado se incorpora otra estrategia; no hace falta cambiar el calculador central. Las tarifas son demostrativas. |
-| LSP | Las tres estrategias implementan el mismo contrato `getMunicipio()` / `calcular(pesoKg)` y se entregan al mismo calculador. | `CalculadorFleteServiceTest` ejercita las tres implementaciones. Esto demuestra sustitucion dentro de ese contrato limitado; no es una prueba formal de todas las jerarquias del sistema. |
-| ISP | `CalculadorFleteStrategy` es un contrato pequeno, enfocado en identificar municipio y calcular flete; no obliga a implementar metodos ajenos. | Ejemplo acotado de interfaz por rol. No se afirma que toda la API del proyecto siga ISP. |
-| DIP | `ReservaService` recibe `CalculadorDescuentoAgricola` por constructor y no instancia `DescuentoMayoristaService`; la implementacion concreta satisface la interfaz. | Evidencia de inversion para la regla de descuento. `ProductoController` aun depende de dos servicios concretos, por lo que DIP no se presenta como aplicado universalmente. |
+| Consultar catálogo | `buscar(municipio, categoria)` | `ProductoRepository` |
+| Consultar detalle | `consultarDetalle(id)` | `ProductoRepository` |
+| Publicar producto | `publicar(usuarioId, request)` | `ProductoRepository`, `AgricultorRepository`, `FincaRepository` |
+| Cambiar estado de oferta propia | `actualizarEstado(usuarioId, productoId, request)` | `ProductoRepository`, `AgricultorRepository` |
 
-Los ejemplos OCP/LSP/ISP/DIP corresponden al codigo actualmente integrado en `main`. El test de estrategias valida el calculador con implementaciones concretas; no equivale a una certificacion exhaustiva de LSP.
+La clase tenía `@Transactional(readOnly = true)` a nivel de clase y sobrescribía esa configuración con `@Transactional` en los métodos de escritura. Un mismo servicio debía atender lecturas públicas y reglas de publicación/propiedad/estado, y mantenía juntas dependencias de consulta y de escritura.
 
-## Evidencia del flujo
+## Después del cambio
 
-La politica de entrada a revision, limites WIP y criterios de Done esta en [politicas Kanban](../kanban-policies.md). El snapshot de conteos disponible y sus limites se registra en [metricas de la Sesion 7](kanban-metricas-sesion7.md). No hay base documental para atribuir metricas historicas a este refactor.
+| Componente actual | Responsabilidad enfocada | Transacción / dependencia principal |
+|---|---|---|
+| [`CatalogoProductoService`](../../src/main/java/co/edu/uniajc/agrovalle/service/CatalogoProductoService.java) | Filtrar productos, listar los del agricultor y consultar el detalle público. | `@Transactional(readOnly = true)`; depende de `ProductoRepository`. |
+| [`GestionProductoService`](../../src/main/java/co/edu/uniajc/agrovalle/service/GestionProductoService.java) | Publicar productos y cambiar el estado de una oferta del agricultor autenticado. | `@Transactional`; depende de los repositorios que necesita para resolver agricultor, finca/parcela y producto. |
+| [`ProductoController`](../../src/main/java/co/edu/uniajc/agrovalle/controller/ProductoController.java) | Recibir solicitudes HTTP, validar/extraer datos y delegar. | Recibe `CatalogoProductoService`, `GestionProductoService` y `TransferenciaProductoService` por constructor. |
+
+### Ejemplo de delegación posterior al refactor
+
+```java
+// Lectura: el controller no consulta el repositorio directamente.
+return catalogoProductoService.buscar(municipio, categoria);
+
+// Escritura: la operación se delega al servicio de gestión.
+ProductoResponse response = gestionProductoService.publicar(usuarioId, request);
+```
+
+La lectura y escritura tienen ahora puntos de entrada y límites transaccionales distintos. El controller conserva coordinación HTTP, mientras que las reglas del caso de uso permanecen en los servicios.
+
+## Por qué este cambio aporta a SOLID
+
+- **SRP:** catálogo y gestión de cambios tienen motivos de cambio distintos y están en clases separadas.
+- **Responsabilidad transaccional más clara:** las consultas del catálogo son de solo lectura; las operaciones de gestión son transaccionales de escritura.
+- **Pruebas más focalizadas:** existen [`CatalogoProductoServiceTest`](../../src/test/java/co/edu/uniajc/agrovalle/service/CatalogoProductoServiceTest.java) y [`GestionProductoServiceTest`](../../src/test/java/co/edu/uniajc/agrovalle/service/GestionProductoServiceTest.java), separadas por comportamiento.
+- **Límite del resultado:** `ProductoController` sigue dependiendo de servicios concretos y `GestionProductoService` conserva más de un repositorio. Este cambio no demuestra DIP ni SRP globales por sí solo.
+
+## Verificación y alcance de la evidencia
+
+El cambio y los tests aparecen en el commit `89edf4f`; el [workflow #103](https://github.com/santixit/agrovalle-connect/actions/runs/40894179070) ejecutado sobre `main` en `a7e2097` terminó en verde con pruebas, Checkstyle y JaCoCo. El resultado respalda que la suite del commit de `main` pasó; no demuestra una ceremonia de revisión ni que el refactor haya sido desarrollado mediante TDD.
+
+Los otros ejemplos SOLID/GoF implementados están resumidos en [`patrones.md`](../diseno/patrones.md): Strategy para tarifas y descuentos, e inversión de dependencia en el cálculo de descuentos. La evidencia específica antes/después de este documento se limita a los dos servicios de producto descritos arriba.

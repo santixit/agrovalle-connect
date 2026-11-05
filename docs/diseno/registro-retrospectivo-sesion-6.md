@@ -17,12 +17,12 @@ La síntesis del [issue #46](https://github.com/santixit/agrovalle-connect/issue
 | Mockups | El issue registra visto bueno informal, retrospectivo y asíncrono. No constan fecha de actividad ni quién dio el visto bueno. | Confirmación de integrantes que no comentaron: **pendiente**. No se reconstruyen detalles ausentes. |
 | Sprint Discovery | El issue registra que se hizo informalmente y de manera asíncrona, con constancia retrospectiva. No constan fecha exacta ni secuencia frente a la codificación. | Confirmación de integrantes que no comentaron: **pendiente**. |
 | Historias y alcance | El issue adopta el Backlog como versión base de HU-01, HU-07 y HU-04, con criterios técnicos del Sprint Planning como aceptación. HU-04 y HU-07 están ajustadas en el Backlog. | Decisión documentada en el issue #46; confirmación de integrantes que no comentaron: **pendiente**. Ver la [comparación](../evidencias/comparacion-historias-backlog-sprint1.md). |
-| Modelo de datos | El issue acuerda mantener el esquema actual y dejar los catálogos normalizados como mejora futura. Otras decisiones del modelo no aparecen resueltas allí. | Decisión parcial documentada en el issue #46; otras preguntas siguen **pendientes** en [normalización](decisiones-normalizacion.md). |
+| Modelo de datos | El issue acuerda mantener el esquema inicial y dejar los catálogos normalizados como mejora futura. V7 posterior añade parcela, ubicación e historial de transferencia según decisiones de alcance posteriores. | El issue #46 no aprueba retroactivamente V7 ni todas sus reglas; revisar la [reconciliación](reconciliacion-der.md) y solicitar confirmación del PO/equipo sobre el DER vigente. |
 
 ## Artefactos revisados
 
 - [Mockups de interfaz](mockups-ui.pdf) y sus fuentes PNG en `mockups/`.
-- Modelos y DDL de referencia: `modelo-entidad-relacion.mmd`, `modelo-datos-der.mmd`, `schema.sql` y migraciones Flyway V1–V6.
+- Modelos y DDL de referencia: `modelo-entidad-relacion.mmd`, `modelo-datos-der.mmd`, `schema.sql` y migraciones Flyway V1–V7. V7 normaliza la ubicación del producto mediante parcelas y `producto_ubicacion`; la [reconciliación](reconciliacion-der.md) documenta el cambio frente a los DER propuestos.
 - [Reconciliación entre DER propuesto e implementado](reconciliacion-der.md).
 - [Comparación Backlog/Sprint Planning](../evidencias/comparacion-historias-backlog-sprint1.md).
 

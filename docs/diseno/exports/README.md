@@ -10,10 +10,16 @@ Archivos generados:
 - [Secuencia HU-02, publicación](../diagrama-secuencia-publicacion.puml): [PNG](uml-secuencia-publicacion.png).
 - [PDF de cuatro páginas](diagramas-uml.pdf), una página por diagrama exportado.
 
-Para regenerarlos con PlantUML desde la raíz del repositorio:
+Para regenerar los PNG con PlantUML desde la raíz del repositorio:
 
 ```powershell
 java -jar plantuml.jar -tpng -o docs/diseno/exports docs/diseno/diagrama-componentes.puml docs/diseno/diagrama-despliegue.puml docs/diseno/diagrama-secuencia.puml docs/diseno/diagrama-secuencia-publicacion.puml
 ```
 
-Las secuencias tienen fuentes separadas para que cada flujo se renderice en su propia lámina. El PDF reúne ambas secuencias más componentes y despliegue. Si se modifica una fuente, hay que regenerar los PNG y el PDF para mantenerlos sincronizados.
+Las secuencias tienen fuentes separadas para que cada flujo se renderice en su propia lámina. Después de exportar los PNG, reconstruye el PDF con:
+
+```powershell
+python docs/diseno/exports/build_diagramas_pdf.py
+```
+
+El script revisa que existan las cuatro imágenes y crea una página por diagrama. Si se modifica una fuente, hay que regenerar primero los PNG y luego el PDF para mantenerlos sincronizados. La etiqueta de Flyway en el diagrama de componentes refleja las migraciones actuales V1-V7.
