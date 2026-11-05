@@ -1,37 +1,27 @@
-# Sprint 3 — checklist para empezar
+# Sprint 3 — checklist para revisar la propuesta
 
-Usa cuentas y datos de prueba. No pegues contraseñas, tokens ni datos personales reales en capturas o documentos.
+La proyección inicial es HU-02, HU-06, HU-09 y HU-10 (14 SP). Este checklist no indica que el sprint esté aprobado ni iniciado. Usa cuentas y datos sintéticos; no guardes contraseñas, tokens ni información personal real en evidencias.
 
-## Preparación
+## Antes de aceptar el alcance
 
-- [ ] Abre GitHub Projects y busca HU-05 y HU-10.
-- [ ] Confirma si cada historia está abierta, cerrada o en revisión.
-- [ ] Si ambas ya fueron aceptadas, no las vuelvas a mover a Sprint 3: acuerda con el Product Owner qué historias pendientes reemplazan este borrador.
-- [ ] Si siguen pendientes, confirma que el Product Owner acepta revisarlas en este Sprint.
-- [ ] Crea o selecciona una rama de trabajo siguiendo la estrategia vigente del repositorio.
+- [ ] En GitHub Projects, revisa el estado real de HU-02, HU-06, HU-09 y HU-10.
+- [ ] Pide al Product Owner confirmar qué historias siguen pendientes de aceptación y cuáles se deben retirar de la propuesta.
+- [ ] Confirma el orden técnico: registrar finca, publicar oferta, cambiar estado y consultar el detalle.
+- [ ] Registra Sprint Goal, fechas y capacidad real de la iteración en el tablero después de su aprobación.
 
-## Comprobación manual del detalle
+## Comprobación de las historias
 
-- [ ] Levanta la aplicación siguiendo las instrucciones del README.
-- [ ] Inicia sesión como usuario de prueba o abre el catálogo sin sesión.
-- [ ] Abre una oferta de prueba con **Ver detalles**.
-- [ ] Comprueba nombre, finca (si tiene), municipio, precio y cantidad disponible.
-- [ ] Confirma que no se ve cédula, contraseña, token ni información privada.
-- [ ] Repite con una oferta que no exista o que no esté disponible y anota el resultado.
+- [ ] Registrar una finca de prueba y verificar que queda vinculada al agricultor correcto.
+- [ ] Publicar una oferta y confirmar que aparece en el catálogo con finca, municipio, categoría y disponibilidad esperadas.
+- [ ] Cambiar el estado de una oferta propia y comprobar que el catálogo refleja el nuevo estado.
+- [ ] Intentar cambiar la oferta con una cuenta que no es propietaria y comprobar que el sistema lo rechaza.
+- [ ] Abrir el detalle de una oferta y confirmar que no expone cédula, contraseña, token ni información privada.
+- [ ] Probar identificadores inexistentes y ofertas que ya no estén disponibles.
+- [ ] Vincular cada escenario BDD aceptado con una prueba automatizada adecuada y revisar el resultado del CI.
 
-## Comprobación manual del contacto
+## Cierre documental
 
-- [ ] Inicia sesión como comprador de prueba.
-- [ ] Abre el detalle de una oferta activa y pulsa **Contactar**.
-- [ ] Envía un mensaje de prueba, por ejemplo: `Hola, ¿sigue disponible esta cosecha?`.
-- [ ] Confirma el mensaje de éxito en la interfaz.
-- [ ] Inicia sesión como agricultor dueño de esa oferta.
-- [ ] Revisa **Mensajes de contacto** o las notificaciones y confirma que apareció el aviso.
-- [ ] Anota el resultado observado y cualquier error en `planificacion.md`.
-
-## Después de la comprobación manual
-
-- [ ] Si todo funciona, implementa la automatización E2E descrita como S3-T4.
-- [ ] Si algo falla, registra el paso exacto, resultado esperado y resultado obtenido antes de corregir el código.
-- [ ] Guarda evidencia sin secretos ni información real.
-- [ ] Actualiza el tablero y la revisión del Sprint según el resultado real.
+- [ ] Guardar solo capturas y resultados reales con datos sintéticos.
+- [ ] Actualizar el tablero con el estado observado, sin marcar como aceptada una HU que solo esté implementada.
+- [ ] Actualizar la revisión y retrospectiva únicamente después de la comprobación o ceremonia correspondiente.
+- [ ] Si el alcance aprobado cambia, corregir `docs/proyeccion-sprints.md` y la planificación antes de presentar la proyección.
