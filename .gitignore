@@ -28,6 +28,7 @@ __pycache__/
 
 # Temporary files created while building delivery PDFs
 tmp/
+/output/pdf/
 
 # Operating system and secrets
 .DS_Store
