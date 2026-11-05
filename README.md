@@ -178,7 +178,8 @@ gitGraph
 - [Evidencia funcional del Sprint 1](docs/sprint-1-review.md), [registro retrospectivo](docs/sprint-1-retrospective.md)
 - [Checklist de cierre de la entrega del Segundo Corte](docs/entrega-segundo-corte/README.md), con estado de evidencia y pendientes de confirmación.
 - [Entrega de Sprint 0](docs/entrega-sprint-0/README.md)
-- [Planificación inicial de Sprint 3](docs/sprint-3/planificacion.md)
+- [Proyección de sprints, estimación de capacidad y dependencias](docs/proyeccion-sprints.md)
+- [Propuesta de Sprint 3](docs/sprint-3/planificacion.md) y [checklist](docs/sprint-3/checklist-inicio.md); Sprint 4 está proyectado en el plan global.
 - [Índice de evidencias](docs/evidencias/README.md), incluida la [disponibilidad de métricas Kanban](docs/evidencias/kanban-metricas-sesion7.md)
 - [Colección Postman inicial](docs/postman/agrovalle-sprint-1.postman_collection.json)
 - [Diagramas UML](docs/uml/README.md)

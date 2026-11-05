@@ -1,37 +1,10 @@
-# Sprint 3 — checklist para empezar
+# Validación de la propuesta de Sprint 3
 
-Usa cuentas y datos de prueba. No pegues contraseñas, tokens ni datos personales reales en capturas o documentos.
+Esta lista sirve para decidir si el alcance candidato debe convertirse en una planificación formal. No indica que el Sprint 3 haya sido aprobado o iniciado.
 
-## Preparación
-
-- [ ] Abre GitHub Projects y busca HU-05 y HU-10.
-- [ ] Confirma si cada historia está abierta, cerrada o en revisión.
-- [ ] Si ambas ya fueron aceptadas, no las vuelvas a mover a Sprint 3: acuerda con el Product Owner qué historias pendientes reemplazan este borrador.
-- [ ] Si siguen pendientes, confirma que el Product Owner acepta revisarlas en este Sprint.
-- [ ] Crea o selecciona una rama de trabajo siguiendo la estrategia vigente del repositorio.
-
-## Comprobación manual del detalle
-
-- [ ] Levanta la aplicación siguiendo las instrucciones del README.
-- [ ] Inicia sesión como usuario de prueba o abre el catálogo sin sesión.
-- [ ] Abre una oferta de prueba con **Ver detalles**.
-- [ ] Comprueba nombre, finca (si tiene), municipio, precio y cantidad disponible.
-- [ ] Confirma que no se ve cédula, contraseña, token ni información privada.
-- [ ] Repite con una oferta que no exista o que no esté disponible y anota el resultado.
-
-## Comprobación manual del contacto
-
-- [ ] Inicia sesión como comprador de prueba.
-- [ ] Abre el detalle de una oferta activa y pulsa **Contactar**.
-- [ ] Envía un mensaje de prueba, por ejemplo: `Hola, ¿sigue disponible esta cosecha?`.
-- [ ] Confirma el mensaje de éxito en la interfaz.
-- [ ] Inicia sesión como agricultor dueño de esa oferta.
-- [ ] Revisa **Mensajes de contacto** o las notificaciones y confirma que apareció el aviso.
-- [ ] Anota el resultado observado y cualquier error en `planificacion.md`.
-
-## Después de la comprobación manual
-
-- [ ] Si todo funciona, implementa la automatización E2E descrita como S3-T4.
-- [ ] Si algo falla, registra el paso exacto, resultado esperado y resultado obtenido antes de corregir el código.
-- [ ] Guarda evidencia sin secretos ni información real.
-- [ ] Actualiza el tablero y la revisión del Sprint según el resultado real.
+- [ ] Revisar en GitHub Projects el estado actual de HU-02, HU-06, HU-09 y HU-10.
+- [ ] Confirmar con el Product Owner qué criterios BDD siguen pendientes de aceptación.
+- [ ] Acordar si la capacidad propuesta de 14 SP corresponde al equipo.
+- [ ] Confirmar el orden de dependencias: finca, publicación, estado y detalle.
+- [ ] Registrar el Sprint Goal y las fechas solo después del acuerdo del equipo.
+- [ ] Si una historia ya fue aceptada, elegir con el Product Owner una sustitución y actualizar [proyeccion-sprints.md](../proyeccion-sprints.md).
