@@ -21,10 +21,20 @@ node_modules/
 playwright-report/
 test-results/
 
+# Python helper scripts
+__pycache__/
+*.py[cod]
+.venv/
+
+# Temporary files created while building delivery PDFs
+tmp/
+
 # Operating system and secrets
 .DS_Store
 Thumbs.db
 .env
+.env.*
+!.env.example
 *.log
 *.pem
 

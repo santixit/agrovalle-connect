@@ -1,6 +1,6 @@
 # Normalización del modelo de datos
 
-**Estado:** implementación local en Flyway V7; no publicada.
+**Estado:** implementación integrada en `main` mediante Flyway V7; Actions #103 pasó las pruebas y controles de calidad del incremento.
 
 ## Reglas implementadas
 

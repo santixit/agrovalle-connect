@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Usuario.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">agrovalle-connect</a> &gt; <a href="index.source.html" class="el_package">co.edu.uniajc.agrovalle.domain</a> &gt; <span class="el_source">Usuario.java</span></div><h1>Usuario.java</h1><pre class="source lang-java linenums">package co.edu.uniajc.agrovalle.domain;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import java.time.LocalDateTime;
+
+/** Shared credentials and role for farmer, buyer, and administrator accounts. */
+@Entity
+@Table(name = &quot;usuarios&quot;)
+public class Usuario {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  @Column(nullable = false, unique = true, length = 254)
+  private String correo;
+
+  @Column(name = &quot;password_hash&quot;, nullable = false, length = 100)
+  private String passwordHash;
+
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false, length = 20)
+  private RolUsuario rol;
+
+<span class="fc" id="L32">  @Column(nullable = false)</span>
+  private boolean activo = true;
+
+<span class="fc" id="L35">  @Column(name = &quot;creado_en&quot;, nullable = false)</span>
+<span class="fc" id="L36">  private LocalDateTime creadoEn = LocalDateTime.now();</span>
+
+<span class="fc" id="L38">  protected Usuario() { }</span>
+
+<span class="fc" id="L40">  public Usuario(String correo, String passwordHash, RolUsuario rol) {</span>
+<span class="fc" id="L41">    this.correo = correo;</span>
+<span class="fc" id="L42">    this.passwordHash = passwordHash;</span>
+<span class="fc" id="L43">    this.rol = rol;</span>
+<span class="fc" id="L44">  }</span>
+
+  public Long getId() {
+<span class="fc" id="L47">    return id;</span>
+  }
+
+  public String getCorreo() {
+<span class="fc" id="L51">    return correo;</span>
+  }
+
+  public String getPasswordHash() {
+<span class="fc" id="L55">    return passwordHash;</span>
+  }
+
+  public RolUsuario getRol() {
+<span class="fc" id="L59">    return rol;</span>
+  }
+
+  public boolean isActivo() {
+<span class="fc" id="L63">    return activo;</span>
+  }
+
+  public LocalDateTime getCreadoEn() {
+<span class="fc" id="L67">    return creadoEn;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

@@ -34,7 +34,7 @@ Los dos diagramas ER suministrados se conservan como referencias de propuesta. E
 
 | Entregable de la guía | Evidencia en el repositorio | Estado honesto |
 |---|---|---|
-| Modelo de datos, DER y DDL PostgreSQL | DER implementado, DER conceptuales/físicos propuestos, `schema.sql` y migraciones Flyway V1–V7. | Snapshot reconstruido en orden de las migraciones; 3FN está implementado localmente según las reglas de dominio confirmadas. |
+| Modelo de datos, DER y DDL PostgreSQL | DER implementado, DER conceptuales/físicos propuestos, `schema.sql` y migraciones Flyway V1–V7. | Snapshot reconstruido en orden de las migraciones; V7 y el modelo 3FN están integrados en `main` según las reglas de dominio documentadas. Actions #103 pasó las pruebas y controles de calidad sobre el incremento. |
 | Mapeo JPA y pruebas | Entidades en `src/main/java/.../domain/` y pruebas automatizadas en `src/test/`. | Implementado y comprobado en la ejecución local del 2026-10-19. PostgreSQL 16 se verifica en CI. |
 | MVC en capas y patrones | [Arquitectura y patrones](arquitectura-mvc-gof.md). | Documentado con base en el código existente. |
 | UML de secuencia, componentes y despliegue | Fuentes PlantUML [secuencia](diagrama-secuencia.puml), [componentes](diagrama-componentes.puml) y [despliegue](diagrama-despliegue.puml); diagramas Mermaid adicionales en [`../uml/README.md`](../uml/README.md). | Exportaciones visibles PNG por fuente y PDF consolidado en [`exports/`](exports/). |

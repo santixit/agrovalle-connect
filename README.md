@@ -13,6 +13,7 @@ Para pequeños y medianos productores del Valle del Cauca que necesitan vender s
 - Repositorio: [santixit/agrovalle-connect](https://github.com/santixit/agrovalle-connect)
 - Tablero Kanban: [Agrovalle-Kamba](https://github.com/users/santixit/projects/3/views/1)
 - Aplicación publicada en staging: [AgroValle Connect](https://agrovalle-connect-staging.onrender.com/)
+
 ## Integrantes y roles
 
 | Integrante | Rol / responsabilidad |
@@ -58,6 +59,8 @@ El backend se organiza en `controller → service → repository → domain`, co
 | HU-14 | Favoritos del comprador | Implementada |
 | HU-15 | Reporte de actividad por fechas | Implementada y restringida a `ADMIN` |
 
+Las prioridades MoSCoW de `BACKLOG.md` reflejan el alcance del primer incremento; esta tabla resume el estado técnico que el repositorio declara actualmente. Por eso una historia que quedó fuera de aquel incremento puede aparecer implementada en el producto actual.
+
 La definición de HU-07 para el Primer Corte como consulta pública de datos no sensibles del agricultor aparece en `BACKLOG.md`, según la decisión del [issue #46](https://github.com/santixit/agrovalle-connect/issues/46). La comparación entre Backlog y Sprint Planning está en [docs/evidencias/comparacion-historias-backlog-sprint1.md](docs/evidencias/comparacion-historias-backlog-sprint1.md). Siguen pendientes las confirmaciones de integrantes que no comentaron en el issue. El registro de compradores es una capacidad adicional del software y no sustituye esa historia.
 
 ## Preparar el entorno
@@ -68,6 +71,8 @@ Requisitos: JDK 17, Git y Docker Compose, o un PostgreSQL 16+ local. Para inicia
 docker compose up -d db
 .\scripts\run-local.ps1
 ```
+
+`docker-compose.yml` configura PostgreSQL para desarrollo local. La contraseña declarada en Compose se aplica cuando PostgreSQL inicializa por primera vez el volumen; cambiar ese valor después no cambia la contraseña de una base que ya existe. El script de Spring solicita la contraseña actual del usuario de la base. Si la aplicación falla con `28P01`, confirma que ambas coincidan antes de cambiar o borrar el volumen local.
 
 El script solicita la contraseña sin guardarla en el repositorio y genera un secreto JWT temporal para esa ejecución. Para usar otra instancia PostgreSQL local, pasa su URL y usuario. Ejemplo con una base cuyo nombre contiene un espacio:
 
@@ -162,6 +167,7 @@ gitGraph
 
 ## Referencias
 
+- [Índice de documentación](docs/README.md)
 - [Product Backlog y BDD](BACKLOG.md)
 - [Definition of Done](docs/dod.md)
 - [Políticas Kanban, límites WIP y métricas de flujo](docs/kanban-policies.md)
@@ -171,6 +177,8 @@ gitGraph
 - [Registro de coordinación asíncrona](docs/bitacora-daily-scrum.md)
 - [Evidencia funcional del Sprint 1](docs/sprint-1-review.md), [registro retrospectivo](docs/sprint-1-retrospective.md)
 - [Checklist de cierre de la entrega del Segundo Corte](docs/entrega-segundo-corte/README.md), con estado de evidencia y pendientes de confirmación.
+- [Entrega de Sprint 0](docs/entrega-sprint-0/README.md)
+- [Planificación inicial de Sprint 3](docs/sprint-3/planificacion.md)
 - [Índice de evidencias](docs/evidencias/README.md), incluida la [disponibilidad de métricas Kanban](docs/evidencias/kanban-metricas-sesion7.md)
 - [Colección Postman inicial](docs/postman/agrovalle-sprint-1.postman_collection.json)
 - [Diagramas UML](docs/uml/README.md)

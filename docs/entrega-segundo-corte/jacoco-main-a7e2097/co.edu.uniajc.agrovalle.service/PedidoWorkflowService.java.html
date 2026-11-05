@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PedidoWorkflowService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">agrovalle-connect</a> &gt; <a href="index.source.html" class="el_package">co.edu.uniajc.agrovalle.service</a> &gt; <span class="el_source">PedidoWorkflowService.java</span></div><h1>PedidoWorkflowService.java</h1><pre class="source lang-java linenums">package co.edu.uniajc.agrovalle.service;
+
+import co.edu.uniajc.agrovalle.domain.EstadoPedido;
+import co.edu.uniajc.agrovalle.domain.EventoTrazabilidad;
+import co.edu.uniajc.agrovalle.domain.Pedido;
+import co.edu.uniajc.agrovalle.domain.PedidoEstadoCambiadoEvent;
+import co.edu.uniajc.agrovalle.repository.EventoTrazabilidadRepository;
+import co.edu.uniajc.agrovalle.repository.PedidoRepository;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+public class PedidoWorkflowService {
+  private final PedidoRepository pedidoRepository;
+  private final EventoTrazabilidadRepository eventoRepository;
+  private final ApplicationEventPublisher eventPublisher;
+
+  public PedidoWorkflowService(PedidoRepository pedidoRepository,
+<span class="fc" id="L20">      EventoTrazabilidadRepository eventoRepository, ApplicationEventPublisher eventPublisher) {</span>
+<span class="fc" id="L21">    this.pedidoRepository = pedidoRepository;</span>
+<span class="fc" id="L22">    this.eventoRepository = eventoRepository;</span>
+<span class="fc" id="L23">    this.eventPublisher = eventPublisher;</span>
+<span class="fc" id="L24">  }</span>
+
+  @Transactional
+  public void confirmar(Long pedidoId, Long usuarioAgricultorId) {
+<span class="fc" id="L28">    Pedido pedido = pedidoRepository.findById(pedidoId)</span>
+<span class="pc" id="L29">        .orElseThrow(() -&gt; new PedidoNoEncontradoException(pedidoId));</span>
+<span class="pc bpc" id="L30" title="2 of 4 branches missed.">    if (pedido.getEstado() != EstadoPedido.PENDIENTE || !perteneceA(pedido, usuarioAgricultorId)) {</span>
+<span class="nc" id="L31">      throw new TransicionPedidoInvalidaException();</span>
+    }
+<span class="fc" id="L33">    actualizar(pedido, EstadoPedido.CONFIRMADO, &quot;Reserva confirmada por el agricultor&quot;);</span>
+<span class="fc" id="L34">  }</span>
+
+  @Transactional
+  public void preparar(Long pedidoId, Long usuarioAgricultorId) {
+<span class="fc" id="L38">    Pedido pedido = pedidoRepository.findById(pedidoId)</span>
+<span class="pc" id="L39">        .orElseThrow(() -&gt; new PedidoNoEncontradoException(pedidoId));</span>
+<span class="pc bpc" id="L40" title="2 of 4 branches missed.">    if (pedido.getEstado() != EstadoPedido.CONFIRMADO || !perteneceA(pedido, usuarioAgricultorId)) {</span>
+<span class="nc" id="L41">      throw new TransicionPedidoInvalidaException();</span>
+    }
+<span class="fc" id="L43">    actualizar(pedido, EstadoPedido.PREPARANDO, &quot;Agricultor inició la preparación del pedido&quot;);</span>
+<span class="fc" id="L44">  }</span>
+
+  @Transactional
+  public void enviarADespacho(Pedido pedido) {
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">    if (pedido.getEstado() != EstadoPedido.CONFIRMADO</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        &amp;&amp; pedido.getEstado() != EstadoPedido.PREPARANDO) {</span>
+<span class="nc" id="L50">      throw new TransicionPedidoInvalidaException();</span>
+    }
+<span class="fc" id="L52">    actualizar(pedido, EstadoPedido.EN_DESPACHO, &quot;Despacho programado&quot;);</span>
+<span class="fc" id="L53">  }</span>
+
+  @Transactional
+  public void salirARuta(Pedido pedido) {
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">    if (pedido.getEstado() != EstadoPedido.EN_DESPACHO) {</span>
+<span class="nc" id="L58">      throw new TransicionPedidoInvalidaException();</span>
+    }
+<span class="fc" id="L60">    actualizar(pedido, EstadoPedido.EN_RUTA, &quot;El despacho salió a ruta&quot;);</span>
+<span class="fc" id="L61">  }</span>
+
+  @Transactional
+  public void entregar(Pedido pedido) {
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">    if (pedido.getEstado() != EstadoPedido.EN_DESPACHO</span>
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        &amp;&amp; pedido.getEstado() != EstadoPedido.EN_RUTA) {</span>
+<span class="nc" id="L67">      throw new TransicionPedidoInvalidaException();</span>
+    }
+<span class="fc" id="L69">    actualizar(pedido, EstadoPedido.ENTREGADO, &quot;Entrega completada&quot;);</span>
+<span class="fc" id="L70">  }</span>
+
+  private boolean perteneceA(Pedido pedido, Long usuarioAgricultorId) {
+<span class="fc" id="L73">    return pedido.getDetalles().stream().allMatch(detalle -&gt;</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        detalle.getProducto().getAgricultor() != null</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">            &amp;&amp; detalle.getProducto().getAgricultor().getUsuario() != null</span>
+<span class="fc" id="L76">            &amp;&amp; detalle.getProducto().getAgricultor().getUsuario().getId()</span>
+<span class="pc bpc" id="L77" title="1 of 2 branches missed.">                .equals(usuarioAgricultorId));</span>
+  }
+
+  private void actualizar(Pedido pedido, EstadoPedido estado, String descripcion) {
+<span class="fc" id="L81">    pedido.cambiarEstado(estado);</span>
+<span class="fc" id="L82">    pedidoRepository.save(pedido);</span>
+<span class="fc" id="L83">    eventoRepository.save(new EventoTrazabilidad(pedido, estado, descripcion));</span>
+<span class="fc" id="L84">    eventPublisher.publishEvent(new PedidoEstadoCambiadoEvent(</span>
+<span class="fc" id="L85">        pedido.getComprador().getUsuario().getId(), pedido.getId(), estado, descripcion));</span>
+<span class="fc" id="L86">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

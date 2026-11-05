@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EventoTrazabilidad.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">agrovalle-connect</a> &gt; <a href="index.source.html" class="el_package">co.edu.uniajc.agrovalle.domain</a> &gt; <span class="el_source">EventoTrazabilidad.java</span></div><h1>EventoTrazabilidad.java</h1><pre class="source lang-java linenums">package co.edu.uniajc.agrovalle.domain;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import java.time.LocalDateTime;
+
+/** Immutable timeline entry for an order state or logistics event. */
+@Entity
+@Table(name = &quot;eventos_trazabilidad&quot;)
+public class EventoTrazabilidad {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = &quot;pedido_id&quot;, nullable = false)
+  private Pedido pedido;
+
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false, length = 24)
+  private EstadoPedido estado;
+
+  @Column(nullable = false, length = 500)
+  private String descripcion;
+
+<span class="fc" id="L36">  @Column(name = &quot;ocurrido_en&quot;, nullable = false)</span>
+<span class="fc" id="L37">  private LocalDateTime ocurridoEn = LocalDateTime.now();</span>
+
+<span class="fc" id="L39">  protected EventoTrazabilidad() { }</span>
+
+<span class="fc" id="L41">  public EventoTrazabilidad(Pedido pedido, EstadoPedido estado, String descripcion) {</span>
+<span class="fc" id="L42">    this.pedido = pedido;</span>
+<span class="fc" id="L43">    this.estado = estado;</span>
+<span class="fc" id="L44">    this.descripcion = descripcion;</span>
+<span class="fc" id="L45">  }</span>
+
+  public Long getId() {
+<span class="fc" id="L48">    return id;</span>
+  }
+
+  public Pedido getPedido() {
+<span class="fc" id="L52">    return pedido;</span>
+  }
+
+  public EstadoPedido getEstado() {
+<span class="fc" id="L56">    return estado;</span>
+  }
+
+  public String getDescripcion() {
+<span class="fc" id="L60">    return descripcion;</span>
+  }
+
+  public LocalDateTime getOcurridoEn() {
+<span class="fc" id="L64">    return ocurridoEn;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DespachoService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">agrovalle-connect</a> &gt; <a href="index.source.html" class="el_package">co.edu.uniajc.agrovalle.service</a> &gt; <span class="el_source">DespachoService.java</span></div><h1>DespachoService.java</h1><pre class="source lang-java linenums">package co.edu.uniajc.agrovalle.service;
+
+import co.edu.uniajc.agrovalle.api.dto.DespachoResponse;
+import co.edu.uniajc.agrovalle.api.dto.ProgramarDespachoRequest;
+import co.edu.uniajc.agrovalle.domain.Despacho;
+import co.edu.uniajc.agrovalle.domain.Pedido;
+import co.edu.uniajc.agrovalle.domain.EstadoDespacho;
+import co.edu.uniajc.agrovalle.domain.TransaccionPrecio;
+import java.math.BigDecimal;
+import co.edu.uniajc.agrovalle.repository.DespachoRepository;
+import co.edu.uniajc.agrovalle.repository.PedidoRepository;
+import co.edu.uniajc.agrovalle.repository.TransaccionPrecioRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+public class DespachoService {
+  private final PedidoRepository pedidoRepository;
+  private final DespachoRepository despachoRepository;
+  private final PedidoWorkflowService workflowService;
+  private final TransaccionPrecioRepository transaccionPrecioRepository;
+  private final CalculadorFleteService calculadorFleteService;
+
+  public DespachoService(PedidoRepository pedidoRepository,
+      DespachoRepository despachoRepository, PedidoWorkflowService workflowService,
+      TransaccionPrecioRepository transaccionPrecioRepository,
+<span class="fc" id="L27">      CalculadorFleteService calculadorFleteService) {</span>
+<span class="fc" id="L28">    this.pedidoRepository = pedidoRepository;</span>
+<span class="fc" id="L29">    this.despachoRepository = despachoRepository;</span>
+<span class="fc" id="L30">    this.workflowService = workflowService;</span>
+<span class="fc" id="L31">    this.transaccionPrecioRepository = transaccionPrecioRepository;</span>
+<span class="fc" id="L32">    this.calculadorFleteService = calculadorFleteService;</span>
+<span class="fc" id="L33">  }</span>
+
+  @Transactional
+  public DespachoResponse programar(Long usuarioAgricultorId,
+      ProgramarDespachoRequest request) {
+<span class="fc" id="L38">    Pedido pedido = pedidoRepository.findById(request.pedidoId())</span>
+<span class="pc" id="L39">        .orElseThrow(() -&gt; new PedidoNoEncontradoException(request.pedidoId()));</span>
+<span class="fc" id="L40">    boolean propio = pedido.getDetalles().stream().allMatch(detalle -&gt;</span>
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">        detalle.getProducto().getAgricultor() != null</span>
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">            &amp;&amp; detalle.getProducto().getAgricultor().getUsuario() != null</span>
+<span class="fc" id="L43">            &amp;&amp; detalle.getProducto().getAgricultor().getUsuario().getId()</span>
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">                .equals(usuarioAgricultorId));</span>
+<span class="pc bpc" id="L45" title="1 of 2 branches missed.">    if (!propio) {</span>
+<span class="nc" id="L46">      throw new TransicionPedidoInvalidaException();</span>
+    }
+<span class="fc" id="L48">    BigDecimal pesoTotalKg = pedido.getDetalles().stream().map(detalle -&gt; detalle.getCantidadKg())</span>
+<span class="fc" id="L49">        .reduce(BigDecimal.ZERO, BigDecimal::add);</span>
+<span class="fc" id="L50">    String municipioDestino = request.municipioDestino().trim();</span>
+<span class="fc" id="L51">    BigDecimal costoFlete = calculadorFleteService.calcular(municipioDestino, pesoTotalKg);</span>
+<span class="fc" id="L52">    workflowService.enviarADespacho(pedido);</span>
+<span class="fc" id="L53">    Despacho despacho = despachoRepository.save(new Despacho(pedido,</span>
+<span class="fc" id="L54">        request.fechaProgramada(), request.franjaHoraria().trim(), request.ruta(),</span>
+        municipioDestino, pesoTotalKg, costoFlete));
+<span class="fc" id="L56">    return DespachoResponse.from(despacho);</span>
+  }
+
+  @Transactional
+  public DespachoResponse marcarEntregado(Long usuarioAgricultorId, Long pedidoId) {
+<span class="fc" id="L61">    Pedido pedido = pedidoRepository.findById(pedidoId)</span>
+<span class="pc" id="L62">        .orElseThrow(() -&gt; new PedidoNoEncontradoException(pedidoId));</span>
+<span class="fc" id="L63">    boolean propio = pedido.getDetalles().stream().allMatch(detalle -&gt;</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        detalle.getProducto().getAgricultor() != null</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">            &amp;&amp; detalle.getProducto().getAgricultor().getUsuario() != null</span>
+<span class="fc" id="L66">            &amp;&amp; detalle.getProducto().getAgricultor().getUsuario().getId()</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">                .equals(usuarioAgricultorId));</span>
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">    if (!propio) {</span>
+<span class="nc" id="L69">      throw new TransicionPedidoInvalidaException();</span>
+    }
+<span class="fc" id="L71">    Despacho despacho = despachoRepository.findByPedido_Id(pedidoId)</span>
+<span class="pc" id="L72">        .orElseThrow(() -&gt; new PedidoNoEncontradoException(pedidoId));</span>
+<span class="fc" id="L73">    despacho.marcarEntregado();</span>
+<span class="fc" id="L74">    workflowService.entregar(pedido);</span>
+<span class="fc" id="L75">    pedido.getDetalles().forEach(detalle -&gt; transaccionPrecioRepository.save(</span>
+<span class="fc" id="L76">        new TransaccionPrecio(detalle.getProducto(), detalle.getCantidadKg(),</span>
+<span class="fc" id="L77">            detalle.getPrecioPorKg())));</span>
+<span class="fc" id="L78">    return DespachoResponse.from(despachoRepository.save(despacho));</span>
+  }
+
+  @Transactional
+  public DespachoResponse marcarEnRuta(Long usuarioAgricultorId, Long pedidoId) {
+<span class="fc" id="L83">    Pedido pedido = pedidoRepository.findById(pedidoId)</span>
+<span class="pc" id="L84">        .orElseThrow(() -&gt; new PedidoNoEncontradoException(pedidoId));</span>
+<span class="fc" id="L85">    boolean propio = pedido.getDetalles().stream().allMatch(detalle -&gt;</span>
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">        detalle.getProducto().getAgricultor() != null</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">            &amp;&amp; detalle.getProducto().getAgricultor().getUsuario() != null</span>
+<span class="fc" id="L88">            &amp;&amp; detalle.getProducto().getAgricultor().getUsuario().getId()</span>
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">                .equals(usuarioAgricultorId));</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">    if (!propio) {</span>
+<span class="nc" id="L91">      throw new TransicionPedidoInvalidaException();</span>
+    }
+<span class="fc" id="L93">    Despacho despacho = despachoRepository.findByPedido_Id(pedidoId)</span>
+<span class="pc" id="L94">        .orElseThrow(() -&gt; new PedidoNoEncontradoException(pedidoId));</span>
+<span class="fc" id="L95">    despacho.marcarEnRuta();</span>
+<span class="fc" id="L96">    workflowService.salirARuta(pedido);</span>
+<span class="fc" id="L97">    return DespachoResponse.from(despachoRepository.save(despacho));</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

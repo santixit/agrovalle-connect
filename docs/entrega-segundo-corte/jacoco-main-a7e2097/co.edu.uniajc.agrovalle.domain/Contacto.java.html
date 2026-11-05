@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Contacto.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">agrovalle-connect</a> &gt; <a href="index.source.html" class="el_package">co.edu.uniajc.agrovalle.domain</a> &gt; <span class="el_source">Contacto.java</span></div><h1>Contacto.java</h1><pre class="source lang-java linenums">package co.edu.uniajc.agrovalle.domain;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import java.time.LocalDateTime;
+
+/** Buyer inquiry associated with a farmer and a specific offer. */
+@Entity
+@Table(name = &quot;contactos&quot;)
+public class Contacto {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = &quot;comprador_id&quot;, nullable = false)
+  private Comprador comprador;
+
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = &quot;agricultor_id&quot;, nullable = false)
+  private Agricultor agricultor;
+
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = &quot;producto_id&quot;, nullable = false)
+  private Producto producto;
+
+  @Column(nullable = false, length = 1000)
+  private String mensaje;
+
+<span class="fc" id="L40">  @Enumerated(EnumType.STRING)</span>
+  @Column(nullable = false, length = 20)
+  private EstadoContacto estado = EstadoContacto.NUEVO;
+
+<span class="fc" id="L44">  @Column(name = &quot;creado_en&quot;, nullable = false)</span>
+<span class="fc" id="L45">  private LocalDateTime creadoEn = LocalDateTime.now();</span>
+
+<span class="fc" id="L47">  protected Contacto() { }</span>
+
+<span class="fc" id="L49">  public Contacto(Comprador comprador, Agricultor agricultor, Producto producto, String mensaje) {</span>
+<span class="fc" id="L50">    this.comprador = comprador;</span>
+<span class="fc" id="L51">    this.agricultor = agricultor;</span>
+<span class="fc" id="L52">    this.producto = producto;</span>
+<span class="fc" id="L53">    this.mensaje = mensaje;</span>
+<span class="fc" id="L54">  }</span>
+
+  public Long getId() {
+<span class="fc" id="L57">    return id;</span>
+  }
+
+  public Comprador getComprador() {
+<span class="fc" id="L61">    return comprador;</span>
+  }
+
+  public Agricultor getAgricultor() {
+<span class="fc" id="L65">    return agricultor;</span>
+  }
+
+  public Producto getProducto() {
+<span class="fc" id="L69">    return producto;</span>
+  }
+
+  public String getMensaje() {
+<span class="fc" id="L73">    return mensaje;</span>
+  }
+
+  public EstadoContacto getEstado() {
+<span class="fc" id="L77">    return estado;</span>
+  }
+
+  public LocalDateTime getCreadoEn() {
+<span class="fc" id="L81">    return creadoEn;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

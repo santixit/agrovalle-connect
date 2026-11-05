@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GestionProductoService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">agrovalle-connect</a> &gt; <a href="index.source.html" class="el_package">co.edu.uniajc.agrovalle.service</a> &gt; <span class="el_source">GestionProductoService.java</span></div><h1>GestionProductoService.java</h1><pre class="source lang-java linenums">package co.edu.uniajc.agrovalle.service;
+
+import co.edu.uniajc.agrovalle.api.dto.EstadoProductoRequest;
+import co.edu.uniajc.agrovalle.api.dto.ProductoResponse;
+import co.edu.uniajc.agrovalle.api.dto.PublicarProductoRequest;
+import co.edu.uniajc.agrovalle.domain.Agricultor;
+import co.edu.uniajc.agrovalle.domain.EstadoProducto;
+import co.edu.uniajc.agrovalle.domain.Producto;
+import co.edu.uniajc.agrovalle.domain.Parcela;
+import co.edu.uniajc.agrovalle.repository.AgricultorRepository;
+import co.edu.uniajc.agrovalle.repository.FincaRepository;
+import co.edu.uniajc.agrovalle.repository.ParcelaRepository;
+import co.edu.uniajc.agrovalle.repository.ProductoRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+/** Handles offer creation and owner-authorized state changes. */
+@Service
+@Transactional
+public class GestionProductoService {
+
+  private final ProductoRepository productoRepository;
+  private final AgricultorRepository agricultorRepository;
+  private final ParcelaRepository parcelaRepository;
+  private final FincaRepository fincaRepository;
+
+  public GestionProductoService(ProductoRepository productoRepository,
+      AgricultorRepository agricultorRepository, ParcelaRepository parcelaRepository,
+<span class="fc" id="L29">      FincaRepository fincaRepository) {</span>
+<span class="fc" id="L30">    this.productoRepository = productoRepository;</span>
+<span class="fc" id="L31">    this.agricultorRepository = agricultorRepository;</span>
+<span class="fc" id="L32">    this.parcelaRepository = parcelaRepository;</span>
+<span class="fc" id="L33">    this.fincaRepository = fincaRepository;</span>
+<span class="fc" id="L34">  }</span>
+
+  public ProductoResponse publicar(Long usuarioId, PublicarProductoRequest request) {
+<span class="fc" id="L37">    Agricultor agricultor = agricultorRepository.findByUsuario_Id(usuarioId)</span>
+<span class="pc" id="L38">        .orElseThrow(() -&gt; new AgricultorNoEncontradoException(usuarioId));</span>
+<span class="pc bpc" id="L39" title="3 of 4 branches missed.">    if (request.parcelaId() != null &amp;&amp; request.fincaId() != null) {</span>
+<span class="nc" id="L40">      throw new IllegalArgumentException(&quot;Indica una parcela, no una parcela y finca a la vez&quot;);</span>
+    }
+<span class="fc" id="L42">    Parcela parcela = null;</span>
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">    if (request.parcelaId() != null) {</span>
+<span class="nc" id="L44">      parcela = parcelaRepository.findByIdAndAgricultorResponsableActual_Id(</span>
+<span class="nc" id="L45">          request.parcelaId(), agricultor.getId())</span>
+<span class="nc" id="L46">          .orElseThrow(() -&gt; new IllegalArgumentException(</span>
+              &quot;La parcela no existe o no está a tu cargo&quot;));
+<span class="fc bfc" id="L48" title="All 2 branches covered.">    } else if (request.fincaId() != null) {</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">      if (parcelaRepository == null) {</span>
+<span class="fc" id="L50">        fincaRepository.findByIdAndAgricultor_Id(request.fincaId(), agricultor.getId())</span>
+<span class="pc" id="L51">            .orElseThrow(() -&gt; new FincaNoEncontradaException(request.fincaId()));</span>
+<span class="nc" id="L52">        throw new IllegalArgumentException(&quot;La finca no tiene una parcela disponible&quot;);</span>
+      }
+<span class="fc" id="L54">      var parcelas = parcelaRepository.findByFinca_IdAndAgricultorResponsableActual_IdOrderByCodigoAsc(</span>
+<span class="fc" id="L55">          request.fincaId(), agricultor.getId());</span>
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">      if (parcelas.size() != 1) {</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">        throw new IllegalArgumentException(parcelas.isEmpty()</span>
+<span class="nc" id="L58">            ? &quot;La finca no existe o no tienes parcelas a tu cargo&quot;</span>
+<span class="nc" id="L59">            : &quot;Selecciona una parcela específica para publicar el producto&quot;);</span>
+      }
+<span class="fc" id="L61">      parcela = parcelas.get(0);</span>
+    }
+    Producto producto;
+<span class="fc bfc" id="L64" title="All 2 branches covered.">    if (parcela != null) {</span>
+<span class="pc bpc" id="L65" title="2 of 4 branches missed.">      if (request.municipio() != null &amp;&amp; !request.municipio().isBlank()</span>
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">          &amp;&amp; !parcela.getFinca().getMunicipio().equalsIgnoreCase(request.municipio().trim())) {</span>
+<span class="nc" id="L67">        throw new IllegalArgumentException(&quot;El municipio debe coincidir con el de la finca&quot;);</span>
+      }
+<span class="fc" id="L69">      producto = Producto.enParcela(parcela, request.nombre().trim(), request.categoria().trim(),</span>
+<span class="fc" id="L70">          request.cantidadKg(), request.precioPorKg(), request.fechaCosecha());</span>
+    } else {
+<span class="pc bpc" id="L72" title="2 of 4 branches missed.">      if (request.municipio() == null || request.municipio().isBlank()) {</span>
+<span class="nc" id="L73">        throw new IllegalArgumentException(&quot;Escribe el municipio para un producto sin finca&quot;);</span>
+      }
+<span class="fc" id="L75">      producto = Producto.sinFinca(agricultor, request.municipio().trim(),</span>
+<span class="fc" id="L76">          request.nombre().trim(), request.categoria().trim(), request.cantidadKg(),</span>
+<span class="fc" id="L77">          request.precioPorKg(), request.fechaCosecha());</span>
+    }
+<span class="fc" id="L79">    return ProductoResponse.from(productoRepository.save(producto));</span>
+  }
+
+  public ProductoResponse actualizarEstado(Long usuarioId, Long productoId,
+      EstadoProductoRequest request) {
+<span class="fc" id="L84">    Agricultor agricultor = agricultorRepository.findByUsuario_Id(usuarioId)</span>
+<span class="pc" id="L85">        .orElseThrow(() -&gt; new AgricultorNoEncontradoException(usuarioId));</span>
+<span class="fc" id="L86">    Producto producto = productoRepository.buscarParaActualizar(productoId)</span>
+<span class="pc" id="L87">        .orElseThrow(() -&gt; new ProductoNoEncontradoException(productoId));</span>
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">    if (producto.getAgricultor() == null</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        || !producto.getAgricultor().getId().equals(agricultor.getId())) {</span>
+<span class="fc" id="L90">      throw new OfertaNoPropiaException(productoId);</span>
+    }
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">    if (request.estado() == EstadoProducto.RESERVADO) {</span>
+<span class="nc" id="L93">      throw new EstadoProductoInvalidoException();</span>
+    }
+<span class="fc bfc" id="L95" title="All 2 branches covered.">    if (request.estado() == EstadoProducto.DISPONIBLE</span>
+<span class="pc bpc" id="L96" title="1 of 4 branches missed.">        &amp;&amp; (producto.getCantidadKg() == null || producto.getCantidadKg().signum() == 0)) {</span>
+<span class="fc" id="L97">      throw new EstadoProductoInvalidoException();</span>
+    }
+<span class="fc" id="L99">    producto.cambiarEstado(request.estado());</span>
+<span class="fc" id="L100">    return ProductoResponse.from(productoRepository.save(producto));</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

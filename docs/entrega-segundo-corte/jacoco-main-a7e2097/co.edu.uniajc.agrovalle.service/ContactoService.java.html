@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ContactoService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">agrovalle-connect</a> &gt; <a href="index.source.html" class="el_package">co.edu.uniajc.agrovalle.service</a> &gt; <span class="el_source">ContactoService.java</span></div><h1>ContactoService.java</h1><pre class="source lang-java linenums">package co.edu.uniajc.agrovalle.service;
+
+import co.edu.uniajc.agrovalle.api.dto.ContactoRequest;
+import co.edu.uniajc.agrovalle.api.dto.ContactoResponse;
+import co.edu.uniajc.agrovalle.domain.Comprador;
+import co.edu.uniajc.agrovalle.domain.Contacto;
+import co.edu.uniajc.agrovalle.domain.ContactoRegistradoEvent;
+import co.edu.uniajc.agrovalle.domain.Producto;
+import co.edu.uniajc.agrovalle.repository.CompradorRepository;
+import co.edu.uniajc.agrovalle.repository.ContactoRepository;
+import co.edu.uniajc.agrovalle.repository.ProductoRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.context.ApplicationEventPublisher;
+
+@Service
+public class ContactoService {
+  private final CompradorRepository compradorRepository;
+  private final ProductoRepository productoRepository;
+  private final ContactoRepository contactoRepository;
+  private final ApplicationEventPublisher eventPublisher;
+
+  public ContactoService(CompradorRepository compradorRepository,
+      ProductoRepository productoRepository, ContactoRepository contactoRepository,
+<span class="fc" id="L25">      ApplicationEventPublisher eventPublisher) {</span>
+<span class="fc" id="L26">    this.compradorRepository = compradorRepository;</span>
+<span class="fc" id="L27">    this.productoRepository = productoRepository;</span>
+<span class="fc" id="L28">    this.contactoRepository = contactoRepository;</span>
+<span class="fc" id="L29">    this.eventPublisher = eventPublisher;</span>
+<span class="fc" id="L30">  }</span>
+
+  @Transactional
+  public ContactoResponse contactar(Long usuarioId, ContactoRequest request) {
+<span class="fc" id="L34">    Comprador comprador = compradorRepository.findByUsuario_Id(usuarioId)</span>
+<span class="fc" id="L35">        .orElseThrow(CompradorNoEncontradoException::new);</span>
+<span class="fc" id="L36">    Producto producto = productoRepository.findById(request.productoId())</span>
+<span class="fc" id="L37">        .filter(Producto::isActivo).orElseThrow(</span>
+<span class="nc" id="L38">            () -&gt; new ProductoNoEncontradoException(request.productoId()));</span>
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">    if (producto.getAgricultor() == null) {</span>
+<span class="nc" id="L40">      throw new IllegalStateException(&quot;La oferta no tiene un agricultor asociado&quot;);</span>
+    }
+<span class="fc" id="L42">    Contacto guardado = contactoRepository.save(new Contacto(comprador,</span>
+<span class="fc" id="L43">        producto.getAgricultor(), producto, request.mensaje().trim()));</span>
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">    if (producto.getAgricultor().getUsuario() != null) {</span>
+<span class="fc" id="L45">      eventPublisher.publishEvent(new ContactoRegistradoEvent(</span>
+<span class="fc" id="L46">          producto.getAgricultor().getUsuario().getId(), guardado.getId(), producto.getNombre()));</span>
+    }
+<span class="fc" id="L48">    return ContactoResponse.from(guardado);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

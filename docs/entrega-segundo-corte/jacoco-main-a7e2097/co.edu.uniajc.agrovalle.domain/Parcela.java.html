@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Parcela.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">agrovalle-connect</a> &gt; <a href="index.source.html" class="el_package">co.edu.uniajc.agrovalle.domain</a> &gt; <span class="el_source">Parcela.java</span></div><h1>Parcela.java</h1><pre class="source lang-java linenums">package co.edu.uniajc.agrovalle.domain;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = &quot;parcelas&quot;, uniqueConstraints = @UniqueConstraint(
+    name = &quot;uq_parcela_codigo_finca&quot;, columnNames = {&quot;finca_id&quot;, &quot;codigo&quot;}))
+public class Parcela {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = &quot;finca_id&quot;, nullable = false)
+  private Finca finca;
+
+  @Column(nullable = false, length = 80)
+  private String codigo;
+
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = &quot;agricultor_responsable_actual_id&quot;, nullable = false)
+  private Agricultor agricultorResponsableActual;
+
+<span class="fc" id="L35">  @Column(name = &quot;creada_en&quot;, nullable = false)</span>
+<span class="fc" id="L36">  private LocalDateTime creadaEn = LocalDateTime.now();</span>
+
+<span class="fc" id="L38">  protected Parcela() { }</span>
+
+<span class="fc" id="L40">  public Parcela(Finca finca, String codigo, Agricultor agricultorResponsableActual) {</span>
+<span class="fc" id="L41">    this.finca = finca;</span>
+<span class="fc" id="L42">    this.codigo = codigo;</span>
+<span class="fc" id="L43">    this.agricultorResponsableActual = agricultorResponsableActual;</span>
+<span class="fc" id="L44">  }</span>
+
+  public Long getId() {
+<span class="fc" id="L47">    return id;</span>
+  }
+
+  public Finca getFinca() {
+<span class="fc" id="L51">    return finca;</span>
+  }
+
+  public String getCodigo() {
+<span class="fc" id="L55">    return codigo;</span>
+  }
+
+  public Agricultor getAgricultorResponsableActual() {
+<span class="fc" id="L59">    return agricultorResponsableActual;</span>
+  }
+
+  public LocalDateTime getCreadaEn() {
+<span class="nc" id="L63">    return creadaEn;</span>
+  }
+
+  public void transferirResponsabilidadA(Agricultor agricultorNuevo) {
+<span class="pc bpc" id="L67" title="2 of 4 branches missed.">    if (agricultorNuevo == null || agricultorNuevo.getId() == null</span>
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">        || agricultorResponsableActual.getId().equals(agricultorNuevo.getId())) {</span>
+<span class="nc" id="L69">      throw new IllegalArgumentException(&quot;Selecciona otro agricultor como responsable&quot;);</span>
+    }
+<span class="fc" id="L71">    agricultorResponsableActual = agricultorNuevo;</span>
+<span class="fc" id="L72">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

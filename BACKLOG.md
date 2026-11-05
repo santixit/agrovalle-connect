@@ -2,6 +2,8 @@
 
 Las estimaciones usan la secuencia Fibonacci y las prioridades siguen MoSCoW. Las historias se organizan según INVEST y se describen con escenarios BDD.
 
+Las prioridades de esta tabla documentan el alcance del primer incremento; no son un inventario actualizado del código. El estado técnico que el repositorio declara actualmente se resume en la sección **Historias implementadas** del `README.md`. Por eso HU-15 puede conservar aquí la prioridad histórica **Won't have this increment** y aparecer como implementada en el estado técnico actual.
+
 | ID | Historia de usuario | Prioridad MoSCoW | SP |
 |---|---|---:|---:|
 | HU-01 | Como agricultor, quiero registrarme para ofrecer mis productos. | Must have | 5 |
