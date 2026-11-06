@@ -40,10 +40,11 @@ public class NeonDatabaseUrlEnvironmentPostProcessor implements EnvironmentPostP
 
     Map<String, Object> properties = new LinkedHashMap<>();
     ConnectionSettings pooled = parseConnectionUrl(databaseUrl);
-    if (environment.getProperty("DB_URL") == null) {
-      properties.put("DB_URL", pooled.jdbcUrl());
-    }
-    addCredentials(environment, properties, pooled);
+    // DATABASE_URL is authoritative when present. This also replaces legacy
+    // DB_URL/DB_USERNAME/DB_PASSWORD values left behind by the previous host.
+    properties.put("DB_URL", pooled.jdbcUrl());
+    properties.put("DB_USERNAME", pooled.username());
+    properties.put("DB_PASSWORD", pooled.password());
 
     String directUrl = environment.getProperty(DATABASE_URL_UNPOOLED);
     if (directUrl != null && !directUrl.isBlank()
@@ -61,18 +62,6 @@ public class NeonDatabaseUrlEnvironmentPostProcessor implements EnvironmentPostP
     if (!properties.isEmpty()) {
       environment.getPropertySources().addFirst(
           new MapPropertySource("neonDatabaseUrl", properties));
-    }
-  }
-
-  private static void addCredentials(
-      ConfigurableEnvironment environment,
-      Map<String, Object> properties,
-      ConnectionSettings settings) {
-    if (environment.getProperty("DB_USERNAME") == null) {
-      properties.put("DB_USERNAME", settings.username());
-    }
-    if (environment.getProperty("DB_PASSWORD") == null) {
-      properties.put("DB_PASSWORD", settings.password());
     }
   }
 
