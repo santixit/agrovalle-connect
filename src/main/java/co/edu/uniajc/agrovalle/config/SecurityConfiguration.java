@@ -56,6 +56,9 @@ public class SecurityConfiguration {
                 .hasAuthority("SCOPE_COMPRADOR")
             .requestMatchers(org.springframework.http.HttpMethod.POST,
                 "/api/v1/contactos/*/respuesta").hasAuthority("SCOPE_AGRICULTOR")
+            .requestMatchers(org.springframework.http.HttpMethod.POST,
+                "/api/v1/contactos/*/mensajes")
+                .hasAnyAuthority("SCOPE_AGRICULTOR", "SCOPE_COMPRADOR")
             .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/reservas")
                 .hasAuthority("SCOPE_COMPRADOR")
             .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/reservas/carrito")

@@ -607,37 +607,51 @@ const api = '/api/v1';
           badge.textContent = rol === 'AGRICULTOR'
             ? `MENSAJE DE ${item.comprador || 'COMPRADOR'}`
             : `CON ${item.agricultor || 'AGRICULTOR'}`;
-          const unread = document.createElement('span'); unread.className = item.respuesta ? 'message-read' : 'message-unread';
-          unread.textContent = item.respuesta ? (rol === 'AGRICULTOR' ? 'Respondido' : 'Respuesta recibida') : (rol === 'AGRICULTOR' ? 'Pendiente' : 'Esperando respuesta');
+          const threadMessages = item.conversacion?.length ? item.conversacion : [
+            { autor: 'COMPRADOR', mensaje: item.mensaje, creadoEn: item.creadoEn },
+            ...(item.respuesta ? [{ autor: 'AGRICULTOR', mensaje: item.respuesta, creadoEn: item.respondidoEn }] : [])
+          ];
+          const lastMessage = threadMessages.at(-1);
+          const unread = document.createElement('span');
+          unread.className = lastMessage?.autor === rol ? 'message-read' : 'message-unread';
+          unread.textContent = lastMessage?.autor === rol ? 'Esperando respuesta' : 'Nuevo mensaje';
           const product = document.createElement('h3'); product.textContent = item.producto || 'Cosecha';
-          const label = document.createElement('strong'); label.textContent = rol === 'AGRICULTOR' ? 'Mensaje del comprador' : 'Tu mensaje';
-          const message = document.createElement('p'); message.textContent = item.mensaje;
-          const date = document.createElement('time'); date.className = 'message-date';
-          if (item.creadaEn) { date.dateTime = item.creadaEn; date.textContent = new Intl.DateTimeFormat('es-CO', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(item.creadaEn)); }
-          top.append(badge, unread); card.append(top, product, label, message); if (date.textContent) card.append(date);
-          if (item.respuesta) {
-            const replyLabel = document.createElement('strong'); replyLabel.textContent = rol === 'AGRICULTOR' ? 'Tu respuesta' : 'Respuesta del agricultor';
-            const reply = document.createElement('p'); reply.className = 'message-reply'; reply.textContent = item.respuesta;
-            card.append(replyLabel, reply);
-          } else if (rol === 'AGRICULTOR') {
-            const form = document.createElement('form'); form.className = 'message-reply-form';
-            const fieldLabel = document.createElement('label'); fieldLabel.textContent = 'Responder al comprador';
-            const textarea = document.createElement('textarea'); textarea.name = 'mensaje'; textarea.maxLength = 1000; textarea.required = true;
-            textarea.placeholder = 'Escribe tu respuesta…'; fieldLabel.append(textarea);
-            const submit = document.createElement('button'); submit.type = 'submit'; submit.textContent = 'Enviar respuesta';
-            const status = document.createElement('p'); status.className = 'status'; status.setAttribute('role', 'status');
-            form.append(fieldLabel, submit, status);
-            form.addEventListener('submit', async (event) => {
-              event.preventDefault(); submit.disabled = true;
-              try {
-                await request(`/contactos/${item.id}/respuesta`, { method: 'POST', body: JSON.stringify({ mensaje: textarea.value.trim() }) });
-                await cargarMensajes();
-              } catch (error) { status.textContent = error.message; submit.disabled = false; }
-            });
-            card.append(form);
-          } else {
-            const waiting = document.createElement('p'); waiting.className = 'message-waiting'; waiting.textContent = 'El agricultor aún no ha respondido.'; card.append(waiting);
-          }
+          const thread = document.createElement('div'); thread.className = 'conversation-thread';
+          thread.setAttribute('aria-label', `Conversación sobre ${item.producto || 'la cosecha'}`);
+          threadMessages.forEach((entry) => {
+            const bubble = document.createElement('div');
+            bubble.className = `conversation-message${entry.autor === rol ? ' is-own' : ''}`;
+            const author = document.createElement('strong');
+            author.textContent = entry.autor === rol ? 'Tú'
+              : entry.autor === 'AGRICULTOR' ? (item.agricultor || 'Agricultor')
+                : (item.comprador || 'Comprador');
+            const body = document.createElement('p'); body.textContent = entry.mensaje;
+            bubble.append(author, body);
+            if (entry.creadoEn) {
+              const sentAt = document.createElement('time'); sentAt.className = 'message-date';
+              sentAt.dateTime = entry.creadoEn;
+              sentAt.textContent = new Intl.DateTimeFormat('es-CO', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(entry.creadoEn));
+              bubble.append(sentAt);
+            }
+            thread.append(bubble);
+          });
+          top.append(badge, unread); card.append(top, product, thread);
+          const form = document.createElement('form'); form.className = 'message-reply-form';
+          const fieldLabel = document.createElement('label');
+          fieldLabel.textContent = rol === 'AGRICULTOR' ? 'Responder al comprador' : 'Responder al agricultor';
+          const textarea = document.createElement('textarea'); textarea.name = 'mensaje'; textarea.maxLength = 1000; textarea.required = true;
+          textarea.placeholder = 'Escribe un mensaje…'; fieldLabel.append(textarea);
+          const submit = document.createElement('button'); submit.type = 'submit'; submit.textContent = 'Enviar mensaje';
+          const status = document.createElement('p'); status.className = 'status'; status.setAttribute('role', 'status');
+          form.append(fieldLabel, submit, status);
+          form.addEventListener('submit', async (event) => {
+            event.preventDefault(); submit.disabled = true;
+            try {
+              await request(`/contactos/${item.id}/mensajes`, { method: 'POST', body: JSON.stringify({ mensaje: textarea.value.trim() }) });
+              await cargarMensajes();
+            } catch (error) { status.textContent = error.message; submit.disabled = false; }
+          });
+          card.append(form);
           return card;
         });
         if (cards.length) byId('actividad').replaceChildren(...cards);

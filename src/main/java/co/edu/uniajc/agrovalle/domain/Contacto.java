@@ -1,6 +1,7 @@
 package co.edu.uniajc.agrovalle.domain;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -10,8 +11,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /** Buyer inquiry associated with a farmer and a specific offer. */
 @Entity
@@ -42,6 +47,10 @@ public class Contacto {
 
   @Column(name = "respondido_en")
   private LocalDateTime respondidoEn;
+
+  @OneToMany(mappedBy = "contacto", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OrderBy("creadoEn ASC, id ASC")
+  private List<MensajeContacto> conversacion = new ArrayList<>();
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, length = 20)
@@ -94,6 +103,22 @@ public class Contacto {
     this.respuesta = respuesta;
     this.respondidoEn = LocalDateTime.now();
     this.estado = EstadoContacto.RESPONDIDO;
+    agregarMensaje("AGRICULTOR", respuesta);
+  }
+
+  public void agregarMensaje(String autor, String mensaje) {
+    if (estado == EstadoContacto.CERRADO) {
+      throw new IllegalStateException("Este contacto está cerrado");
+    }
+    conversacion.add(new MensajeContacto(this, autor, mensaje));
+    estado = "AGRICULTOR".equals(autor) ? EstadoContacto.RESPONDIDO : EstadoContacto.NUEVO;
+    if ("AGRICULTOR".equals(autor)) {
+      respondidoEn = LocalDateTime.now();
+    }
+  }
+
+  public List<MensajeContacto> getConversacion() {
+    return conversacion;
   }
 
   public EstadoContacto getEstado() {

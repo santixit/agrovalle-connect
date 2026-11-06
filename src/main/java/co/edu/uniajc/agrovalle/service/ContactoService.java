@@ -43,6 +43,7 @@ public class ContactoService {
     }
     Contacto guardado = contactoRepository.save(new Contacto(comprador,
         producto.getAgricultor(), producto, request.mensaje().trim()));
+    guardado.agregarMensaje("COMPRADOR", request.mensaje().trim());
     if (producto.getAgricultor().getUsuario() != null) {
       eventPublisher.publishEvent(new ContactoRegistradoEvent(
           producto.getAgricultor().getUsuario().getId(), guardado.getId(), producto.getNombre()));
@@ -69,6 +70,22 @@ public class ContactoService {
         .findByIdAndAgricultor_Usuario_Id(contactoId, agricultorUsuarioId)
         .orElseThrow(() -> new ContactoNoEncontradoException(contactoId));
     contacto.responder(mensaje.trim());
+    return ContactoBandejaResponse.from(contacto);
+  }
+
+  @Transactional
+  public ContactoBandejaResponse enviarMensaje(Long usuarioId, String rol, Long contactoId,
+      String mensaje) {
+    Contacto contacto = switch (rol) {
+      case "COMPRADOR" -> contactoRepository
+          .findByIdAndComprador_Usuario_Id(contactoId, usuarioId)
+          .orElseThrow(() -> new ContactoNoEncontradoException(contactoId));
+      case "AGRICULTOR" -> contactoRepository
+          .findByIdAndAgricultor_Usuario_Id(contactoId, usuarioId)
+          .orElseThrow(() -> new ContactoNoEncontradoException(contactoId));
+      default -> throw new IllegalArgumentException("El rol no puede responder este contacto");
+    };
+    contacto.agregarMensaje(rol, mensaje.trim());
     return ContactoBandejaResponse.from(contacto);
   }
 }

@@ -50,4 +50,11 @@ public class ContactoController {
       @PathVariable Long contactoId, @Valid @RequestBody ResponderContactoRequest request) {
     return contactoService.responder(Long.valueOf(jwt.getSubject()), contactoId, request.mensaje());
   }
+
+  @PostMapping("/{contactoId}/mensajes")
+  public ContactoBandejaResponse enviarMensaje(@AuthenticationPrincipal Jwt jwt,
+      @PathVariable Long contactoId, @Valid @RequestBody ResponderContactoRequest request) {
+    return contactoService.enviarMensaje(Long.valueOf(jwt.getSubject()),
+        jwt.getClaimAsString("scope"), contactoId, request.mensaje());
+  }
 }
