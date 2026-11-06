@@ -94,6 +94,7 @@ const api = '/api/v1';
       byId('catalog-search-form').hidden = !token;
       byId('catalog-nav').hidden = !token;
       byId('prices-nav').hidden = !token;
+      byId('messages-nav').hidden = !token || rol !== 'COMPRADOR';
       byId('agricultor-panel').hidden = rol !== 'AGRICULTOR' || vistaEnfocada || vistasCatalogoAgricultor || vistaAgricultor === 'cuenta';
       byId('agricultor-panel').querySelector('.farmer-dashboard-layout').hidden = vistaAgricultor !== 'resumen';
       byId('productos-publicados').hidden = vistaAgricultor !== 'productos';
@@ -416,6 +417,11 @@ const api = '/api/v1';
             }) });
             feedback.textContent = 'Mensaje enviado. El agricultor recibirá una notificación en su cuenta.';
             form.reset();
+            const openMessages = document.createElement('button');
+            openMessages.type = 'button'; openMessages.className = 'secondary';
+            openMessages.textContent = 'Ver conversación';
+            openMessages.addEventListener('click', cargarMensajes);
+            form.append(openMessages);
           } else {
             const quantity = Number(form.elements.namedItem('cantidad').value);
             if (tipo === 'reserve') {
@@ -598,7 +604,9 @@ const api = '/api/v1';
           const card = document.createElement('article'); card.className = 'card activity-card message-card';
           const top = document.createElement('div'); top.className = 'message-card-top';
           const badge = document.createElement('span'); badge.className = 'badge';
-          badge.textContent = rol === 'AGRICULTOR' ? `MENSAJE DE ${item.comprador || 'COMPRADOR'}` : `PARA ${item.producto || 'AGRICULTOR'}`;
+          badge.textContent = rol === 'AGRICULTOR'
+            ? `MENSAJE DE ${item.comprador || 'COMPRADOR'}`
+            : `CON ${item.agricultor || 'AGRICULTOR'}`;
           const unread = document.createElement('span'); unread.className = item.respuesta ? 'message-read' : 'message-unread';
           unread.textContent = item.respuesta ? (rol === 'AGRICULTOR' ? 'Respondido' : 'Respuesta recibida') : (rol === 'AGRICULTOR' ? 'Pendiente' : 'Esperando respuesta');
           const product = document.createElement('h3'); product.textContent = item.producto || 'Cosecha';
@@ -789,6 +797,10 @@ const api = '/api/v1';
     byId('carrito-link').addEventListener('click', (event) => {
       if (rol !== 'COMPRADOR') return;
       event.preventDefault(); abrirVistaComprador('carrito', '#carrito-seccion');
+    });
+    byId('messages-nav').addEventListener('click', (event) => {
+      if (rol !== 'COMPRADOR') return;
+      event.preventDefault(); cargarMensajes();
     });
     window.addEventListener('hashchange', () => {
       if (vistaActividad && location.hash !== '#actividad-vista') {

@@ -10,12 +10,12 @@ import java.time.LocalDateTime;
 public interface ContactoRepository extends JpaRepository<Contacto, Long> {
   long countByCreadoEnBetween(LocalDateTime inicio, LocalDateTime fin);
 
-  @EntityGraph(attributePaths = {"comprador", "producto"})
+  @EntityGraph(attributePaths = {"comprador", "producto", "agricultor"})
   List<Contacto> findByAgricultor_Usuario_IdOrderByCreadoEnDesc(Long usuarioId);
 
-  @EntityGraph(attributePaths = {"comprador", "producto"})
+  @EntityGraph(attributePaths = {"comprador", "producto", "agricultor"})
   List<Contacto> findByComprador_Usuario_IdOrderByCreadoEnDesc(Long usuarioId);
 
-  @EntityGraph(attributePaths = {"comprador", "producto"})
+  @EntityGraph(attributePaths = {"comprador", "producto", "agricultor"})
   Optional<Contacto> findByIdAndAgricultor_Usuario_Id(Long id, Long usuarioId);
 }
