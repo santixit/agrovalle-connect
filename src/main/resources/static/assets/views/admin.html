@@ -1,0 +1,19 @@
+<section id="admin-panel" hidden>
+      <div class="dashboard-layout">
+        <aside class="dashboard-sidebar" aria-label="Menú de administración"><h2>Administración</h2><div class="dashboard-nav-links">
+          <a href="#admin-panel" aria-current="page">Resumen</a><a href="#admin-users">Gestión de usuarios</a>
+          <a href="#reporte-form">Reporte de cosechas</a><a href="#reporte-form">Reporte de clientes</a><a href="#reporte-form">Reporte de usuarios</a><a href="#reporte-form">Actividad de la comunidad</a>
+        </div></aside>
+        <div class="dashboard-content"><h2>Resumen general</h2>
+          <div class="metric-grid"><article class="metric-card"><span>Usuarios del periodo</span><strong id="admin-user-count">—</strong></article>
+            <article class="metric-card"><span>Productores</span><strong id="admin-farmer-count">—</strong></article>
+            <article class="metric-card"><span>Clientes</span><strong id="admin-client-count">—</strong></article>
+            <article class="metric-card"><span>Cosechas del periodo</span><strong id="admin-harvest-count">—</strong></article>
+          </div>
+          <article id="admin-users" class="admin-users"><h3>Gestión de usuarios (productores y clientes)</h3><p>La API actual ofrece reportes de actividad; la gestión individual y el bloqueo de cuentas aún no están disponibles.</p></article>
+          <h3>Reportes de acceso rápido</h3>
+          <form id="reporte-form" class="report-form"><label>Desde<input name="desde" type="date" required></label><label>Hasta<input name="hasta" type="date" required></label><button>Consultar actividad</button></form>
+          <p id="reporte-status" class="status" role="status"></p>
+        </div>
+      </div>
+    </section>

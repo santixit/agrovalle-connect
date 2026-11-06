@@ -1,0 +1,84 @@
+/* Responsive layouts for desktop, tablet and mobile. */
+@media (max-width: 1100px) {
+  .farmer-overview { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .traceability-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .catalog-results .row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 1023px) {
+  .site-header { grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "brand session" "search search" "nav nav"; }
+  .site-header .catalog-search { width: 100%; max-width: none; }
+  .site-header .session-bar { width: 100%; max-width: 440px; justify-self: end; }
+  .dashboard-layout, #admin-panel .dashboard-layout { grid-template-columns: minmax(0, 1fr); }
+  .dashboard-sidebar { position: static; max-height: none; padding: 14px; }
+  .dashboard-sidebar h2 { margin: 0 4px 10px; }
+  .dashboard-nav-links { display: flex; gap: 6px; overflow-x: auto; padding: 2px 1px 5px; scrollbar-width: thin; }
+  .dashboard-sidebar a { flex: 0 0 auto; white-space: nowrap; }
+  .dashboard-content { gap: 18px; }
+  #agricultor-panel .publish-layout { grid-template-columns: minmax(0, 1.15fr) minmax(290px, .85fr); }
+}
+@media (max-width: 760px) {
+  main#app-content { width: min(100% - 24px, 1440px); gap: 16px; padding: 16px 0 24px; }
+  main#app-content > section { padding: 20px; border-radius: 14px; }
+  .site-header { grid-template-columns: 1fr; grid-template-areas: "brand" "session" "search" "nav"; gap: 10px; padding: 13px 18px; }
+  .site-header .catalog-search { width: 100%; }
+  .site-header nav { gap: 2px; overflow-x: auto; flex-wrap: nowrap; }
+  .site-header nav a { flex: 0 0 auto; }
+  .session-bar { max-width: none; }
+  .home-hero { padding: 28px !important; }
+  .catalog-heading { align-items: flex-start; flex-direction: column; padding: 22px 20px 16px; }
+  .catalog-layout { grid-template-columns: 1fr; gap: 16px; padding: 0 20px 20px; }
+  .catalog-filters { padding: 16px; }
+  .catalog-results .row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #agricultor-panel .publish-layout { grid-template-columns: 1fr; }
+  .publish-aside { grid-template-rows: auto auto auto; }
+  .farmer-overview, .traceability-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .activity-actions { grid-template-columns: 1fr; }
+  .activity-actions button { min-height: 56px; }
+  .dashboard-heading, .subsection-heading { align-items: flex-start; }
+}
+@media (max-width: 640px) {
+  body { font-size: 15px; }
+  main#app-content { width: min(100% - 20px, 1440px); }
+  main#app-content > section { padding: 16px; }
+  .site-header .brand { font-size: 1.25rem; }
+  .session-bar { flex-wrap: wrap; }
+  .session-copy { flex-basis: calc(100% - 58px); }
+  .session-bar .button { margin-left: 47px; }
+  .home-hero { padding: 24px !important; }
+  .home-hero h1 { font-size: clamp(1.8rem, 9vw, 2.5rem); }
+  .auth-card { padding: 22px 18px; }
+  .auth-card #registro-form { grid-template-columns: 1fr; }
+  .auth-card #registro-form button { grid-column: auto; }
+  .dashboard-content { padding: 17px; }
+  .dashboard-heading { display: block; }
+  .dashboard-heading .section-intro { font-size: .9rem; }
+  .farmer-overview { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .farmer-overview .metric-card { min-height: 106px; padding: 11px; gap: 7px; }
+  .farmer-overview .metric-icon { width: 34px; height: 34px; }
+  .farmer-overview .metric-icon svg { width: 18px; height: 18px; }
+  .farmer-overview .metric-card .metric-copy { font-size: .76rem; }
+  .metric-card strong { font-size: 1.55rem; }
+  .traceability-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .traceability-grid .metric-card { min-height: 80px; padding: 10px; }
+  .traceability-grid .trace-icon { width: 27px; height: 27px; }
+  .subsection-heading { flex-direction: column; gap: 8px; }
+  .dashboard-shortcuts { align-items: stretch; flex-direction: column; }
+  .dashboard-shortcuts .button { width: 100%; }
+  .publish-form-panel, .farm-card { padding: 18px; }
+  .publish-form { grid-template-columns: 1fr; }
+  .publish-form > .harvest-date-field, .publish-form > .publish-actions { grid-column: auto; }
+  .publish-actions { display: grid; grid-template-columns: 1fr 1fr; }
+  .publish-actions input.secondary, .publish-actions button { min-width: 0; width: 100%; }
+  .farm-form { grid-template-columns: 1fr; }
+  .farm-form label:first-child, .farm-form label:nth-child(3), .farm-form button { grid-column: auto; }
+  .image-preview { min-height: 175px; }
+  .activity-actions { gap: 8px; }
+  #admin-panel .report-form { grid-template-columns: 1fr; }
+  #admin-panel .report-form button { grid-column: auto; }
+}
+@media (max-width: 400px) {
+  .farmer-overview { grid-template-columns: 1fr; }
+  .farmer-overview .metric-card { min-height: 88px; }
+  .traceability-grid { grid-template-columns: 1fr 1fr; }
+  .site-header nav a { padding-inline: 9px; font-size: .82rem; }
+}

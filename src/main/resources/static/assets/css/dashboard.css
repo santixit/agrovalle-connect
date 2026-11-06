@@ -1,0 +1,117 @@
+/* Farmer workspace, activity and reusable dashboard surfaces. */
+.dashboard-layout { display: grid; grid-template-columns: minmax(220px, 258px) minmax(0, 1fr); gap: 24px; align-items: start; }
+.dashboard-sidebar { position: sticky; top: 16px; align-self: start; width: 100%; min-width: 0; max-height: calc(100vh - 32px); overflow-y: auto; padding: 18px 12px; border: 1px solid var(--line); border-radius: var(--radius-card); background: #fff; box-shadow: var(--shadow-card); }
+.dashboard-sidebar h2 { margin: 0 8px 14px; font-size: 1rem; }
+.dashboard-nav-links { display: grid; gap: 4px; min-width: 0; max-width: 100%; }
+.dashboard-sidebar a { display: flex; align-items: center; gap: 11px; min-height: 42px; padding: 9px 11px; border-radius: 8px; color: #46564a; font-size: .89rem; font-weight: 620; text-decoration: none; }
+.dashboard-sidebar a:hover { background: #f2f7f1; color: var(--green-900); }
+.dashboard-sidebar a[aria-current="page"] { background: var(--green-100); color: var(--green-900); font-weight: 760; }
+.nav-link-icon { display: grid; place-items: center; width: 21px; height: 21px; flex: 0 0 auto; color: var(--green-700); }
+.nav-link-icon svg { width: 19px; height: 19px; }
+.dashboard-content { display: grid; align-content: start; gap: 20px; min-width: 0; padding: clamp(18px, 2.5vw, 30px); border: 1px solid var(--line); border-radius: var(--radius-panel); background: #fff; box-shadow: var(--shadow-card); }
+.dashboard-heading, .subsection-heading { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.dashboard-heading h2 { margin: 0 0 6px; font-size: clamp(1.5rem, 2.2vw, 2rem); }
+.dashboard-heading .section-intro { margin: 0; }
+.subsection-heading { margin: 4px 0 -6px; }
+.subsection-heading h3 { margin: 0; }
+.metric-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.metric-card { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-width: 0; min-height: 112px; padding: 17px; border: 1px solid var(--line); border-radius: var(--radius-card); background: #fff; }
+.metric-card > span:not(.metric-icon):not(.metric-copy):not(.trace-icon) { color: var(--text-secondary); }
+.metric-card > strong { color: var(--text); }
+.metric-card strong { display: block; font-size: clamp(1.55rem, 2.5vw, 2.1rem); font-weight: 780; line-height: 1.08; letter-spacing: -.045em; }
+.metric-card .metric-copy { display: grid; gap: 7px; min-width: 0; color: var(--text-secondary); font-size: .82rem; font-weight: 610; }
+.metric-card .metric-copy > span { color: inherit; }
+.metric-icon, .trace-icon { display: grid; place-items: center; width: 42px; height: 42px; flex: 0 0 auto; border-radius: 12px; background: var(--green-100); color: var(--green-800); }
+.metric-icon svg { width: 21px; height: 21px; }
+.metric-products .metric-icon { background: #eff6e4; color: #557a24; }
+.metric-orders .metric-icon { background: #eaf3fb; color: #28668f; }
+.metric-deliveries .metric-icon { background: #f1edfb; color: #6850a4; }
+.metric-grid-small { margin-top: -2px; }
+.traceability-grid .metric-card { min-height: 92px; padding: 14px; }
+.traceability-grid .trace-icon { width: 33px; height: 33px; border-radius: 10px; font-size: 1.2rem; font-weight: 800; }
+.trace-pending { border-color: #f1dfb6; background: #fffbf1; }
+.trace-pending .metric-copy strong, .trace-pending .trace-icon { color: var(--amber); }
+.trace-pending .trace-icon { background: var(--amber-bg); }
+.trace-course { border-color: #cfe3f1; background: #f6fbff; }
+.trace-course .metric-copy strong, .trace-course .trace-icon { color: var(--blue); }
+.trace-course .trace-icon { background: var(--blue-bg); }
+.trace-delivered { border-color: #cbe2d0; background: #f4fbf5; }
+.trace-delivered .metric-copy strong, .trace-delivered .trace-icon { color: var(--green-700); }
+.trace-delivered .trace-icon { background: var(--green-100); }
+.trace-late { border-color: #f1d1ce; background: #fff8f7; }
+.trace-late .metric-copy strong, .trace-late .trace-icon { color: var(--red); }
+.trace-late .trace-icon { background: var(--red-bg); }
+.metric-card .is-placeholder { opacity: .6; }
+.dashboard-shortcuts { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 17px 18px; border: 1px solid #dce9db; border-radius: var(--radius-card); background: linear-gradient(100deg, #f2f8ef, #fbfdf9); }
+.dashboard-shortcuts > div { display: flex; align-items: center; gap: 13px; }
+.dashboard-shortcuts > div > div { display: grid; gap: 3px; }
+.dashboard-shortcuts strong { color: var(--text); }
+.dashboard-shortcuts span:not(.shortcut-icon) { color: var(--text-secondary); font-size: .87rem; }
+.shortcut-icon { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 12px; background: #dcefd8; color: var(--green-800); font-size: 1.6rem; font-weight: 500; }
+.dashboard-price { display: flex; align-items: flex-start; gap: 14px; padding: 16px 18px; border: 1px solid var(--line); border-radius: var(--radius-card); background: #fff; }
+.dashboard-price h3 { margin: 2px 0 5px; font-size: 1rem; }
+.dashboard-price p { margin: 0; color: var(--text-secondary); font-size: .9rem; }
+.dashboard-price a { color: var(--green-700); font-weight: 700; }
+.price-icon { display: grid; place-items: center; width: 38px; height: 38px; flex: 0 0 auto; border-radius: 11px; background: var(--green-100); color: var(--green-800); }
+#agricultor-panel { display: grid; gap: 22px; padding: 0; border: 0; background: transparent; box-shadow: none; }
+#agricultor-panel .publish-layout { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(300px, .85fr); gap: 20px; align-items: stretch; }
+.publish-form-panel, .farm-card { min-width: 0; padding: clamp(20px, 2.5vw, 30px); border: 1px solid var(--line); border-radius: var(--radius-panel); background: #fff; box-shadow: var(--shadow-card); }
+.publish-form-panel h2 { margin-bottom: 7px; font-size: 1.55rem; }
+.publish-form-panel .section-intro { margin-bottom: 22px; }
+.publish-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 17px 16px; align-items: start; padding-top: 4px; }
+.publish-form > label { min-width: 0; }
+.publish-form > .harvest-date-field, .publish-form > .publish-actions { grid-column: 1 / -1; }
+.publish-form .hint { margin-top: -2px; }
+.publish-actions { display: flex; justify-content: flex-end; gap: 10px; padding-top: 5px; }
+.publish-actions input.secondary { min-width: 150px; min-height: 44px; }
+.publish-actions button { min-width: 150px; }
+.publish-aside { display: grid; grid-template-rows: minmax(0, 1fr) auto auto; align-content: start; gap: 14px; min-width: 0; }
+.farm-card { display: grid; align-content: start; gap: 13px; }
+.farm-card h3 { margin: 0; font-size: 1.3rem; }
+.farm-list { display: grid; gap: 9px; }
+.farm-list > p { margin: 0; padding: 14px; border: 1px dashed #c9d8cb; border-radius: 9px; background: var(--green-50); color: var(--text-secondary); font-size: .88rem; }
+.farm-item { display: grid; gap: 3px; padding: 13px 14px; border: 1px solid var(--line); border-radius: 10px; background: #fbfdfb; }
+.farm-item strong { color: var(--text); font-size: .94rem; }
+.farm-item span { color: var(--text-secondary); font-size: .83rem; }
+.form-subtitle { margin: 8px 0 -4px; padding-top: 13px; border-top: 1px solid #edf1ed; color: var(--green-900); }
+.farm-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: end; margin: 0; }
+.farm-form label:first-child, .farm-form label:nth-child(3), .farm-form button { grid-column: 1 / -1; }
+.farm-form button { width: 100%; }
+#ver-mas-fincas { justify-self: start; min-height: 38px; }
+#farm-status, #product-status, #farmer-dashboard-status { overflow-wrap: anywhere; }
+.image-dropzone { position: relative; display: grid; gap: 10px; padding: 12px; border: 1.5px dashed #9fbea4; border-radius: var(--radius-card); background: #f8fcf7; }
+.image-preview { position: relative; display: grid; place-content: center; justify-items: center; gap: 8px; min-height: 190px; overflow: hidden; border-radius: 9px; background: linear-gradient(145deg, #e7f2e5, #f4f8ed); color: var(--green-900); text-align: center; }
+.image-preview > svg { width: 36px; height: 36px; margin-bottom: 3px; color: var(--green-700); }
+.image-preview > strong { font-size: .94rem; }
+.image-preview > span { color: var(--text-secondary); font-size: .78rem; }
+#imagen-preview img { position: absolute; inset: 0; width: 100%; height: 100%; max-height: none; border-radius: inherit; object-fit: cover; }
+.upload-button { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 42px; padding: 9px 14px; border: 1px solid #d4e4d4; border-radius: 8px; background: #fff; color: var(--green-800); font-size: .87rem; font-weight: 730; cursor: pointer; }
+.upload-button:hover { background: var(--green-50); }
+.upload-button svg { width: 18px; height: 18px; }
+.upload-button input { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.publish-aside > .hint { margin: 0 4px; }
+#cuenta-panel { padding: clamp(20px, 3vw, 32px); }
+#cuenta-panel > h2 { margin-bottom: 20px; }
+.activity-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 0 0 16px; }
+.activity-actions button { justify-content: flex-start; width: 100%; min-height: 68px; padding: 14px 16px; border-color: var(--line); border-radius: var(--radius-card); background: #fff; box-shadow: 0 2px 10px rgb(25 39 30 / 3%); color: var(--text); text-align: left; }
+.activity-actions button:hover { border-color: #b7d2b9; background: var(--green-50); color: var(--green-900); }
+.activity-actions button svg { width: 21px; height: 21px; color: var(--green-700); }
+#actividad { gap: 12px; margin-top: 12px; }
+#actividad > .card, #actividad > p { margin: 0; padding: 16px; border: 1px solid var(--line); border-radius: var(--radius-card); background: #fff; box-shadow: 0 3px 12px rgb(25 39 30 / 4%); }
+#actividad > p { color: var(--text-secondary); }
+#actividad .card .actions { gap: 8px; margin-top: 12px; }
+#actividad .card .actions button { min-height: 40px; }
+#actividad-status:not(:empty) { margin: 0 0 12px; }
+#cuenta-panel:target { scroll-margin-top: 18px; }
+.dashboard-publish { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px; border: 1px solid var(--line); border-radius: var(--radius-card); background: #fff; }
+.dashboard-publish strong { font-size: 1.05rem; }
+.admin-users { padding: 20px; border: 1px solid var(--line); border-radius: var(--radius-card); background: #fff; }
+.admin-users p { margin-bottom: 0; color: var(--text-secondary); }
+#admin-panel .dashboard-layout { grid-template-columns: minmax(220px, 260px) minmax(0, 1fr); }
+#admin-panel .dashboard-content { box-shadow: var(--shadow-card); }
+#admin-panel .metric-card { display: grid; align-content: center; gap: 8px; }
+#admin-panel .metric-card > span { color: var(--text-secondary); font-size: .84rem; }
+#admin-panel .metric-card strong { font-size: 1.9rem; }
+#admin-panel .dashboard-sidebar a { color: var(--green-800); }
+#admin-panel .report-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; align-items: end; }
+#admin-panel .report-form button { grid-column: 1 / -1; justify-self: start; }

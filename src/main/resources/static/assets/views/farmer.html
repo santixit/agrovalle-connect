@@ -1,0 +1,82 @@
+<section id="agricultor-panel" hidden aria-labelledby="publicar-titulo">
+      <div class="dashboard-layout farmer-dashboard-layout">
+        <aside class="dashboard-sidebar" aria-label="Menú del agricultor">
+          <h2>Mi espacio</h2>
+          <div class="dashboard-nav-links">
+            <a href="#agricultor-panel" aria-current="page"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1z"/></svg></span>Resumen</a>
+            <a href="#actividad-status" data-dashboard-action="notificaciones"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9m-8 12h4"/></svg></span>Mensajes de contacto</a>
+            <a href="#publicar-titulo"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg></span>Productos publicados</a>
+            <a href="#actividad-status" data-dashboard-action="pedidos"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 4h2l2.2 11h10.6L21 8H6m2 11h.01M17 19h.01"/></svg></span>Pedidos</a>
+            <a href="#actividad-status" data-dashboard-action="pedidos"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 12h18M12 3v18m-7-14 14 14M19 5 5 19"/></svg></span>Seguimiento de entregas</a>
+            <a href="#catalogo-seccion"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM8 9h8M8 13h5"/></svg></span>Ofertas y catálogo</a>
+            <a href="#precios-seccion"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 17 6-6 4 3 8-9M15 5h6v6"/></svg></span>Consulta de precios</a>
+            <a href="#acceso-seccion"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>Mi cuenta</a>
+          </div>
+        </aside>
+        <div class="dashboard-content">
+          <div class="dashboard-heading"><div><p class="eyebrow">AGROVALLE / PRODUCTOR</p><h2>Panel del agricultor</h2><p class="section-intro">Administra tus cosechas y mantén tus pedidos al día.</p></div></div>
+          <div class="metric-grid farmer-overview"><article class="metric-card metric-contacts"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 9 9 0 0 1-4-.9L3 21l1.9-5.5a9 9 0 0 1-.9-4A8.5 8.5 0 0 1 12.5 3h.5a8.5 8.5 0 0 1 8 8z"/></svg></span><span class="metric-copy"><strong id="farmer-contact-count" class="is-placeholder">—</strong><span>Mensajes de contacto</span></span></article>
+            <article class="metric-card metric-products"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v4m0 0c-2-3-5-3-7-2 0 4 2 6 7 5m0-3c2-3 5-3 7-2 0 4-2 6-7 5m0 2v9m-5 0h10"/></svg></span><span class="metric-copy"><strong id="farmer-product-count" class="is-placeholder">—</strong><span>Productos publicados</span></span></article>
+            <article class="metric-card metric-orders"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4h2l2 11h10l2-7H7m2 11h.01M17 19h.01"/></svg></span><span class="metric-copy"><strong id="farmer-order-count" class="is-placeholder">—</strong><span>Pedidos activos</span></span></article>
+            <article class="metric-card metric-deliveries"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7h11v10H3zM14 10h4l3 3v4h-7zM7 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm11 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg></span><span class="metric-copy"><strong id="farmer-delivery-count" class="is-placeholder">—</strong><span>Entregas en curso</span></span></article>
+          </div>
+          <div class="subsection-heading"><div><p class="eyebrow">ESTADO DE PEDIDOS</p><h3>Trazabilidad de entregas</h3></div><span class="badge">Resumen</span></div>
+          <div class="metric-grid metric-grid-small traceability-grid"><article class="metric-card trace-pending"><span class="metric-copy"><strong id="farmer-pending-count" class="is-placeholder">—</strong><span>Pendientes por enviar</span></span><span class="trace-icon" aria-hidden="true">◷</span></article>
+            <article class="metric-card trace-course"><span class="metric-copy"><strong id="farmer-course-count" class="is-placeholder">—</strong><span>En curso</span></span><span class="trace-icon" aria-hidden="true">↗</span></article>
+            <article class="metric-card trace-delivered"><span class="metric-copy"><strong id="farmer-delivered-count" class="is-placeholder">—</strong><span>Entregadas</span></span><span class="trace-icon" aria-hidden="true">✓</span></article>
+            <article class="metric-card trace-late"><span class="metric-copy"><strong class="is-placeholder">—</strong><span>Con retraso</span></span><span class="trace-icon" aria-hidden="true">!</span></article>
+          </div>
+          <div class="dashboard-shortcuts"><div><span class="shortcut-icon" aria-hidden="true">＋</span><div><strong>¿Tienes una nueva cosecha?</strong><span>Publica la disponibilidad de tu finca.</span></div></div><a class="button" href="#publicar-titulo">Publicar producto</a></div>
+          <div class="dashboard-price"><span class="price-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 17 6-6 4 3 8-9M15 5h6v6"/></svg></span><div><h3>Alza de precios</h3><p id="price-trend-status">Consulta el <a href="#precios-seccion">promedio regional</a> desde el catálogo.</p></div></div>
+          <p id="farmer-dashboard-status" class="status" role="status"></p>
+        </div>
+      </div>
+      <div class="publish-layout">
+        <div class="publish-form-panel">
+          <h2 id="publicar-titulo">Publicar cosecha</h2>
+          <p class="section-intro">Comparte la disponibilidad de tu finca con compradores de la región.</p>
+          <form id="producto-form" class="publish-form">
+            <label>Producto y variedad<input name="nombre" maxlength="120" required placeholder="Ej. Aguacate Hass"></label>
+            <label>Categoría<input name="categoria" list="categoria-sugerencias" maxlength="80" required placeholder="Elige o escribe una categoría"></label>
+            <label>Municipio<input name="municipio" list="municipios-valle" maxlength="80" required placeholder="Municipio de la finca"></label>
+            <label>Parcela (opcional)<select name="parcelaId" id="parcela-select"><option value="">Sin finca asociada</option></select></label>
+            <label>Cantidad total (kg)<input name="cantidadKg" type="number" min="0.01" step="0.01" required placeholder="Ej. 250"></label>
+            <label>Precio por kilo (COP)<input name="precioPorKg" type="number" min="0.01" step="0.01" required placeholder="Ej. 4500"></label>
+            <label class="harvest-date-field">Fecha de cosecha<input name="fecha_cosecha" type="date" required><span class="hint">Debe ser hoy o una fecha futura.</span></label>
+            <datalist id="categoria-sugerencias"><option value="Frutas"><option value="Verduras"><option value="Hortalizas"><option value="Tubérculos"><option value="Granos"><option value="Lácteos"><option value="Legumbres"><option value="Hierbas aromáticas"><option value="Otros"></datalist>
+            <datalist id="municipios-valle"><option value="Cali"><option value="Palmira"><option value="Tuluá"><option value="Buga"><option value="Cartago"><option value="Yumbo"><option value="Jamundí"><option value="Candelaria"><option value="Florida"><option value="Pradera"><option value="Roldanillo"><option value="Zarzal"><option value="Sevilla"><option value="Caicedonia"><option value="Dagua"><option value="El Cerrito"><option value="Ginebra"><option value="La Unión"><option value="Andalucía"><option value="Restrepo"></datalist>
+            <div class="publish-actions">
+              <input type="button" id="guardar-borrador" class="secondary" value="Guardar borrador">
+              <button type="submit">Publicar</button>
+            </div>
+          </form>
+          <p id="product-status" class="status" role="status"></p>
+        </div>
+        <aside class="publish-aside">
+          <section class="farm-card" aria-labelledby="fincas-titulo">
+            <h3 id="fincas-titulo">Mis fincas</h3>
+            <div id="fincas-list" class="farm-list"><p class="muted">Inicia sesión para ver tus fincas.</p></div>
+            <button type="button" id="ver-mas-fincas" class="secondary" hidden>Ver más</button>
+            <h4 class="form-subtitle">Registrar finca</h4>
+            <form id="finca-form" class="farm-form">
+              <label>Nombre de finca<input name="nombre" maxlength="120" required></label>
+              <label>Municipio<input name="municipio" maxlength="80" required></label>
+              <label>Dirección o vereda<input name="direccion" maxlength="200" required></label>
+              <button>Registrar finca</button>
+            </form>
+            <h4 class="form-subtitle">Agregar parcela</h4>
+            <form id="parcela-form" class="farm-form">
+              <label>Finca para la nueva parcela<select name="fincaId" id="parcela-finca-select" required><option value="">Selecciona una finca</option></select></label>
+              <label>Código de parcela<input name="codigo" maxlength="80" required placeholder="Ej. Parcela norte"></label>
+              <button>Registrar parcela</button>
+            </form>
+            <p id="farm-status" class="status" role="status"></p>
+          </section>
+          <div class="image-dropzone">
+            <div id="imagen-preview" class="image-preview" role="img" aria-label="Vista previa de la imagen del producto"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4zM8 13l2.5-2.5L16 16M14 13l1.5-1.5L20 16"/><circle cx="9" cy="9" r="1.5"/></svg><strong>Selecciona una imagen</strong><span>JPG, PNG o WEBP</span></div>
+            <label class="upload-button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m-5 5 5-5 5 5M4 16v4h16v-4"/></svg>Explorar archivos<input id="producto-imagen" type="file" accept="image/*"></label>
+          </div>
+          <p class="hint">La imagen se previsualiza en este navegador; el servicio actual no almacena fotos.</p>
+        </aside>
+      </div>
+    </section>

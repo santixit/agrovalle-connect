@@ -1,0 +1,35 @@
+<section id="catalogo-seccion" aria-labelledby="catalogo-titulo" hidden>
+      <div class="catalog-heading">
+        <div>
+          <h2 id="catalogo-titulo">Cosechas recientes</h2>
+          <p class="section-intro">Cosechas frescas de productores del Valle del Cauca.</p>
+        </div>
+      </div>
+      <div class="catalog-layout">
+        <aside class="catalog-filters" aria-label="Filtros de cosechas">
+          <h3>Filtros</h3>
+          <form id="buscar-form" class="filters">
+            <label>Municipio<input name="municipio" maxlength="80" placeholder="Todos los municipios"></label>
+            <label>Productor o comerciante<input name="productor" maxlength="120" placeholder="Todos"></label>
+            <label>Categoría<input name="categoria" maxlength="80" placeholder="Todas las categorías"></label>
+            <button>Aplicar filtros</button>
+            <button type="button" id="limpiar" class="secondary">Ver todo</button>
+          </form>
+          <div id="precios-seccion" class="price-widget">
+            <h3>Precio regional</h3>
+            <p>Compara el promedio de ventas completadas por categoría.</p>
+            <form id="precios-form">
+              <label>Categoría<input name="categoria" maxlength="80" required placeholder="Ej. Frutas"></label>
+              <button class="secondary">Consultar promedio</button>
+            </form>
+            <div id="price-chart" class="price-chart" hidden aria-live="polite"></div>
+            <p id="precio-status" class="status" role="status"></p>
+          </div>
+          <button type="button" id="history-button" class="history-button">Historial de cambios</button>
+        </aside>
+        <div class="catalog-results">
+          <p id="catalog-status" class="muted" role="status"></p>
+          <div id="catalogo" class="row"></div>
+        </div>
+      </div>
+    </section>

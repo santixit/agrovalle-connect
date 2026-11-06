@@ -1,0 +1,27 @@
+<section id="acceso-seccion" aria-labelledby="acceso-titulo">
+      <div class="auth-layout">
+        <div class="auth-card">
+          <h2 id="acceso-titulo">Iniciar sesión</h2>
+          <form id="login-form" class="form-grid">
+            <div id="login-fields" class="form-grid">
+              <label>Correo<input name="correo" type="email" required autocomplete="username" placeholder="nombre@correo.com"></label>
+              <label>Contraseña<input name="contrasena" type="password" required autocomplete="current-password" placeholder="Contraseña"></label>
+              <button>Iniciar sesión</button>
+            </div>
+          </form>
+          <form id="registro-form" class="form-grid" hidden>
+            <label>Nombre completo<input name="nombre" maxlength="120" required autocomplete="name"></label>
+            <label>Tipo de documento<select name="tipoDocumento"><option value="CC">Cédula</option><option value="CE">Cédula de extranjería</option><option value="PASAPORTE">Pasaporte</option><option value="NIT">NIT</option></select></label>
+            <label>Número de documento<input name="cedula" maxlength="30" required></label>
+            <label>Teléfono<input name="telefono" type="tel" maxlength="30" required autocomplete="tel"></label>
+            <label>Rol de usuario<select name="tipo"><option value="AGRICULTOR">Agricultor</option><option value="COMPRADOR">Comprador</option></select></label>
+            <label data-farmer>Municipio<input name="ubicacion_valle" maxlength="80"></label>
+            <label data-buyer hidden>Tipo de comercio<input name="tipoComercio" maxlength="80"></label>
+            <label>Correo<input name="correo" type="email" maxlength="254" required autocomplete="email"></label>
+            <label>Contraseña<input name="contrasena" type="password" minlength="10" maxlength="72" required autocomplete="new-password"></label>
+            <button>Crear cuenta</button>
+          </form>
+          <button type="button" id="auth-toggle" class="auth-switch secondary">¿No tienes cuenta? Crear cuenta</button>
+        </div>
+      </div>
+    </section>
