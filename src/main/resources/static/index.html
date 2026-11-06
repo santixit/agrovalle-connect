@@ -11,7 +11,7 @@
   <header>
     <div class="hero site-header">
       <a class="brand" href="#inicio-seccion" aria-label="AgroValle Connect, inicio"><span aria-hidden="true">🌱</span><span>AgroValle</span></a>
-      <form id="catalog-search-form" class="catalog-search" role="search">
+      <form id="catalog-search-form" class="catalog-search" role="search" hidden>
         <label class="sr-only" for="catalog-query">Buscar producto o municipio</label>
         <span aria-hidden="true" class="search-icon">⌕</span>
         <input id="catalog-query" maxlength="120" placeholder="Buscar producto o municipio" aria-label="Buscar producto o municipio">
@@ -19,9 +19,9 @@
       <a id="header-login" class="header-login" href="#acceso-seccion">Ingresar</a>
       <nav aria-label="Navegación principal">
         <a href="#inicio-seccion">Inicio</a>
-        <a href="#catalogo-seccion">Catálogo</a>
+        <a id="catalog-nav" href="#catalogo-seccion" hidden>Catálogo</a>
         <a id="carrito-link" href="#carrito-seccion" hidden>Mi carrito <span id="carrito-count">0</span></a>
-        <a href="#precios-seccion">Precios regionales</a>
+        <a id="prices-nav" href="#precios-seccion" hidden>Precios regionales</a>
         <a href="#acceso-seccion">Mi cuenta</a>
       </nav>
     </div>
@@ -30,13 +30,13 @@
     <section id="inicio-seccion" class="home-hero" aria-labelledby="inicio-titulo">
       <h1 id="inicio-titulo">Compra cosechas frescas directo del productor</h1>
       <p>Agricultores del Valle del Cauca publican sus cosechas; tú las reservas sin intermediarios y sigues la entrega.</p>
-      <div class="actions">
-        <a class="button-link" href="#catalogo-seccion">Ver catálogo de cosechas</a>
-        <a class="button-link secondary" href="#catalogo-seccion">Reservar productos</a>
+      <div id="guest-auth-actions" class="actions">
+        <a class="button-link" href="#acceso-seccion" data-auth-mode="login">Iniciar sesión para ver cosechas</a>
+        <a class="button-link secondary" href="#acceso-seccion" data-auth-mode="registro">Crear cuenta</a>
       </div>
       <div class="home-shortcuts">
-        <p>Consulta la trazabilidad de tus entregas <a href="#cuenta-panel">Ver mis entregas</a></p>
-        <p>¿Eres agricultor? Publica tu cosecha y recibe contactos <a href="#acceso-seccion">Registrarme como productor</a></p>
+        <p>Consulta la trazabilidad de tus entregas <a href="#acceso-seccion" data-auth-mode="login">Inicia sesión</a></p>
+        <p>¿Eres agricultor? Publica tu cosecha y recibe contactos <a href="#acceso-seccion" data-auth-mode="registro">Crear cuenta</a></p>
       </div>
     </section>
     <section id="acceso-seccion" aria-labelledby="acceso-titulo">
@@ -50,22 +50,20 @@
               <button>Iniciar sesión</button>
             </div>
           </form>
+          <form id="registro-form" class="form-grid" hidden>
+            <label>Nombre completo<input name="nombre" maxlength="120" required autocomplete="name"></label>
+            <label>Tipo de documento<select name="tipoDocumento"><option value="CC">Cédula</option><option value="CE">Cédula de extranjería</option><option value="PASAPORTE">Pasaporte</option><option value="NIT">NIT</option></select></label>
+            <label>Número de documento<input name="cedula" maxlength="30" required></label>
+            <label>Teléfono<input name="telefono" type="tel" maxlength="30" required autocomplete="tel"></label>
+            <label>Rol de usuario<select name="tipo"><option value="AGRICULTOR">Agricultor</option><option value="COMPRADOR">Comprador</option></select></label>
+            <label data-farmer>Municipio<input name="ubicacion_valle" maxlength="80"></label>
+            <label data-buyer hidden>Tipo de comercio<input name="tipoComercio" maxlength="80"></label>
+            <label>Correo<input name="correo" type="email" maxlength="254" required autocomplete="email"></label>
+            <label>Contraseña<input name="contrasena" type="password" minlength="10" maxlength="72" required autocomplete="new-password"></label>
+            <button>Crear cuenta</button>
+          </form>
+          <button type="button" id="auth-toggle" class="auth-switch secondary">¿No tienes cuenta? Crear cuenta</button>
           <button type="button" id="salir" class="secondary" hidden>Cerrar sesión</button>
-        </div>
-        <div id="registro-details" class="auth-card">
-          <h2>Crear cuenta</h2>
-        <form id="registro-form" class="form-grid">
-          <label>Nombre completo<input name="nombre" maxlength="120" required autocomplete="name"></label>
-          <label>Tipo de documento<select name="tipoDocumento"><option value="CC">Cédula</option><option value="CE">Cédula de extranjería</option><option value="PASAPORTE">Pasaporte</option><option value="NIT">NIT</option></select></label>
-          <label>Número de documento<input name="cedula" maxlength="30" required></label>
-          <label>Teléfono<input name="telefono" type="tel" maxlength="30" required autocomplete="tel"></label>
-          <label>Rol de usuario<select name="tipo"><option value="AGRICULTOR">Agricultor</option><option value="COMPRADOR">Comprador</option></select></label>
-          <label data-farmer>Municipio<input name="ubicacion_valle" maxlength="80"></label>
-          <label data-buyer hidden>Tipo de comercio<input name="tipoComercio" maxlength="80"></label>
-          <label>Correo<input name="correo" type="email" maxlength="254" required autocomplete="email"></label>
-          <label>Contraseña<input name="contrasena" type="password" minlength="10" maxlength="72" required autocomplete="new-password"></label>
-          <button>Registrarme</button>
-        </form>
         </div>
       </div>
       <p id="auth-status" class="status" role="status"></p>
@@ -141,7 +139,7 @@
       </div>
     </section>
 
-    <section id="catalogo-seccion" aria-labelledby="catalogo-titulo">
+    <section id="catalogo-seccion" aria-labelledby="catalogo-titulo" hidden>
       <div class="catalog-heading">
         <div>
           <h2 id="catalogo-titulo">Cosechas recientes</h2>
@@ -227,6 +225,7 @@
     const api = '/api/v1';
     let token = null;
     let rol = null;
+    let modoAuth = 'login';
     let vistaActividad = null;
     let carrito;
     try {
@@ -266,10 +265,19 @@
     }
     function actualizarPaneles() {
       byId('header-login').textContent = token && rol !== 'COMPRADOR' ? 'Cerrar sesión' : token ? 'Mi cuenta' : 'Ingresar';
-      byId('login-fields').hidden = Boolean(token);
-      byId('registro-details').hidden = Boolean(token);
+      byId('acceso-titulo').textContent = token ? 'Tu cuenta' : modoAuth === 'registro' ? 'Crear cuenta' : 'Iniciar sesión';
+      byId('login-form').hidden = Boolean(token) || modoAuth !== 'login';
+      byId('registro-form').hidden = Boolean(token) || modoAuth !== 'registro';
+      byId('auth-toggle').hidden = Boolean(token);
+      byId('auth-toggle').textContent = modoAuth === 'registro'
+        ? '¿Ya tienes cuenta? Iniciar sesión' : '¿No tienes cuenta? Crear cuenta';
       byId('salir').hidden = !token;
       byId('cuenta-panel').hidden = !token;
+      byId('catalogo-seccion').hidden = !token;
+      byId('catalog-search-form').hidden = !token;
+      byId('catalog-nav').hidden = !token;
+      byId('prices-nav').hidden = !token;
+      byId('guest-auth-actions').hidden = Boolean(token);
       byId('agricultor-panel').hidden = rol !== 'AGRICULTOR';
       byId('admin-panel').hidden = rol !== 'ADMIN';
       byId('carrito-seccion').hidden = rol !== 'COMPRADOR';
@@ -278,6 +286,18 @@
       if (rol === 'AGRICULTOR') { cargarFincas(); cargarPanelAgricultor(); }
       if (rol === 'ADMIN') cargarReporteAdmin();
     }
+    function cambiarModoAuth(modo) {
+      if (token) return;
+      modoAuth = modo;
+      actualizarPaneles();
+      tell('auth-status', '');
+    }
+    byId('auth-toggle').addEventListener('click', () => {
+      cambiarModoAuth(modoAuth === 'login' ? 'registro' : 'login');
+    });
+    document.querySelectorAll('[data-auth-mode]').forEach((link) => {
+      link.addEventListener('click', () => cambiarModoAuth(link.dataset.authMode));
+    });
     async function cargarPanelAgricultor() {
       try {
         const [messages, products, orders] = await Promise.all([
@@ -309,7 +329,7 @@
         tell('auth-status', `Sesión iniciada como ${rol}.`);
       } catch (error) { tell('auth-status', error.message); }
     });
-    byId('salir').addEventListener('click', () => { token = null; rol = null; vistaActividad = null; carrito.clear(); actualizarPaneles(); tell('auth-status', 'Sesión cerrada.'); });
+    byId('salir').addEventListener('click', () => { token = null; rol = null; modoAuth = 'login'; vistaActividad = null; carrito.clear(); actualizarPaneles(); tell('auth-status', 'Sesión cerrada.'); });
     byId('header-login').addEventListener('click', (event) => {
       if (!token || rol === 'COMPRADOR') return;
       event.preventDefault(); byId('salir').click();
@@ -338,9 +358,10 @@
       const path = type === 'AGRICULTOR' ? '/auth/register' : '/auth/register/comprador';
       try {
         await request(path, { method: 'POST', body: JSON.stringify(data) });
-        tell('auth-status', 'Cuenta creada. Ya puedes iniciar sesión.');
         form.reset();
         actualizarCamposRegistro(form.elements.namedItem('tipo').value);
+        cambiarModoAuth('login');
+        tell('auth-status', 'Cuenta creada. Ya puedes iniciar sesión.');
       } catch (error) { tell('auth-status', error.message); }
     });
     async function cargarFincas() {
@@ -777,7 +798,7 @@
         } catch (error) { tell('actividad-status', error.message); }
       }
     }));
-    buscar();
+    actualizarPaneles();
   </script>
 </body>
 </html>

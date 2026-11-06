@@ -222,12 +222,15 @@ main { max-width: 1680px; gap: 1.3rem; }
 .home-shortcuts p { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin: 0; padding: .8rem 1rem; border: 1px solid var(--line); border-radius: 10px; background: white; color: var(--ink); font-weight: 700; }
 .home-shortcuts a { color: var(--green); white-space: nowrap; }
 #acceso-seccion { order: 5; background: transparent; border: 0; box-shadow: none; padding: 0; }
-.auth-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; align-items: start; }
+.auth-layout { display: grid; grid-template-columns: minmax(0, 560px); justify-content: center; gap: 1.25rem; align-items: start; }
 .auth-card { padding: clamp(1rem, 2vw, 1.5rem); border: 1px solid var(--line); border-radius: 12px; background: white; }
 .auth-card h2 { margin-bottom: .8rem; font-size: clamp(1.4rem, 2.6vw, 2rem); }
 .auth-card form { display: grid; grid-template-columns: 1fr; align-items: stretch; gap: .8rem; }
 .auth-card form > div { display: grid; gap: .8rem; }
 .auth-card form button { width: 100%; }
+.auth-card #registro-form { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.auth-card #registro-form button { grid-column: 1 / -1; }
+.auth-card .auth-switch { width: 100%; margin-top: .75rem; }
 #registro-form label { color: var(--muted); font-weight: 500; }
 #registro-form input, #registro-form select, #login-form input { min-height: 3.2rem; }
 #catalogo-seccion { order: 1; }
@@ -278,7 +281,7 @@ main { max-width: 1680px; gap: 1.3rem; }
   .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 760px) {
-  .auth-layout, .dashboard-layout, .catalog-layout { grid-template-columns: 1fr; }
+  .auth-layout, .auth-card #registro-form, .dashboard-layout, .catalog-layout { grid-template-columns: 1fr; }
   .dashboard-sidebar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .dashboard-sidebar h2 { grid-column: 1 / -1; }
   .catalog-results .row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
