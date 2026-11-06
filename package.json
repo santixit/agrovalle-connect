@@ -8,6 +8,8 @@
   },
   "scripts": {
     "prepare": "husky",
+    "build": "node scripts/run-maven.js -DskipTests package",
+    "start": "node scripts/run-maven.js spring-boot:run",
     "test:e2e": "playwright test"
   }
 }

@@ -1,0 +1,1 @@
+org.springframework.boot.env.EnvironmentPostProcessor=co.edu.uniajc.agrovalle.config.NeonDatabaseUrlEnvironmentPostProcessor

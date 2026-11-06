@@ -98,6 +98,11 @@ try {
 ```
 
 Abre `http://localhost:8080/`. Las migraciones Flyway crean y validan el esquema al iniciar. Detén la aplicación con `Ctrl+C`. En producción, el secreto JWT y las credenciales de la base se deben administrar como secretos del proveedor; no se deben copiar al repositorio.
+
+### Usar PostgreSQL de Neon
+
+Después de vincular el repositorio con `neon link`, `neon env pull` guarda las conexiones en `.env.local`, archivo ignorado por Git. `npm start` lee esa configuración: usa `DATABASE_URL` para las consultas normales y `DATABASE_URL_UNPOOLED` para que Flyway ejecute migraciones sin pasar por el pool. Para ejecutar el contenedor en un proveedor, configura ambas variables y `JWT_SECRET` como variables secretas del servicio. Neon aloja PostgreSQL; el backend Spring Boot se despliega por separado usando el `Dockerfile`.
+
 ## Pruebas y calidad
 
 ```powershell
