@@ -67,6 +67,15 @@ header { background: var(--green-900); }
   clip-path: inset(50%);
   border: 0;
 }
+.publish-layout .farmer-subpage-top { grid-column: 1 / -1; }
+#catalogo-seccion.is-price-view .catalog-heading,
+#catalogo-seccion.is-price-view .catalog-filters > h3,
+#catalogo-seccion.is-price-view .filters,
+#catalogo-seccion.is-price-view .history-button,
+#catalogo-seccion.is-price-view .catalog-results { display: none !important; }
+#catalogo-seccion.is-price-view .catalog-layout { display: block; }
+#catalogo-seccion.is-price-view .catalog-filters { width: min(100%, 680px); margin: 0 auto; }
+#catalogo-seccion.is-price-view .price-widget { margin: 0; }
 main#app-content { width: min(100% - 48px, 1392px); gap: 22px; padding-top: 32px; }
 main#app-content > section { border-radius: var(--radius-panel); }
 .home-hero {

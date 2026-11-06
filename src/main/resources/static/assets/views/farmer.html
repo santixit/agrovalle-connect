@@ -1,20 +1,20 @@
-<section id="agricultor-panel" hidden aria-labelledby="publicar-titulo">
+<section id="agricultor-panel" hidden aria-labelledby="farmer-dashboard-title">
       <div class="dashboard-layout farmer-dashboard-layout">
         <aside class="dashboard-sidebar" aria-label="Menú del agricultor">
           <h2>Mi espacio</h2>
           <div class="dashboard-nav-links">
-            <a href="#agricultor-panel" aria-current="page"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1z"/></svg></span>Resumen</a>
+            <a href="#agricultor-panel" data-farmer-page="resumen" aria-current="page"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1z"/></svg></span>Resumen</a>
             <a href="#actividad-vista" data-dashboard-action="notificaciones"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9m-8 12h4"/></svg></span>Mensajes directos</a>
-            <a href="#publicar-titulo"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg></span>Productos publicados</a>
+            <a href="#productos-publicados" data-farmer-page="productos"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg></span>Productos publicados</a>
             <a href="#actividad-vista" data-dashboard-action="pedidos"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 4h2l2.2 11h10.6L21 8H6m2 11h.01M17 19h.01"/></svg></span>Pedidos</a>
-            <a href="#actividad-status" data-dashboard-action="pedidos"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 12h18M12 3v18m-7-14 14 14M19 5 5 19"/></svg></span>Seguimiento de entregas</a>
-            <a href="#catalogo-seccion"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM8 9h8M8 13h5"/></svg></span>Ofertas y catálogo</a>
-            <a href="#precios-seccion"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 17 6-6 4 3 8-9M15 5h6v6"/></svg></span>Consulta de precios</a>
-            <a href="#acceso-seccion"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>Mi cuenta</a>
+            <a href="#actividad-vista" data-dashboard-action="entregas"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 12h18M12 3v18m-7-14 14 14M19 5 5 19"/></svg></span>Seguimiento de entregas</a>
+            <a href="#catalogo-seccion" data-farmer-page="catalogo"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM8 9h8M8 13h5"/></svg></span>Ofertas y catálogo</a>
+            <a href="#precios-seccion" data-farmer-page="precios"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 17 6-6 4 3 8-9M15 5h6v6"/></svg></span>Consulta de precios</a>
+            <a href="#cuenta-panel" data-farmer-page="cuenta"><span class="nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>Mi cuenta</a>
           </div>
         </aside>
         <div class="dashboard-content">
-          <div class="dashboard-heading"><div><p class="eyebrow">AGROVALLE / PRODUCTOR</p><h2>Panel del agricultor</h2><p class="section-intro">Administra tus cosechas y mantén tus pedidos al día.</p></div></div>
+          <div class="dashboard-heading"><div><p class="eyebrow">AGROVALLE / PRODUCTOR</p><h2 id="farmer-dashboard-title">Panel del agricultor</h2><p class="section-intro">Administra tus cosechas y mantén tus pedidos al día.</p></div></div>
           <div class="metric-grid farmer-overview"><article class="metric-card metric-contacts"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 9 9 0 0 1-4-.9L3 21l1.9-5.5a9 9 0 0 1-.9-4A8.5 8.5 0 0 1 12.5 3h.5a8.5 8.5 0 0 1 8 8z"/></svg></span><span class="metric-copy"><strong id="farmer-contact-count" class="is-placeholder">—</strong><span>Mensajes de contacto</span></span></article>
             <article class="metric-card metric-products"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v4m0 0c-2-3-5-3-7-2 0 4 2 6 7 5m0-3c2-3 5-3 7-2 0 4-2 6-7 5m0 2v9m-5 0h10"/></svg></span><span class="metric-copy"><strong id="farmer-product-count" class="is-placeholder">—</strong><span>Productos publicados</span></span></article>
             <article class="metric-card metric-orders"><span class="metric-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4h2l2 11h10l2-7H7m2 11h.01M17 19h.01"/></svg></span><span class="metric-copy"><strong id="farmer-order-count" class="is-placeholder">—</strong><span>Pedidos activos</span></span></article>
@@ -26,12 +26,13 @@
             <article class="metric-card trace-delivered"><span class="metric-copy"><strong id="farmer-delivered-count" class="is-placeholder">—</strong><span>Entregadas</span></span><span class="trace-icon" aria-hidden="true">✓</span></article>
             <article class="metric-card trace-late"><span class="metric-copy"><strong class="is-placeholder">—</strong><span>Con retraso</span></span><span class="trace-icon" aria-hidden="true">!</span></article>
           </div>
-          <div class="dashboard-shortcuts"><div><span class="shortcut-icon" aria-hidden="true">＋</span><div><strong>¿Tienes una nueva cosecha?</strong><span>Publica la disponibilidad de tu finca.</span></div></div><a class="button" href="#publicar-titulo">Publicar producto</a></div>
-          <div class="dashboard-price"><span class="price-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 17 6-6 4 3 8-9M15 5h6v6"/></svg></span><div><h3>Alza de precios</h3><p id="price-trend-status">Consulta el <a href="#precios-seccion">promedio regional</a> desde el catálogo.</p></div></div>
+          <div class="dashboard-shortcuts"><div><span class="shortcut-icon" aria-hidden="true">＋</span><div><strong>¿Tienes una nueva cosecha?</strong><span>Publica la disponibilidad de tu finca.</span></div></div><a class="button" href="#productos-publicados" data-farmer-page="productos">Publicar producto</a></div>
+          <div class="dashboard-price"><span class="price-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 17 6-6 4 3 8-9M15 5h6v6"/></svg></span><div><h3>Alza de precios</h3><p id="price-trend-status">Consulta el <a href="#precios-seccion" data-farmer-page="precios">promedio regional</a> desde el catálogo.</p></div></div>
           <p id="farmer-dashboard-status" class="status" role="status"></p>
         </div>
       </div>
-      <div class="publish-layout">
+      <div id="productos-publicados" class="publish-layout" hidden>
+        <div class="activity-page-top farmer-subpage-top"><button type="button" class="secondary" data-farmer-back><span aria-hidden="true">←</span> Volver al resumen</button><span class="badge">GESTIÓN DE COSECHAS</span></div>
         <div class="publish-form-panel">
           <h2 id="publicar-titulo">Publicar cosecha</h2>
           <p class="section-intro">Comparte la disponibilidad de tu finca con compradores de la región.</p>
