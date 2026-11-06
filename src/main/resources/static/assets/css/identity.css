@@ -55,6 +55,18 @@ header { background: var(--green-900); }
 .site-header .brand > span:first-child { width: 44px; height: 44px; border: 1px solid #f5e4bc45; border-radius: 15px; background: #f5e4bc14; }
 .site-header nav a { border-radius: 999px; }
 .site-header nav a:hover, .site-header nav a:focus-visible { background: #f5e4bc20; }
+.site-status.is-session-confirmation {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+  border: 0;
+}
 main#app-content { width: min(100% - 48px, 1392px); gap: 22px; padding-top: 32px; }
 main#app-content > section { border-radius: var(--radius-panel); }
 .home-hero {

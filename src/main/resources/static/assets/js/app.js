@@ -10,7 +10,13 @@ const api = '/api/v1';
     } catch { carrito = new Map(); }
     const byId = (id) => document.getElementById(id);
     const formData = (form) => Object.fromEntries(new FormData(form).entries());
-    const tell = (id, text) => { byId(id).textContent = text; };
+    const tell = (id, text) => {
+      const message = byId(id);
+      message.textContent = text;
+      if (id === 'auth-status') {
+        message.classList.toggle('is-session-confirmation', Boolean(token) && text.startsWith('Sesión iniciada como '));
+      }
+    };
     const todayInBogota = () => {
       const parts = new Intl.DateTimeFormat('en', {
         timeZone: 'America/Bogota', year: 'numeric', month: '2-digit', day: '2-digit'
