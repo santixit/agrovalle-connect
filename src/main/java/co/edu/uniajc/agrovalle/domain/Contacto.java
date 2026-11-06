@@ -37,6 +37,12 @@ public class Contacto {
   @Column(nullable = false, length = 1000)
   private String mensaje;
 
+  @Column(length = 1000)
+  private String respuesta;
+
+  @Column(name = "respondido_en")
+  private LocalDateTime respondidoEn;
+
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, length = 20)
   private EstadoContacto estado = EstadoContacto.NUEVO;
@@ -71,6 +77,23 @@ public class Contacto {
 
   public String getMensaje() {
     return mensaje;
+  }
+
+  public String getRespuesta() {
+    return respuesta;
+  }
+
+  public LocalDateTime getRespondidoEn() {
+    return respondidoEn;
+  }
+
+  public void responder(String respuesta) {
+    if (estado == EstadoContacto.CERRADO) {
+      throw new IllegalStateException("Este contacto está cerrado");
+    }
+    this.respuesta = respuesta;
+    this.respondidoEn = LocalDateTime.now();
+    this.estado = EstadoContacto.RESPONDIDO;
   }
 
   public EstadoContacto getEstado() {

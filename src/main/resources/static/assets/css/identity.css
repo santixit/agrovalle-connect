@@ -187,6 +187,14 @@ main#app-content.is-focused-route > #actividad-vista { display: grid; align-cont
 .message-unread, .message-read { color: #a85b23; font-size: .68rem; font-weight: 850; }
 .message-read { color: #728076; }
 .message-date { margin-top: auto; color: #7c857a; font-size: .73rem; }
+.message-reply { padding: 14px 16px; border: 1px solid #c7dfc8; border-radius: 12px; background: #f0f7ed; color: #204b2d !important; }
+.message-waiting { padding: 12px 14px; border-radius: 10px; background: #f5f3ec; color: #59665c !important; }
+.message-reply-form { display: grid; gap: 10px; padding-top: 14px; border-top: 1px solid #e7e4d9; }
+.message-reply-form label { display: grid; gap: 7px; color: #294e37; font-size: .88rem; font-weight: 700; }
+.message-reply-form textarea { width: 100%; min-height: 100px; resize: vertical; border: 1px solid #c8d1c4; border-radius: 10px; padding: 12px; color: #24372b; background: #fff; font: inherit; }
+.message-reply-form textarea:focus-visible { outline: 3px solid #80bb83; outline-offset: 2px; }
+.message-reply-form button { justify-self: start; }
+.message-reply-form .status { margin: 0; }
 .order-card { border-top: 3px solid #709066; }
 .order-card .actions { margin-top: auto; }
 .activity-list .empty-state { grid-column: 1 / -1; max-width: 740px; padding: 42px 28px; border-color: #d7d5c8; background: #f4f2e9; }

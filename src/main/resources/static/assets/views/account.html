@@ -1,11 +1,12 @@
 <section id="cuenta-panel" hidden>
       <div class="activity-page-top farmer-subpage-top"><button type="button" class="secondary" data-farmer-back><span aria-hidden="true">←</span> Volver al resumen</button><span class="badge">MI AGROVALLE</span></div>
-      <p class="eyebrow">TU ESPACIO</p><h2>Todo lo que pasa en tu cuenta.</h2>
-      <p class="section-intro">Elige a dónde quieres ir y vuelve cuando quieras.</p>
+      <div class="activity-page-top buyer-subpage-top"><button type="button" class="secondary" data-buyer-page="catalogo"><span aria-hidden="true">←</span> Volver al catálogo</button><span class="badge">MI AGROVALLE</span></div>
+      <p class="eyebrow">TU ESPACIO</p><h2 id="account-title">Todo lo que pasa en tu cuenta.</h2>
+      <p id="account-intro" class="section-intro">Elige a dónde quieres ir y vuelve cuando quieras.</p>
       <div class="actions activity-actions">
+        <button id="ver-pedidos" class="secondary"><span class="activity-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4h2l2 11h10l2-7H7m2 11h.01M17 19h.01"/></svg></span><span><strong id="account-orders-title">Pedidos y reservas</strong><small id="account-orders-subtitle">Consulta el estado de tus compras</small></span><span class="activity-arrow" aria-hidden="true">↗</span></button>
         <button id="ver-favoritos" class="secondary"><span class="activity-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9z"/></svg></span><span><strong>Mis favoritos</strong><small>Lo que quieres volver a encontrar</small></span><span class="activity-arrow" aria-hidden="true">↗</span></button>
-        <button id="ver-notificaciones" class="secondary"><span class="activity-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9m-8 12h4"/></svg></span><span><strong>Mensajes directos</strong><small>Contactos de la comunidad</small></span><span class="activity-arrow" aria-hidden="true">↗</span></button>
-        <button id="ver-pedidos" class="secondary"><span class="activity-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4h2l2 11h10l2-7H7m2 11h.01M17 19h.01"/></svg></span><span><strong>Pedidos y reservas</strong><small>Consulta el estado de tus compras</small></span><span class="activity-arrow" aria-hidden="true">↗</span></button>
+        <button id="ver-notificaciones" class="secondary"><span class="activity-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9m-8 12h4"/></svg></span><span><strong id="account-messages-title">Mensajes directos</strong><small id="account-messages-subtitle">Contactos de la comunidad</small></span><span class="activity-arrow" aria-hidden="true">↗</span></button>
       </div>
     </section>
     <section id="actividad-vista" class="activity-page" hidden aria-labelledby="actividad-titulo">

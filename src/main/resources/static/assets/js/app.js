@@ -4,6 +4,7 @@ const api = '/api/v1';
     let modoAuth = 'login';
     let vistaActividad = null;
     let vistaAgricultor = 'resumen';
+    let vistaComprador = 'catalogo';
     let carrito;
     try {
       carrito = new Map(JSON.parse(sessionStorage.getItem('agrovalle-carrito') || '[]')
@@ -49,6 +50,7 @@ const api = '/api/v1';
     function actualizarPaneles() {
       const vistaEnfocada = Boolean(token && vistaActividad);
       const vistasCatalogoAgricultor = ['catalogo', 'precios'].includes(vistaAgricultor);
+      const cuentaCompradorActiva = rol === 'COMPRADOR' && vistaComprador === 'cuenta';
       byId('acceso-seccion').classList.toggle('is-register', modoAuth === 'registro');
       byId('session-bar').hidden = !token;
       byId('session-identity').textContent = token ? `Sesión iniciada como ${rol}` : '';
@@ -69,13 +71,25 @@ const api = '/api/v1';
       byId('auth-toggle').textContent = modoAuth === 'registro'
         ? '¿Ya tienes cuenta? Iniciar sesión' : '¿No tienes cuenta? Crear cuenta';
       byId('salir').hidden = !token;
-      byId('cuenta-panel').hidden = !token || vistaEnfocada || (rol === 'AGRICULTOR' && vistaAgricultor !== 'cuenta');
+      byId('cuenta-panel').hidden = !token || vistaEnfocada
+        || (rol === 'AGRICULTOR' && vistaAgricultor !== 'cuenta')
+        || (rol === 'COMPRADOR' && !cuentaCompradorActiva);
+      byId('account-title').textContent = rol === 'COMPRADOR' ? 'Tu actividad de compra.' : 'Todo lo que pasa en tu cuenta.';
+      byId('account-intro').textContent = rol === 'COMPRADOR'
+        ? 'Consulta tus compras, mensajes y cosechas guardadas.' : 'Elige a dónde quieres ir y vuelve cuando quieras.';
+      byId('account-orders-title').textContent = rol === 'COMPRADOR' ? 'Mis compras' : 'Pedidos y reservas';
+      byId('account-orders-subtitle').textContent = rol === 'COMPRADOR'
+        ? 'Historial de reservas, compras y entregas' : 'Consulta el estado de tus compras';
+      byId('account-messages-title').textContent = rol === 'COMPRADOR' ? 'Mensajes enviados' : 'Mensajes directos';
+      byId('account-messages-subtitle').textContent = rol === 'COMPRADOR'
+        ? 'Consultas y respuestas de agricultores' : 'Contactos de compradores';
       byId('actividad-vista').hidden = !vistaEnfocada;
       byId('inicio-seccion').hidden = Boolean(token) || vistaEnfocada;
       byId('como-funciona').hidden = Boolean(token) || vistaEnfocada;
       byId('app-content').classList.toggle('is-focused-route', vistaEnfocada);
       byId('catalogo-seccion').hidden = !token || vistaEnfocada
-        || (rol === 'AGRICULTOR' && !vistasCatalogoAgricultor);
+        || (rol === 'AGRICULTOR' && !vistasCatalogoAgricultor)
+        || (cuentaCompradorActiva || (rol === 'COMPRADOR' && vistaComprador === 'carrito'));
       byId('catalogo-seccion').classList.toggle('is-price-view', rol === 'AGRICULTOR' && vistaAgricultor === 'precios');
       byId('catalog-search-form').hidden = !token;
       byId('catalog-nav').hidden = !token;
@@ -86,8 +100,10 @@ const api = '/api/v1';
       byId('agricultor-panel').setAttribute('aria-labelledby', vistaAgricultor === 'productos' ? 'publicar-titulo' : 'farmer-dashboard-title');
       document.querySelectorAll('.farmer-subpage-top').forEach((heading) => { heading.hidden = rol !== 'AGRICULTOR'; });
       byId('admin-panel').hidden = rol !== 'ADMIN' || vistaEnfocada;
-      byId('carrito-seccion').hidden = rol !== 'COMPRADOR' || vistaEnfocada;
+      byId('carrito-seccion').hidden = rol !== 'COMPRADOR' || vistaEnfocada
+        || (rol === 'COMPRADOR' && vistaComprador !== 'carrito');
       byId('carrito-link').hidden = rol !== 'COMPRADOR';
+      document.querySelectorAll('.buyer-subpage-top').forEach((heading) => { heading.hidden = rol !== 'COMPRADOR'; });
       renderCarrito();
       if (rol === 'AGRICULTOR') { cargarFincas(); cargarPanelAgricultor(); }
       if (rol === 'ADMIN') cargarReporteAdmin();
@@ -134,13 +150,14 @@ const api = '/api/v1';
         token = result.accessToken;
         rol = JSON.parse(atob(token.split('.')[1])).scope;
         vistaAgricultor = 'resumen';
+        vistaComprador = 'catalogo';
         form.reset();
         actualizarPaneles();
         await buscar();
         tell('auth-status', `Sesión iniciada como ${rol}.`);
       } catch (error) { tell('auth-status', error.message); }
     });
-    byId('salir').addEventListener('click', () => { token = null; rol = null; modoAuth = 'login'; vistaActividad = null; vistaAgricultor = 'resumen'; carrito.clear(); actualizarPaneles(); tell('auth-status', 'Sesión cerrada.'); });
+    byId('salir').addEventListener('click', () => { token = null; rol = null; modoAuth = 'login'; vistaActividad = null; vistaAgricultor = 'resumen'; vistaComprador = 'catalogo'; carrito.clear(); actualizarPaneles(); tell('auth-status', 'Sesión cerrada.'); });
     const registroForm = byId('registro-form');
     function actualizarCamposRegistro(tipo) {
       document.querySelectorAll('[data-farmer]').forEach((field) => {
@@ -405,12 +422,11 @@ const api = '/api/v1';
               await request('/reservas', { method: 'POST', body: JSON.stringify({
                 productoId: producto.id, cantidad_kg: quantity
               }) });
-              feedback.textContent = 'Reserva creada. Ya aparece en “Mi actividad” y el agricultor debe confirmarla.';
+              feedback.textContent = 'Reserva creada. Ya aparece en “Mis compras” y el agricultor debe confirmarla.';
               form.reset();
               await buscar();
               await cargarPedidos();
               tell('catalog-status', 'Reserva creada. El agricultor debe confirmarla.');
-              byId('cuenta-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
             } else {
               const current = carrito.get(producto.id);
               carrito.set(producto.id, { productoId: producto.id, nombre: producto.nombre,
@@ -484,7 +500,6 @@ const api = '/api/v1';
         carrito.clear(); renderCarrito();
         tell('carrito-status', `Compra confirmada en ${result.pedidos.length} pedido(s), uno por agricultor.`);
         await buscar(); await cargarPedidos();
-        byId('cuenta-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
       } catch (error) { tell('carrito-status', error.message); }
     });
     byId('buscar-form').addEventListener('submit', (event) => { event.preventDefault(); buscar(); });
@@ -517,7 +532,16 @@ const api = '/api/v1';
     function abrirActividad(tipo) {
       const vistaCambio = vistaActividad !== tipo;
       vistaActividad = tipo;
-      const [titulo, descripcion] = actividadVistas[tipo] || actividadVistas.notificaciones;
+      let [titulo, descripcion] = actividadVistas[tipo] || actividadVistas.notificaciones;
+      if (rol === 'COMPRADOR' && tipo === 'pedidos') {
+        titulo = 'Mis compras';
+        descripcion = 'Aquí puedes consultar todas tus reservas, su estado y el seguimiento de cada entrega.';
+      } else if (rol === 'COMPRADOR' && tipo === 'notificaciones') {
+        titulo = 'Mensajes enviados';
+        descripcion = 'Consulta las preguntas que enviaste a los agricultores y sus respuestas.';
+      } else if (rol === 'AGRICULTOR' && tipo === 'notificaciones') {
+        descripcion = 'Lee el mensaje del comprador y respóndele desde esta bandeja.';
+      }
       byId('actividad-titulo').textContent = titulo;
       byId('actividad-descripcion').textContent = descripcion;
       if (vistaCambio) {
@@ -531,6 +555,7 @@ const api = '/api/v1';
     function cerrarActividad() {
       vistaActividad = null;
       vistaAgricultor = 'resumen';
+      if (rol === 'COMPRADOR') vistaComprador = 'cuenta';
       byId('actividad').replaceChildren();
       actualizarPaneles();
       const panel = rol === 'AGRICULTOR' ? '#agricultor-panel' : '#cuenta-panel';
@@ -568,20 +593,47 @@ const api = '/api/v1';
     async function cargarMensajes() {
       abrirActividad('notificaciones');
       try {
-        const items = await request('/notificaciones/mias');
-        const contacts = rol === 'AGRICULTOR' ? items.filter((item) => item.tipo === 'CONTACTO') : items;
+        const contacts = await request(rol === 'AGRICULTOR' ? '/contactos/recibidos' : '/contactos/enviados');
         const cards = contacts.map((item) => {
           const card = document.createElement('article'); card.className = 'card activity-card message-card';
           const top = document.createElement('div'); top.className = 'message-card-top';
-          const badge = document.createElement('span'); badge.className = 'badge'; badge.textContent = item.tipo === 'CONTACTO' ? 'CONTACTO DE COMPRADOR' : item.tipo;
-          const unread = document.createElement('span'); unread.className = item.leida ? 'message-read' : 'message-unread'; unread.textContent = item.leida ? 'Leído' : 'Nuevo';
+          const badge = document.createElement('span'); badge.className = 'badge';
+          badge.textContent = rol === 'AGRICULTOR' ? `MENSAJE DE ${item.comprador || 'COMPRADOR'}` : `PARA ${item.producto || 'AGRICULTOR'}`;
+          const unread = document.createElement('span'); unread.className = item.respuesta ? 'message-read' : 'message-unread';
+          unread.textContent = item.respuesta ? (rol === 'AGRICULTOR' ? 'Respondido' : 'Respuesta recibida') : (rol === 'AGRICULTOR' ? 'Pendiente' : 'Esperando respuesta');
+          const product = document.createElement('h3'); product.textContent = item.producto || 'Cosecha';
+          const label = document.createElement('strong'); label.textContent = rol === 'AGRICULTOR' ? 'Mensaje del comprador' : 'Tu mensaje';
           const message = document.createElement('p'); message.textContent = item.mensaje;
           const date = document.createElement('time'); date.className = 'message-date';
           if (item.creadaEn) { date.dateTime = item.creadaEn; date.textContent = new Intl.DateTimeFormat('es-CO', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(item.creadaEn)); }
-          top.append(badge, unread); card.append(top, message); if (date.textContent) card.append(date); return card;
+          top.append(badge, unread); card.append(top, product, label, message); if (date.textContent) card.append(date);
+          if (item.respuesta) {
+            const replyLabel = document.createElement('strong'); replyLabel.textContent = rol === 'AGRICULTOR' ? 'Tu respuesta' : 'Respuesta del agricultor';
+            const reply = document.createElement('p'); reply.className = 'message-reply'; reply.textContent = item.respuesta;
+            card.append(replyLabel, reply);
+          } else if (rol === 'AGRICULTOR') {
+            const form = document.createElement('form'); form.className = 'message-reply-form';
+            const fieldLabel = document.createElement('label'); fieldLabel.textContent = 'Responder al comprador';
+            const textarea = document.createElement('textarea'); textarea.name = 'mensaje'; textarea.maxLength = 1000; textarea.required = true;
+            textarea.placeholder = 'Escribe tu respuesta…'; fieldLabel.append(textarea);
+            const submit = document.createElement('button'); submit.type = 'submit'; submit.textContent = 'Enviar respuesta';
+            const status = document.createElement('p'); status.className = 'status'; status.setAttribute('role', 'status');
+            form.append(fieldLabel, submit, status);
+            form.addEventListener('submit', async (event) => {
+              event.preventDefault(); submit.disabled = true;
+              try {
+                await request(`/contactos/${item.id}/respuesta`, { method: 'POST', body: JSON.stringify({ mensaje: textarea.value.trim() }) });
+                await cargarMensajes();
+              } catch (error) { status.textContent = error.message; submit.disabled = false; }
+            });
+            card.append(form);
+          } else {
+            const waiting = document.createElement('p'); waiting.className = 'message-waiting'; waiting.textContent = 'El agricultor aún no ha respondido.'; card.append(waiting);
+          }
+          return card;
         });
         if (cards.length) byId('actividad').replaceChildren(...cards);
-        else mostrarEstadoVacio(byId('actividad'), rol === 'AGRICULTOR' ? 'Aún no tienes contactos. Cuando alguien pregunte por una cosecha, aparecerá aquí.' : 'No tienes mensajes pendientes por ahora.');
+        else mostrarEstadoVacio(byId('actividad'), rol === 'AGRICULTOR' ? 'Aún no tienes mensajes. Cuando un comprador te escriba por una cosecha, aparecerá aquí para que puedas responder.' : 'Aún no has enviado mensajes a agricultores. Cuando contactes una cosecha, verás aquí tu consulta y la respuesta.');
         tell('actividad-status', `${contacts.length} mensaje(s) en tu bandeja.`);
       } catch (error) { tell('actividad-status', error.message); }
     }
@@ -631,8 +683,11 @@ const api = '/api/v1';
           card.append(actions); return card;
         });
         byId('actividad').replaceChildren(...cards);
-        if (orders.length === 0) mostrarEstadoVacio(byId('actividad'), 'Aún no hay reservas o pedidos. Cuando hagas una reserva aparecerá aquí.');
-        tell('actividad-status', `${orders.length} pedido(s) encontrado(s).`);
+        if (orders.length === 0) mostrarEstadoVacio(byId('actividad'), rol === 'COMPRADOR'
+          ? 'Aún no tienes compras. Cuando reserves una cosecha, la verás aquí con su estado y seguimiento.'
+          : 'Aún no hay pedidos pendientes de atender.');
+        tell('actividad-status', rol === 'COMPRADOR'
+          ? `${orders.length} compra(s) en tu historial.` : `${orders.length} pedido(s) por atender.`);
       } catch (error) { tell('actividad-status', error.message); }
     }
     byId('ver-pedidos').addEventListener('click', cargarPedidos);
@@ -679,6 +734,18 @@ const api = '/api/v1';
       if (location.hash !== hash) location.hash = hash;
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+    function abrirVistaComprador(vista, hash) {
+      vistaComprador = vista;
+      vistaActividad = null;
+      actualizarPaneles();
+      if (location.hash !== hash) location.hash = hash;
+      document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    document.querySelectorAll('[data-buyer-page]').forEach((link) => link.addEventListener('click', (event) => {
+      if (rol !== 'COMPRADOR') return;
+      event.preventDefault();
+      abrirVistaComprador(link.dataset.buyerPage, link.getAttribute('href'));
+    }));
     document.querySelectorAll('[data-farmer-page]').forEach((link) => link.addEventListener('click', (event) => {
       if (rol !== 'AGRICULTOR') return;
       event.preventDefault();
@@ -688,24 +755,40 @@ const api = '/api/v1';
       abrirVistaAgricultor('resumen', '#agricultor-panel');
     }));
     byId('catalog-nav').addEventListener('click', (event) => {
+      if (rol === 'COMPRADOR') {
+        event.preventDefault(); abrirVistaComprador('catalogo', '#catalogo-seccion'); return;
+      }
       if (rol !== 'AGRICULTOR') return;
       event.preventDefault();
       abrirVistaAgricultor('catalogo', '#catalogo-seccion');
     });
     byId('prices-nav').addEventListener('click', (event) => {
+      if (rol === 'COMPRADOR') {
+        event.preventDefault(); abrirVistaComprador('catalogo', '#precios-seccion'); return;
+      }
       if (rol !== 'AGRICULTOR') return;
       event.preventDefault();
       abrirVistaAgricultor('precios', '#precios-seccion');
     });
     byId('header-login').addEventListener('click', (event) => {
+      if (rol === 'COMPRADOR') {
+        event.preventDefault(); abrirVistaComprador('cuenta', '#cuenta-panel'); return;
+      }
       if (rol !== 'AGRICULTOR') return;
       event.preventDefault();
       abrirVistaAgricultor('resumen', '#agricultor-panel');
     });
     byId('header-home').addEventListener('click', (event) => {
+      if (rol === 'COMPRADOR') {
+        event.preventDefault(); abrirVistaComprador('catalogo', '#catalogo-seccion'); return;
+      }
       if (rol !== 'AGRICULTOR') return;
       event.preventDefault();
       abrirVistaAgricultor('resumen', '#agricultor-panel');
+    });
+    byId('carrito-link').addEventListener('click', (event) => {
+      if (rol !== 'COMPRADOR') return;
+      event.preventDefault(); abrirVistaComprador('carrito', '#carrito-seccion');
     });
     window.addEventListener('hashchange', () => {
       if (vistaActividad && location.hash !== '#actividad-vista') {

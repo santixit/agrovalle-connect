@@ -7,6 +7,7 @@ import co.edu.uniajc.agrovalle.service.DatosCuentaInvalidosException;
 import co.edu.uniajc.agrovalle.service.ProductoNoEncontradoException;
 import co.edu.uniajc.agrovalle.service.CompradorNoEncontradoException;
 import co.edu.uniajc.agrovalle.service.PedidoNoEncontradoException;
+import co.edu.uniajc.agrovalle.service.ContactoNoEncontradoException;
 import co.edu.uniajc.agrovalle.service.FincaNoEncontradaException;
 import co.edu.uniajc.agrovalle.domain.StockInsuficienteException;
 import co.edu.uniajc.agrovalle.service.OfertaNoPropiaException;
@@ -65,7 +66,8 @@ public class ApiExceptionHandler {
   }
 
   @ExceptionHandler({ProductoNoEncontradoException.class, FincaNoEncontradaException.class,
-      PedidoNoEncontradoException.class, CompradorNoEncontradoException.class})
+      PedidoNoEncontradoException.class, CompradorNoEncontradoException.class,
+      ContactoNoEncontradoException.class})
   public ResponseEntity<Map<String, String>> productoNoEncontrado(
       RuntimeException exception) {
     return ResponseEntity.status(HttpStatus.NOT_FOUND)

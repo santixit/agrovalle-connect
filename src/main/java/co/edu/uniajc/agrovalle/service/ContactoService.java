@@ -2,6 +2,7 @@ package co.edu.uniajc.agrovalle.service;
 
 import co.edu.uniajc.agrovalle.api.dto.ContactoRequest;
 import co.edu.uniajc.agrovalle.api.dto.ContactoResponse;
+import co.edu.uniajc.agrovalle.api.dto.ContactoBandejaResponse;
 import co.edu.uniajc.agrovalle.domain.Comprador;
 import co.edu.uniajc.agrovalle.domain.Contacto;
 import co.edu.uniajc.agrovalle.domain.ContactoRegistradoEvent;
@@ -9,6 +10,7 @@ import co.edu.uniajc.agrovalle.domain.Producto;
 import co.edu.uniajc.agrovalle.repository.CompradorRepository;
 import co.edu.uniajc.agrovalle.repository.ContactoRepository;
 import co.edu.uniajc.agrovalle.repository.ProductoRepository;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.context.ApplicationEventPublisher;
@@ -46,5 +48,27 @@ public class ContactoService {
           producto.getAgricultor().getUsuario().getId(), guardado.getId(), producto.getNombre()));
     }
     return ContactoResponse.from(guardado);
+  }
+
+  @Transactional(readOnly = true)
+  public List<ContactoBandejaResponse> recibidos(Long agricultorUsuarioId) {
+    return contactoRepository.findByAgricultor_Usuario_IdOrderByCreadoEnDesc(agricultorUsuarioId)
+        .stream().map(ContactoBandejaResponse::from).toList();
+  }
+
+  @Transactional(readOnly = true)
+  public List<ContactoBandejaResponse> enviados(Long compradorUsuarioId) {
+    return contactoRepository.findByComprador_Usuario_IdOrderByCreadoEnDesc(compradorUsuarioId)
+        .stream().map(ContactoBandejaResponse::from).toList();
+  }
+
+  @Transactional
+  public ContactoBandejaResponse responder(Long agricultorUsuarioId, Long contactoId,
+      String mensaje) {
+    Contacto contacto = contactoRepository
+        .findByIdAndAgricultor_Usuario_Id(contactoId, agricultorUsuarioId)
+        .orElseThrow(() -> new ContactoNoEncontradoException(contactoId));
+    contacto.responder(mensaje.trim());
+    return ContactoBandejaResponse.from(contacto);
   }
 }
