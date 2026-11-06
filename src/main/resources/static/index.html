@@ -16,7 +16,6 @@
         <span aria-hidden="true" class="search-icon">⌕</span>
         <input id="catalog-query" maxlength="120" placeholder="Buscar producto o municipio" aria-label="Buscar producto o municipio">
       </form>
-      <a id="header-login" class="header-login" href="#acceso-seccion">Ingresar</a>
       <nav aria-label="Navegación principal">
         <a href="#inicio-seccion">Inicio</a>
         <a id="catalog-nav" href="#catalogo-seccion" hidden>Catálogo</a>
@@ -30,14 +29,6 @@
     <section id="inicio-seccion" class="home-hero" aria-labelledby="inicio-titulo">
       <h1 id="inicio-titulo">Compra cosechas frescas directo del productor</h1>
       <p>Agricultores del Valle del Cauca publican sus cosechas; tú las reservas sin intermediarios y sigues la entrega.</p>
-      <div id="guest-auth-actions" class="actions">
-        <a class="button-link" href="#acceso-seccion" data-auth-mode="login">Iniciar sesión para ver cosechas</a>
-        <a class="button-link secondary" href="#acceso-seccion" data-auth-mode="registro">Crear cuenta</a>
-      </div>
-      <div class="home-shortcuts">
-        <p>Consulta la trazabilidad de tus entregas <a href="#acceso-seccion" data-auth-mode="login">Inicia sesión</a></p>
-        <p>¿Eres agricultor? Publica tu cosecha y recibe contactos <a href="#acceso-seccion" data-auth-mode="registro">Crear cuenta</a></p>
-      </div>
     </section>
     <section id="acceso-seccion" aria-labelledby="acceso-titulo">
       <div class="auth-layout">
@@ -264,7 +255,6 @@
       return body;
     }
     function actualizarPaneles() {
-      byId('header-login').textContent = token && rol !== 'COMPRADOR' ? 'Cerrar sesión' : token ? 'Mi cuenta' : 'Ingresar';
       byId('acceso-titulo').textContent = token ? 'Tu cuenta' : modoAuth === 'registro' ? 'Crear cuenta' : 'Iniciar sesión';
       byId('login-form').hidden = Boolean(token) || modoAuth !== 'login';
       byId('registro-form').hidden = Boolean(token) || modoAuth !== 'registro';
@@ -277,7 +267,6 @@
       byId('catalog-search-form').hidden = !token;
       byId('catalog-nav').hidden = !token;
       byId('prices-nav').hidden = !token;
-      byId('guest-auth-actions').hidden = Boolean(token);
       byId('agricultor-panel').hidden = rol !== 'AGRICULTOR';
       byId('admin-panel').hidden = rol !== 'ADMIN';
       byId('carrito-seccion').hidden = rol !== 'COMPRADOR';
@@ -294,9 +283,6 @@
     }
     byId('auth-toggle').addEventListener('click', () => {
       cambiarModoAuth(modoAuth === 'login' ? 'registro' : 'login');
-    });
-    document.querySelectorAll('[data-auth-mode]').forEach((link) => {
-      link.addEventListener('click', () => cambiarModoAuth(link.dataset.authMode));
     });
     async function cargarPanelAgricultor() {
       try {
@@ -330,10 +316,6 @@
       } catch (error) { tell('auth-status', error.message); }
     });
     byId('salir').addEventListener('click', () => { token = null; rol = null; modoAuth = 'login'; vistaActividad = null; carrito.clear(); actualizarPaneles(); tell('auth-status', 'Sesión cerrada.'); });
-    byId('header-login').addEventListener('click', (event) => {
-      if (!token || rol === 'COMPRADOR') return;
-      event.preventDefault(); byId('salir').click();
-    });
     const registroForm = byId('registro-form');
     function actualizarCamposRegistro(tipo) {
       document.querySelectorAll('[data-farmer]').forEach((field) => {
@@ -510,7 +492,7 @@
           favorite.onclick = async () => { try { await request(`/favoritos/${detalle.id}`, { method: 'POST' }); tell('catalog-status', 'Oferta guardada en favoritos.'); favorite.textContent = '★ Guardado en favoritos'; } catch (error) { tell('catalog-status', error.message); } };
           actions.append(favorite, reserve, contact);
         } else {
-          const login = document.createElement('a'); login.className = 'header-login'; login.href = '#acceso-seccion';
+          const login = document.createElement('a'); login.className = 'button-link secondary'; login.href = '#acceso-seccion';
           login.textContent = 'Ingresa para reservar o contactar'; actions.append(login);
         }
         info.append(chart, actions); layout.append(left, info); content.replaceChildren(layout);
