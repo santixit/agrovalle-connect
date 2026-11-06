@@ -1,12 +1,21 @@
 <section id="acceso-seccion" aria-labelledby="acceso-titulo">
       <div class="auth-layout">
+        <div class="auth-story">
+          <p class="eyebrow">TU COMUNIDAD, MÁS CERCA</p>
+          <h2>El campo del Valle tiene mucho que contar.</h2>
+          <p>Entra a una comunidad que pone en contacto a quienes cultivan con quienes quieren comprar fresco y local.</p>
+          <div class="auth-story-note"><span aria-hidden="true">✳</span><span><strong>Conexiones con raíz</strong><small>Personas reales. Cosechas de aquí. Tratos directos.</small></span></div>
+          <div class="auth-orbit" aria-hidden="true"><span>COSECHA</span><span>COMUNIDAD</span><span>VALLE</span></div>
+        </div>
         <div class="auth-card">
+          <p class="auth-card-kicker">BIENVENIDO A AGROVALLE</p>
           <h2 id="acceso-titulo">Iniciar sesión</h2>
+          <p id="auth-card-intro" class="auth-card-intro">Tu próxima conexión con el campo empieza aquí.</p>
           <form id="login-form" class="form-grid">
             <div id="login-fields" class="form-grid">
               <label>Correo<input name="correo" type="email" required autocomplete="username" placeholder="nombre@correo.com"></label>
               <label>Contraseña<input name="contrasena" type="password" required autocomplete="current-password" placeholder="Contraseña"></label>
-              <button>Iniciar sesión</button>
+              <button>Iniciar sesión <span aria-hidden="true">→</span></button>
             </div>
           </form>
           <form id="registro-form" class="form-grid" hidden>
@@ -19,9 +28,10 @@
             <label data-buyer hidden>Tipo de comercio<input name="tipoComercio" maxlength="80"></label>
             <label>Correo<input name="correo" type="email" maxlength="254" required autocomplete="email"></label>
             <label>Contraseña<input name="contrasena" type="password" minlength="10" maxlength="72" required autocomplete="new-password"></label>
-            <button>Crear cuenta</button>
+            <button>Crear cuenta <span aria-hidden="true">→</span></button>
           </form>
-          <button type="button" id="auth-toggle" class="auth-switch secondary">¿No tienes cuenta? Crear cuenta</button>
+          <div class="auth-switch-row"><span>¿Primera vez por aquí?</span><button type="button" id="auth-toggle" class="auth-switch secondary">Crear cuenta</button></div>
+          <p class="auth-footnote"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 5 6v5c0 5 3 8 7 10 4-2 7-5 7-10V6zM9 12l2 2 4-5"/></svg> Gestiona tus cosechas, pedidos y conexiones locales.</p>
         </div>
       </div>
     </section>

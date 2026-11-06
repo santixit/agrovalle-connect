@@ -1,10 +1,15 @@
 <section id="cuenta-panel" hidden>
-      <h2>Mi actividad</h2>
+      <p class="eyebrow">TU ESPACIO</p><h2>Todo lo que pasa en tu cuenta.</h2>
+      <p class="section-intro">Elige a dónde quieres ir y vuelve cuando quieras.</p>
       <div class="actions activity-actions">
-        <button id="ver-favoritos" class="secondary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9z"/></svg><span>Ver favoritos</span></button>
-        <button id="ver-notificaciones" class="secondary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9m-8 12h4"/></svg><span>Ver notificaciones</span></button>
-        <button id="ver-pedidos" class="secondary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h2l2 11h10l2-7H7m2 11h.01M17 19h.01"/></svg><span>Ver mis reservas/pedidos</span></button>
+        <button id="ver-favoritos" class="secondary"><span class="activity-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9z"/></svg></span><span><strong>Mis favoritos</strong><small>Lo que quieres volver a encontrar</small></span><span class="activity-arrow" aria-hidden="true">↗</span></button>
+        <button id="ver-notificaciones" class="secondary"><span class="activity-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9m-8 12h4"/></svg></span><span><strong>Mensajes directos</strong><small>Contactos de la comunidad</small></span><span class="activity-arrow" aria-hidden="true">↗</span></button>
+        <button id="ver-pedidos" class="secondary"><span class="activity-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4h2l2 11h10l2-7H7m2 11h.01M17 19h.01"/></svg></span><span><strong>Pedidos y reservas</strong><small>Consulta el estado de tus compras</small></span><span class="activity-arrow" aria-hidden="true">↗</span></button>
       </div>
+    </section>
+    <section id="actividad-vista" class="activity-page" hidden aria-labelledby="actividad-titulo">
+      <div class="activity-page-top"><button type="button" id="activity-back" class="secondary"><span aria-hidden="true">←</span> Volver al panel</button><span class="badge">MI AGROVALLE</span></div>
+      <div class="activity-page-heading"><p class="eyebrow">TU ESPACIO / ACTIVIDAD</p><h2 id="actividad-titulo">Mensajes directos</h2><p id="actividad-descripcion" class="section-intro">Conversaciones y contactos de personas interesadas en tus cosechas.</p></div>
       <p id="actividad-status" class="status" role="status"></p>
-      <div id="actividad" class="row"></div>
+      <div id="actividad" class="row activity-list" aria-live="polite"></div>
     </section>

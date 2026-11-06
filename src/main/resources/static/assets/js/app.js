@@ -40,6 +40,8 @@ const api = '/api/v1';
       return body;
     }
     function actualizarPaneles() {
+      const vistaEnfocada = Boolean(token && vistaActividad);
+      byId('acceso-seccion').classList.toggle('is-register', modoAuth === 'registro');
       byId('session-bar').hidden = !token;
       byId('session-identity').textContent = token ? `Sesión iniciada como ${rol}` : '';
       byId('acceso-seccion').hidden = Boolean(token);
@@ -47,20 +49,27 @@ const api = '/api/v1';
         ? rol === 'AGRICULTOR' ? '#agricultor-panel' : rol === 'ADMIN' ? '#admin-panel' : '#cuenta-panel'
         : '#acceso-seccion';
       byId('acceso-titulo').textContent = token ? 'Tu cuenta' : modoAuth === 'registro' ? 'Crear cuenta' : 'Iniciar sesión';
+      byId('auth-card-intro').textContent = modoAuth === 'registro'
+        ? 'Cuéntanos quién eres para encontrar tu lugar en la red.'
+        : 'Tu próxima conexión con el campo empieza aquí.';
       byId('login-form').hidden = Boolean(token) || modoAuth !== 'login';
       byId('registro-form').hidden = Boolean(token) || modoAuth !== 'registro';
       byId('auth-toggle').hidden = Boolean(token);
       byId('auth-toggle').textContent = modoAuth === 'registro'
         ? '¿Ya tienes cuenta? Iniciar sesión' : '¿No tienes cuenta? Crear cuenta';
       byId('salir').hidden = !token;
-      byId('cuenta-panel').hidden = !token;
-      byId('catalogo-seccion').hidden = !token;
+      byId('cuenta-panel').hidden = !token || vistaEnfocada;
+      byId('actividad-vista').hidden = !vistaEnfocada;
+      byId('inicio-seccion').hidden = vistaEnfocada;
+      byId('como-funciona').hidden = vistaEnfocada;
+      byId('app-content').classList.toggle('is-focused-route', vistaEnfocada);
+      byId('catalogo-seccion').hidden = !token || vistaEnfocada;
       byId('catalog-search-form').hidden = !token;
       byId('catalog-nav').hidden = !token;
       byId('prices-nav').hidden = !token;
-      byId('agricultor-panel').hidden = rol !== 'AGRICULTOR';
-      byId('admin-panel').hidden = rol !== 'ADMIN';
-      byId('carrito-seccion').hidden = rol !== 'COMPRADOR';
+      byId('agricultor-panel').hidden = rol !== 'AGRICULTOR' || vistaEnfocada;
+      byId('admin-panel').hidden = rol !== 'ADMIN' || vistaEnfocada;
+      byId('carrito-seccion').hidden = rol !== 'COMPRADOR' || vistaEnfocada;
       byId('carrito-link').hidden = rol !== 'COMPRADOR';
       renderCarrito();
       if (rol === 'AGRICULTOR') { cargarFincas(); cargarPanelAgricultor(); }
@@ -69,6 +78,7 @@ const api = '/api/v1';
     function cambiarModoAuth(modo) {
       if (token) return;
       modoAuth = modo;
+      byId('acceso-seccion').classList.toggle('is-register', modo === 'registro');
       actualizarPaneles();
       tell('auth-status', '');
     }
@@ -480,23 +490,88 @@ const api = '/api/v1';
       tell('precio-status', 'El historial de cambios requiere datos de varios períodos; el servicio actual solo entrega el promedio acumulado disponible.');
       byId('precios-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
+    const actividadVistas = {
+      favoritos: ['Mis favoritos', 'Tus cosechas guardadas para volver a ellas cuando quieras.'],
+      notificaciones: ['Mensajes directos', 'Contactos de personas interesadas en tus cosechas.'],
+      pedidos: ['Pedidos y reservas', 'Consulta el avance de tus compras y entregas.']
+    };
+    function abrirActividad(tipo) {
+      const vistaCambio = vistaActividad !== tipo;
+      vistaActividad = tipo;
+      const [titulo, descripcion] = actividadVistas[tipo] || actividadVistas.notificaciones;
+      byId('actividad-titulo').textContent = titulo;
+      byId('actividad-descripcion').textContent = descripcion;
+      if (vistaCambio) {
+        byId('actividad').replaceChildren();
+        tell('actividad-status', 'Cargando…');
+      }
+      actualizarPaneles();
+      if (location.hash !== '#actividad-vista') location.hash = '#actividad-vista';
+      if (vistaCambio) window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    function cerrarActividad() {
+      vistaActividad = null;
+      byId('actividad').replaceChildren();
+      actualizarPaneles();
+      const panel = rol === 'AGRICULTOR' ? '#agricultor-panel' : '#cuenta-panel';
+      if (rol === 'AGRICULTOR') {
+        document.querySelectorAll('#agricultor-panel .dashboard-sidebar a').forEach((item) => item.removeAttribute('aria-current'));
+        document.querySelector('#agricultor-panel .dashboard-sidebar a[href="#agricultor-panel"]')?.setAttribute('aria-current', 'page');
+      }
+      if (location.hash !== panel) location.hash = panel;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    function mostrarEstadoVacio(contenedor, texto) {
+      const empty = document.createElement('p');
+      empty.className = 'empty-state';
+      empty.textContent = texto;
+      contenedor.replaceChildren(empty);
+    }
     byId('ver-favoritos').addEventListener('click', async () => {
-      vistaActividad = 'favoritos';
-      try { const items = await request('/favoritos'); byId('actividad').replaceChildren(...items.map((f) => { const p = document.createElement('p'); p.textContent = `${f.nombre} · ${f.categoria} · ${f.municipio}`; return p; })); }
-      catch (error) { tell('actividad-status', error.message); }
+      abrirActividad('favoritos');
+      try {
+        const items = await request('/favoritos');
+        const cards = items.map((favorite) => {
+          const card = document.createElement('article'); card.className = 'card activity-card favorite-card';
+          const eyebrow = document.createElement('span'); eyebrow.className = 'eyebrow'; eyebrow.textContent = favorite.categoria || 'COSECHA LOCAL';
+          const title = document.createElement('h3'); title.textContent = favorite.nombre;
+          const detail = document.createElement('p'); detail.textContent = favorite.municipio || 'Valle del Cauca';
+          card.append(eyebrow, title, detail); return card;
+        });
+        if (cards.length) byId('actividad').replaceChildren(...cards);
+        else mostrarEstadoVacio(byId('actividad'), 'Aún no guardas cosechas. Cuando encuentres una que te guste, podrás verla aquí.');
+        tell('actividad-status', `${items.length} cosecha(s) guardada(s).`);
+      } catch (error) { tell('actividad-status', error.message); }
     });
-    byId('ver-notificaciones').addEventListener('click', async () => {
-      vistaActividad = 'notificaciones';
-      try { const items = await request('/notificaciones/mias'); byId('actividad').replaceChildren(...items.map((n) => { const p = document.createElement('p'); p.textContent = n.mensaje; return p; })); }
-      catch (error) { tell('actividad-status', error.message); }
-    });
+    byId('ver-notificaciones').addEventListener('click', cargarMensajes);
+    byId('activity-back').addEventListener('click', cerrarActividad);
+    async function cargarMensajes() {
+      abrirActividad('notificaciones');
+      try {
+        const items = await request('/notificaciones/mias');
+        const contacts = rol === 'AGRICULTOR' ? items.filter((item) => item.tipo === 'CONTACTO') : items;
+        const cards = contacts.map((item) => {
+          const card = document.createElement('article'); card.className = 'card activity-card message-card';
+          const top = document.createElement('div'); top.className = 'message-card-top';
+          const badge = document.createElement('span'); badge.className = 'badge'; badge.textContent = item.tipo === 'CONTACTO' ? 'CONTACTO DE COMPRADOR' : item.tipo;
+          const unread = document.createElement('span'); unread.className = item.leida ? 'message-read' : 'message-unread'; unread.textContent = item.leida ? 'Leído' : 'Nuevo';
+          const message = document.createElement('p'); message.textContent = item.mensaje;
+          const date = document.createElement('time'); date.className = 'message-date';
+          if (item.creadaEn) { date.dateTime = item.creadaEn; date.textContent = new Intl.DateTimeFormat('es-CO', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(item.creadaEn)); }
+          top.append(badge, unread); card.append(top, message); if (date.textContent) card.append(date); return card;
+        });
+        if (cards.length) byId('actividad').replaceChildren(...cards);
+        else mostrarEstadoVacio(byId('actividad'), rol === 'AGRICULTOR' ? 'Aún no tienes contactos. Cuando alguien pregunte por una cosecha, aparecerá aquí.' : 'No tienes mensajes pendientes por ahora.');
+        tell('actividad-status', `${contacts.length} mensaje(s) en tu bandeja.`);
+      } catch (error) { tell('actividad-status', error.message); }
+    }
     async function cargarPedidos() {
-      vistaActividad = 'pedidos';
+      abrirActividad('pedidos');
       try {
         const path = rol === 'AGRICULTOR' ? '/reservas/pendientes' : '/reservas/mias';
         const orders = await request(path);
         const cards = orders.map((order) => {
-          const card = document.createElement('article'); card.className = 'card';
+          const card = document.createElement('article'); card.className = 'card activity-card order-card';
           const title = document.createElement('h3'); title.textContent = `Pedido #${order.id} · ${order.estado}`;
           const description = document.createElement('p');
           description.textContent = order.productos.map((p) => `${p.nombre}: ${p.cantidadKg} kg`).join(' · ');
@@ -536,8 +611,8 @@ const api = '/api/v1';
           card.append(actions); return card;
         });
         byId('actividad').replaceChildren(...cards);
-        if (orders.length === 0) tell('actividad-status', 'Aún no hay reservas o pedidos. Cuando hagas una reserva aparecerá aquí.');
-        else tell('actividad-status', `${orders.length} pedido(s) encontrado(s).`);
+        if (orders.length === 0) mostrarEstadoVacio(byId('actividad'), 'Aún no hay reservas o pedidos. Cuando hagas una reserva aparecerá aquí.');
+        tell('actividad-status', `${orders.length} pedido(s) encontrado(s).`);
       } catch (error) { tell('actividad-status', error.message); }
     }
     byId('ver-pedidos').addEventListener('click', cargarPedidos);
@@ -567,21 +642,21 @@ const api = '/api/v1';
         tell('reporte-status', `Del ${report.desde} al ${report.hasta}: ${report.usuariosRegistrados} usuarios, ${report.ofertasPublicadas} cosechas y ${report.contactosRegistrados} contactos.`);
       } catch (error) { tell('reporte-status', error.message); }
     }
-    document.querySelectorAll('[data-dashboard-action]').forEach((link) => link.addEventListener('click', async () => {
-      if (link.dataset.dashboardAction === 'pedidos') await cargarPedidos();
-      else {
-        try {
-          const items = await request('/notificaciones/mias');
-          byId('actividad').replaceChildren(...items.map((item) => Object.assign(document.createElement('p'), { textContent: `${item.tipo} · ${item.mensaje}` })));
-          tell('actividad-status', `${items.filter((item) => item.tipo === 'CONTACTO').length} mensaje(s) de contacto.`);
-        } catch (error) { tell('actividad-status', error.message); }
-      }
-    }));
-    document.querySelectorAll('#agricultor-panel .dashboard-sidebar a').forEach((link) => link.addEventListener('click', () => {
+    document.querySelectorAll('[data-dashboard-action]').forEach((link) => link.addEventListener('click', async (event) => {
+      event.preventDefault();
       document.querySelectorAll('#agricultor-panel .dashboard-sidebar a').forEach((item) => item.removeAttribute('aria-current'));
       link.setAttribute('aria-current', 'page');
-      if (link.hasAttribute('data-dashboard-action')) {
-        byId('cuenta-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+      if (link.dataset.dashboardAction === 'pedidos') await cargarPedidos();
+      else await cargarMensajes();
     }));
+    document.querySelectorAll('#agricultor-panel .dashboard-sidebar a:not([data-dashboard-action])').forEach((link) => link.addEventListener('click', () => {
+      document.querySelectorAll('#agricultor-panel .dashboard-sidebar a').forEach((item) => item.removeAttribute('aria-current'));
+      link.setAttribute('aria-current', 'page');
+    }));
+    window.addEventListener('hashchange', () => {
+      if (vistaActividad && location.hash !== '#actividad-vista') {
+        vistaActividad = null;
+        actualizarPaneles();
+      }
+    });
     actualizarPaneles();
