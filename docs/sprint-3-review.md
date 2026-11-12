@@ -13,14 +13,18 @@
   [`ADR-001-despliegue-staging-paas.md`](architecture-decisions/ADR-001-despliegue-staging-paas.md).
 - Instrucciones operativas en [`deploy-staging.md`](deploy-staging.md).
 
+## Verificación realizada
+
+- `mvnw.cmd --batch-mode --no-transfer-progress clean verify` pasó con Java Temurin 17.0.21:
+  69 pruebas sin fallos, Checkstyle sin violaciones y todas las reglas de cobertura JaCoCo
+  satisfechas.
+
 ## Verificaciones pendientes
 
-- No se pudo ejecutar `mvn clean verify` en el entorno de preparación: no hay una instalación de
-  Java disponible para el Maven Wrapper.
 - La consulta a `GET https://agrovalle-connect-staging.onrender.com/api/v1/health` agotó el
   tiempo de espera sin respuesta. No se registra como HTTP 200.
-- El pipeline de CD todavía debe ejecutarse en GitHub después de publicar estos cambios y
-  configurar `DEPLOY_HOOK_URL`.
+- El pipeline de CD debe ejecutarse después de integrar los cambios en `main` y configurar
+  `DEPLOY_HOOK_URL`.
 - La configuración de `SPRING_PROFILES_ACTIVE`, `DB_URL`, `DB_USERNAME`, `DB_PASSWORD` y
   `JWT_SECRET` debe comprobarse en el servicio Render. No se almacena una captura o registro
   HTTP de éxito hasta observar una respuesta real.
