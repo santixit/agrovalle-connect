@@ -180,4 +180,4 @@ gitGraph
 - [ADR 002 Modelo relacional](docs/adr/002-modelo-relacional-integrador.md)
 - [ADR 003 Seguridad JWT](docs/adr/003-autenticacion-y-autorizacion.md)
 - [ADR 004 Patrones](docs/adr/004-patrones-de-diseno.md)
-- [Despliegue a staging](docs/deploy-staging.md)
+- [Despliegue continuo a staging](docs/deploy-staging.md), [ADR de PaaS y CD](docs/architecture-decisions/ADR-001-despliegue-staging-paas.md) y [estado de verificación del Sprint 3](docs/sprint-3-review.md)

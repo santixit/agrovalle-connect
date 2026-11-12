@@ -1,3 +1,14 @@
 #!/usr/bin/env sh
-./mvnw --batch-mode --no-transfer-progress test \
-  && ./mvnw --batch-mode --no-transfer-progress checkstyle:check
+
+run_maven() {
+  if command -v cygpath >/dev/null 2>&1; then
+    ./mvnw "$@"
+  elif command -v cmd.exe >/dev/null 2>&1; then
+    cmd.exe /c mvnw.cmd "$@"
+  else
+    ./mvnw "$@"
+  fi
+}
+
+run_maven --batch-mode --no-transfer-progress test \
+  && run_maven --batch-mode --no-transfer-progress checkstyle:check

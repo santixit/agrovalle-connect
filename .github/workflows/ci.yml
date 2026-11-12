@@ -62,20 +62,3 @@ jobs:
           name: jacoco-coverage-report
           path: target/site/jacoco/
           if-no-files-found: ignore
-
-  deploy-staging:
-    name: Deploy to staging
-    needs: quality
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    environment: staging
-    steps:
-      - name: Trigger staging deployment
-        env:
-          STAGING_DEPLOY_HOOK: ${{ secrets.STAGING_DEPLOY_HOOK }}
-        run: |
-          if [ -z "$STAGING_DEPLOY_HOOK" ]; then
-            echo "STAGING_DEPLOY_HOOK is not configured; staging deployment was skipped."
-            exit 0
-          fi
-          curl --fail --silent --show-error --request POST "$STAGING_DEPLOY_HOOK"
