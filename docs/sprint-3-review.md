@@ -18,12 +18,13 @@
 - `mvnw.cmd --batch-mode --no-transfer-progress clean verify` pasó con Java Temurin 17.0.21:
   69 pruebas sin fallos, Checkstyle sin violaciones y todas las reglas de cobertura JaCoCo
   satisfechas.
+- GitHub Actions CI pasó en la rama de trabajo: [ejecución 43233986589](https://github.com/santixit/agrovalle-connect/actions/runs/43233986589).
 
 ## Verificaciones pendientes
 
 - La consulta a `GET https://agrovalle-connect-staging.onrender.com/api/v1/health` agotó el
   tiempo de espera sin respuesta. No se registra como HTTP 200.
-- El pipeline de CD debe ejecutarse después de integrar los cambios en `main` y configurar
+- El pipeline de CD se ejecutará cuando los cambios se integren en `main` y esté configurado
   `DEPLOY_HOOK_URL`.
 - La configuración de `SPRING_PROFILES_ACTIVE`, `DB_URL`, `DB_USERNAME`, `DB_PASSWORD` y
   `JWT_SECRET` debe comprobarse en el servicio Render. No se almacena una captura o registro
