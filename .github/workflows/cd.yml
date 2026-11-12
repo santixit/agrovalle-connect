@@ -25,10 +25,10 @@ jobs:
     steps:
       - name: Trigger staging deployment webhook
         env:
-          DEPLOY_HOOK_URL: ${{ secrets.DEPLOY_HOOK_URL }}
+          DEPLOY_HOOK_URL: ${{ secrets.DEPLOY_HOOK_URL || secrets.STAGING_DEPLOY_HOOK }}
         run: |
           if [ -z "$DEPLOY_HOOK_URL" ]; then
-            echo "Required repository/environment secret DEPLOY_HOOK_URL is not configured." >&2
+            echo "Configure DEPLOY_HOOK_URL or STAGING_DEPLOY_HOOK as a repository/environment secret." >&2
             exit 1
           fi
           curl --fail --silent --show-error --request POST "$DEPLOY_HOOK_URL"
