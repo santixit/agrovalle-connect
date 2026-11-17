@@ -33,6 +33,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,7 +44,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.util.ReflectionTestUtils;
 
-/** Verifies the Sprint 1 REST scenarios against the test database. */
+/** Verifies REST acceptance scenarios against the test database. */
 @AutoConfigureMockMvc
 @SpringBootTest
 class AgrovalleConnectApplicationTests {
@@ -601,6 +604,52 @@ class AgrovalleConnectApplicationTests {
         .andExpect(jsonPath("$.transaccionesAnalizadas").value(1));
   }
 
+  @ParameterizedTest
+  @ValueSource(strings = {"nombre", "municipio", "direccion"})
+  void rechazaRegistroDeFincaConCampoObligatorioVacio(String campo) throws Exception {
+    String tokenAgricultor = registrarAgricultorYObtenerToken("finca-vacia@example.test");
+    String nombre = "La Esperanza";
+    String municipio = "Dagua";
+    String direccion = "Vereda El Salado";
+    switch (campo) {
+      case "nombre" -> nombre = " ";
+      case "municipio" -> municipio = "";
+      default -> direccion = " ";
+    }
+
+    mockMvc.perform(post("/api/v1/fincas")
+            .header("Authorization", "Bearer " + tokenAgricultor)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonFinca(nombre, municipio, direccion)))
+        .andExpect(status().isBadRequest());
+
+    assertEquals(0, fincaRepository.count());
+  }
+
+  @ParameterizedTest
+  @CsvSource({"nombre, 121", "municipio, 81", "direccion, 201"})
+  void rechazaRegistroDeFincaConCampoQueSuperaElLimite(String campo, int longitud)
+      throws Exception {
+    String tokenAgricultor = registrarAgricultorYObtenerToken("finca-limite@example.test");
+    String valorLargo = "x".repeat(longitud);
+    String nombre = "La Esperanza";
+    String municipio = "Dagua";
+    String direccion = "Vereda El Salado";
+    switch (campo) {
+      case "nombre" -> nombre = valorLargo;
+      case "municipio" -> municipio = valorLargo;
+      default -> direccion = valorLargo;
+    }
+
+    mockMvc.perform(post("/api/v1/fincas")
+            .header("Authorization", "Bearer " + tokenAgricultor)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonFinca(nombre, municipio, direccion)))
+        .andExpect(status().isBadRequest());
+
+    assertEquals(0, fincaRepository.count());
+  }
+
   @Test
   void administradorPuedeSolicitarReporteConRangoValido() throws Exception {
     usuarioRepository.save(new Usuario("admin@example.com",
@@ -621,5 +670,23 @@ class AgrovalleConnectApplicationTests {
         .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
     return com.jayway.jsonpath.JsonPath.read(response, "$.accessToken");
   }
+
+  private String registrarAgricultorYObtenerToken(String correo) throws Exception {
+    mockMvc.perform(post("/api/v1/auth/register").contentType(MediaType.APPLICATION_JSON)
+            .content("""
+                {"nombre":"Agricultor de prueba","cedula":"998877",
+                 "ubicacion_valle":"Dagua","correo":"%s",
+                 "contrasena":"ClaveSegura2026"}
+                """.formatted(correo)))
+        .andExpect(status().isCreated());
+    return token(correo, "ClaveSegura2026");
+  }
+
+  private String jsonFinca(String nombre, String municipio, String direccion) {
+    return """
+        {"nombre":"%s","municipio":"%s","direccion":"%s"}
+        """.formatted(nombre, municipio, direccion);
+  }
 }
+
 
