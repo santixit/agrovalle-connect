@@ -40,6 +40,17 @@ No hay fechas por tarjeta verificadas para entrada a Backlog, primer paso a In P
 - **Lead Time:** desde la creación/entrada de una necesidad a Backlog hasta que el cambio está desplegado y operativo.
 - **Cycle Time:** desde el primer movimiento a In Progress hasta que el trabajo cumple DoD y llega a Done.
 
+## 5. Resultado que sí puede reportarse
+
+| Medida | Resultado disponible | Interpretación permitida |
+|---|---|---|
+| WIP al revisar el tablero el 2026-11-19 | In Progress 0/3; Code Review / Testing 0/2 | Colas vacías en ese instante; no informa duración ni throughput. |
+| Historias seleccionadas para validación de Sprint 3 | HU-02, HU-06, HU-09 y HU-10 | Alcance elegido por el usuario; sus 14 SP son estimaciones históricas de implementación, no compromiso de validación. |
+| Suite local de Sprint 3 reportada el 2026-11-19 | 37 pruebas, 0 fallos, 0 errores, 0 omitidas | Resultado de Maven compartido por el usuario; no es dato de flujo Kanban ni run de CI. |
+| Velocity, burndown, CFD, throughput, Lead Time, Cycle Time | No calculables con la evidencia conservada | No completar con aproximaciones, fechas de commits o snapshots aislados. |
+
+Este es el resultado final del periodo documental revisado: solo WIP puntual y el resultado de pruebas son observables; no hay una métrica de flujo histórica reproducible. Cuando se inicie un nuevo periodo de medición, guardar snapshots y eventos según [captura-de-metricas.md](captura-de-metricas.md); no reutilizar el 0/3 y 0/2 como resultado del periodo siguiente.
+
 ## Datos necesarios para cerrar el reporte
 
 1. Acordar periodos de Sprint y SP comprometidos antes de iniciar cada uno.

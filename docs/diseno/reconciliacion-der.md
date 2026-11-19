@@ -29,21 +29,25 @@ Antes de V7, `productos` guardaba directamente `finca_id`, `agricultor_id` y `mu
 
 La dependencia de ubicación de un producto de finca queda expresada como `producto → ubicación → parcela → finca → municipio`. El municipio deja de duplicarse en cada producto de finca. La regla y el proceso de migración están descritos en [decisiones-normalizacion.md](decisiones-normalizacion.md). El DDL consolidado es un snapshot legible; las migraciones Flyway siguen siendo la fuente ejecutable.
 
-## Diferencias que requieren decisión del equipo/PO
+## Decisiones de modelo para la versión actual
 
-| Pregunta de dominio | Evidencia disponible | Decisión que falta |
+La comparación técnica queda resuelta para continuar el prototipo con las siguientes decisiones de línea base. No son una aprobación colectiva de todos los integrantes ni una certificación de que cada alternativa sea el modelo ideal para producción.
+
+| Tema | Línea base de esta versión | Motivo / evidencia | Consecuencia de cambio |
+|---|---|---|---|
+| Producto y oferta | Para los contratos actuales, el registro `productos` representa el artículo/oferta publicada. No se crea una tabla separada `ofertas`. | Código, estados, precio y disponibilidad están en `productos`; contrato REST usa `/productos`. | Si el dominio requiere ciclo de vida distinto, abrir una historia y ADR antes de migrar. |
+| Historial de estado | No se persiste un evento por cada cambio de estado de oferta. La trazabilidad logística y las transferencias tienen sus propias tablas y no se interpretan como auditoría de estados. | V1–V7 y entidades vigentes. | Añadir tabla y pruebas solo si se incorpora requisito auditable. |
+| Municipio y categoría | Municipio y categoría permanecen como texto; no se crean catálogos en este alcance. Para producto asociado a parcela, el municipio se deriva de finca. | Issue #46 acordó conservar el esquema y dejar catálogos como mejora; V7 normaliza la ubicación mediante finca/parcela. | La normalización a catálogos es mejora futura y requiere migración y pruebas. |
+| DER canónico | Los diagramas vigentes deben representar Flyway V1–V7. Los archivos con sufijo `propuesta` quedan como antecedentes y no sustituyen el modelo implementado. | Las migraciones son el esquema ejecutable y el código JPA se mapea a ellas. | Al cambiar el modelo, actualizar DER y snapshot en el mismo PR que la migración. |
+
+No se modifica el esquema solo para igualar un dibujo. Las migraciones ya aplicadas son inmutables; cualquier cambio se incorpora en una nueva migración versionada con sus pruebas.
+
+## Cierre documental de Sesión 6
+
+| Punto | Estado factual | Resolución para continuar |
 |---|---|---|
-| ¿Producto y oferta son el mismo concepto para este sistema? | `productos` representa el artículo publicado y tiene estado/precio/cantidad. No hay tabla `ofertas`. | PO/equipo confirma si este modelo satisface el vocabulario y ciclo de vida de la oferta. |
-| ¿Se debe guardar historial de cada cambio de estado de oferta? | `transferencias_producto` conserva cambios de titularidad; no guarda todas las transiciones de estado. | Confirmar si se requiere una tabla de auditoría de estados. |
-| ¿Municipio y categoría requieren catálogos? | Ambos valores siguen siendo texto en sus ubicaciones descritas. La decisión de aplazar catálogos está en el issue #46. | Confirmar si esa decisión sigue vigente para el alcance evaluado. |
-| ¿Los dos DER propuestos deben sustituirse o conservarse como propuesta? | Los documentos se titulan y describen como propuestas; los modelos canónicos y V1–V7 reflejan el esquema actual. | PO/equipo determina cuál modelo se acepta como diseño de dominio final. |
+| Mockups | El issue #46 conserva un visto bueno informal y asíncrono de algunos integrantes. No identifica aprobación del PO para cada pantalla ni acuerdo de todo el equipo. | Usar el PDF y PNG versionados como referencia visual vigente. Cualquier corrección futura se registra en issue/PR; no se afirma aceptación histórica completa. |
+| DER y esquema | La reconciliación técnica de V1–V7 y la decisión sobre catálogos están documentadas. | Flyway V1–V7 es el modelo ejecutable de referencia para el prototipo. |
+| Discovery antes de la codificación | No se encontró evidencia contemporánea de la secuencia. | Se registra como no demostrada; no se infiere una fecha ni se afirma que el diseño precedió al código. |
 
-No se debe cambiar el esquema solo para hacer coincidir un dibujo. Si se aprueban cambios, primero se actualizan el DER canónico y la decisión de dominio; después se diseña una nueva migración Flyway y sus pruebas. Nunca se reescribe una migración ya aplicada.
-
-## Validación pendiente para cerrar Sesión 6
-
-- **Mockups:** el issue #46 respalda un visto bueno informal y asíncrono de algunas personas, pero no identifica la versión aceptada por el Product Owner ni demuestra aprobación de cada pantalla por todo el equipo.
-- **DER:** esta reconciliación expone las diferencias técnicas; la aceptación de las decisiones de dominio sigue pendiente del equipo/PO.
-- **Discovery antes de código:** no se encontró evidencia contemporánea que compruebe la secuencia temporal. La documentación retrospectiva no puede demostrarla ni debe inferirla de fechas de commits.
-
-Registrar las confirmaciones en el issue o PR correspondiente con responsable, artefacto/versión revisada y fecha real. Hasta entonces, la revisión de diseño se considera documentada, pero no completamente aprobada.
+Este cierre deja una fuente de verdad para el desarrollo sin llenar vacíos históricos con supuestos. Véase también [Decisiones de línea base](../requirements/baseline-decisions-2026-11-19.md) y el [índice de diseño](README.md).

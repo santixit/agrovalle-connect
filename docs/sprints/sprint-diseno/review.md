@@ -1,25 +1,29 @@
-# Revisión documental del Sprint de Diseño
+# Sprint de Diseño — revisión documental
 
-**Estado:** revisión retrospectiva basada en los artefactos disponibles. No se presenta como una reunión celebrada ni como aprobación del Product Owner o de todo el equipo.
+**Fecha de registro:** 2026-11-19
+**Modalidad:** revisión retrospectiva de artefactos versionados; no se presenta como reunión formal ni como aprobación colectiva del PO/equipo.
 
-## Incremento de diseño revisado
+## Incremento revisado
 
-| Elemento | Evidencia del repositorio | Resultado de la revisión |
+| Elemento | Evidencia | Resultado de revisión |
 |---|---|---|
-| Modelo de datos y DDL | DER implementado, DER propuestos, `schema.sql` y migraciones Flyway | Hay un modelo ejecutable y propuestas de referencia. La reconciliación documenta diferencias; el equipo aún debe confirmar las reglas de dominio. |
-| Arquitectura y patrones | `arquitectura-mvc-gof.md` y `patrones.md` | Las capas y patrones están descritos con referencia a la implementación actual. |
-| Diagramas UML | Fuentes PlantUML y exportaciones en `exports/` y `secuencias/` | Hay diagramas editables y renders. Algunas secuencias representan flujos propuestos y no el comportamiento asíncrono actual. |
-| Mockups | `mockups-ui.pdf` y fuentes PNG | Se conservan siete wireframes y siete mockups. El issue #46 registra un visto bueno informal y asíncrono de algunos integrantes; no permite afirmar aprobación de todo el equipo ni quién aprobó cada pantalla. |
-| Historias y escenarios | [`product-backlog-bdd.md`](../../requirements/product-backlog-bdd.md) y [`api-sprint-1.md`](../../api-sprint-1.md) | Hay 15 historias con criterios BDD; el issue #46 conserva precisiones de HU-01, HU-04 y HU-07. |
-| Secuencia Discovery → Diseño → Código | Issue #46 y registro retrospectivo de Sesión 6 | La secuencia cronológica frente a la codificación no está acreditada. Parte de la documentación expresa la implementación vigente, no una prueba de que el diseño se completara antes de programar. |
+| Modelo de datos y DDL | DER implementado, DER propuestos, `schema.sql` y migraciones Flyway | Hay esquema ejecutable V1–V7 y snapshots de referencia. Flyway es canónico; la reconciliación documenta las diferencias y decisiones para continuar. |
+| Arquitectura y patrones | `arquitectura-mvc-gof.md`, `patrones.md` y código Java | Capas y patrones están vinculados a la implementación actual. |
+| UML | Fuentes PlantUML, renders en `exports/` y secuencias | Hay fuentes editables y exportaciones. Las secuencias que muestran una cola asíncrona son propuestas; Observer funciona de forma síncrona en la implementación descrita. |
+| Mockups | `mockups-ui.pdf` y fuentes PNG | Se conservan siete wireframes y siete mockups. Issue #46 registra un visto bueno informal de algunos integrantes, no una aprobación individual de todas las pantallas o del equipo completo. |
+| Historias y escenarios | Backlog BDD, contratos HTTP y comparación de historias | Quince HUs documentadas; issue #46 contiene precisiones de HU-01, HU-04 y HU-07. |
+| Orden Discovery → Diseño → Código | Issue #46 y registro de Sesión 6 | No hay evidencia contemporánea suficiente para verificar que el diseño precedió a la codificación. |
 
-## Resultado
+## Decisiones para continuar
 
-Los artefactos de diseño están presentes y se pueden revisar, pero el expediente no demuestra una aprobación completa de mockups ni que el diseño precediera a la codificación. La reconciliación entre los DER propuestos y el esquema vigente está documentada y mantiene explícitas las diferencias. La revisión queda abierta hasta que el equipo confirme esos puntos con evidencia verificable.
+- Flyway V1–V7 es el esquema de referencia; los DER implementados se mantienen alineados con él.
+- Los DER rotulados como propuesta permanecen como antecedentes de análisis.
+- Se mantienen fuera de este alcance los catálogos normalizados de municipio/categoría; productos asociados a finca derivan municipio de finca.
+- El PDF y PNG actuales se usan como referencia visual. Una aprobación completa de mockups no se afirma porque no está registrada.
+- La cronología Discovery–Diseño–Código queda como no demostrada; no se intenta inferirla de timestamps posteriores.
 
-## Acciones pendientes
+Las decisiones se desarrollan en la [reconciliación DER](../../diseno/reconciliacion-der.md) y en la [línea base de requisitos](../../requirements/baseline-decisions-2026-11-19.md).
 
-- El Product Owner y el equipo confirman si los mockups representan el alcance que se acepta.
-- El equipo valida las diferencias entre DER propuestos y modelo implementado, así como las reglas de dominio que siguen abiertas.
-- Si existen evidencias contemporáneas de Discovery anterior a la codificación, se enlazan aquí; no se infieren fechas a partir de commits.
-- Se registra la decisión y sus responsables en el issue o PR correspondiente. Este documento no sustituye ese registro.
+## Conclusión
+
+El paquete de diseño está organizado, mantiene fuentes editables y distingue propuestas de implementación. Sus límites de aprobación e historia están descritos; no hay bloqueos documentales para continuar con la línea base actual del prototipo.

@@ -4,7 +4,7 @@
 
 El README adopta **Trunk-Based Development**: se conserva `main` como rama de integración y se usan ramas cortas `feature/HU-XX-descripcion`, `fix/...` o `docs/...`. Los cambios se integran por Pull Request después de revisión y CI. El proyecto no usa una rama permanente `develop`; crearla cambiaría el flujo y no se hace automáticamente.
 
-La consulta pública de GitHub reporta `main` como rama protegida (`protected: true`). La integración disponible no puede leer las reglas detalladas de protección; por eso el estado exacto de aprobaciones y verificaciones requeridas debe confirmarse en la configuración del repositorio.
+GitHub tiene un ruleset activo llamado main-protection dirigido a ~DEFAULT_BRANCH. La configuración se leyó desde la API de Rulesets el 2026-11-19 y se registra en la tabla de verificación. El endpoint antiguo de branch protection no es accesible para la integración, pero eso no impide leer el ruleset activo.
 
 ## Reglas recomendadas para `main`
 
@@ -33,14 +33,17 @@ main → rama corta → commit → Pull Request → CI verde → revisión indep
 6. Fusiona por PR solo cuando estén satisfechas las reglas configuradas.
 7. Tras el push a `main`, observa el job reutilizable de CD y comprueba staging.
 
-## Registro de verificación
+## Configuración verificada en GitHub
 
-| Control | Evidencia observada | Estado |
+| Control | Configuración de main-protection | Estado |
 |---|---|---|
-| `main` existe y GitHub reporta `protected: true` | API pública de ramas consultada el 19-11-2026. | Confirmado |
-| Requerir PR | No se pudo leer la configuración detallada con el acceso de integración disponible. | Confirmar en Settings |
-| Aprobación independiente obligatoria | No se pudo leer la configuración detallada con el acceso de integración disponible. | Confirmar en Settings |
-| Job `quality` requerido | No se pudo leer la configuración detallada con el acceso de integración disponible. | Confirmar en Settings |
-| Force push y borrado bloqueados | No se pudo leer la configuración detallada con el acceso de integración disponible. | Confirmar en Settings |
+| Rama objetivo | ~DEFAULT_BRANCH, que corresponde a main en este repositorio. | Confirmado |
+| Exigir Pull Request | Regla pull_request activa. | Confirmado |
+| Aprobación requerida | Una aprobación antes de integrar; no se exige revisión de Code Owners y no se descartan aprobaciones obsoletas tras nuevos commits. | Confirmado; una persona debe aprobar el PR. |
+| Check requerido | Build, tests, Checkstyle and JaCoCo. | Confirmado |
+| Estado de rama actualizado antes de merge | strict_required_status_checks_policy=false; el ruleset no exige actualizar la rama con la base antes de integrar. | No exigido |
+| Resolver conversaciones de revisión | required_review_thread_resolution=false. | No exigido por este ruleset |
+| Borrado y force push | Reglas deletion y non_fast_forward. | Bloqueados |
+| Métodos de merge permitidos | Merge commit, squash y rebase. | Confirmado |
 
-Esta tabla se actualiza solo después de comprobar la configuración en GitHub Settings. Un archivo de documentación y una plantilla ayudan al equipo, pero no aplican por sí solos reglas de protección.
+**Fuente:** [ruleset main-protection en GitHub](https://github.com/santixit/agrovalle-connect/rules/24141794), consultado por la API de Rulesets el 2026-11-19. La configuración es operativa; este archivo solo la documenta.

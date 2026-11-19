@@ -1,6 +1,6 @@
 # Planificacion del Sprint 1
 
-> Documento de planificación técnica del Sprint 1: HU-01, HU-07 y HU-04 (10 SP). El equipo indica que trabajó informalmente y de forma asíncrona, sin una reunión formal de Sprint Planning ni roles permanentes. Este archivo describe el alcance y la descomposición técnica registrados; no es un acta ni prueba de una ceremonia. El issue #46 registra el Backlog como texto base y estos criterios técnicos como criterios de aceptación; las confirmaciones de integrantes que no comentaron siguen pendientes. Véase la [comparación](../../evidencias/comparacion-historias-backlog-sprint1.md).
+> Documento de planificación técnica del Sprint 1: HU-01, HU-07 y HU-04 (10 SP). El equipo indica que trabajó informalmente y de forma asíncrona, sin una reunión formal de Sprint Planning ni roles permanentes. Este archivo describe el alcance y la descomposición técnica registrados; no es un acta ni prueba de una ceremonia. El issue #46 registra el Backlog como texto base y estos criterios técnicos como criterios de aceptación; allí constan confirmaciones explícitas de algunos integrantes. Véase la [comparación](../../evidencias/comparacion-historias-backlog-sprint1.md).
 
 ## Sprint Goal
 
@@ -45,4 +45,4 @@ Estimaciones técnicas que aparecen en el plan documentado; no se atribuyen a un
 
 - La implementacion local declara JPA, driver PostgreSQL y Flyway; las pruebas usan H2 en modo compatible con PostgreSQL.
 - La integracion continua levanta PostgreSQL 16 para ejecutar las pruebas de persistencia; la demostracion final debe adjuntar evidencia de persistencia.
-- Pendiente de validación colectiva: si se mantienen las estimaciones en horas y los contratos de datos; el issue #46 resolvió la versión base de historias y la adopción de criterios técnicos, aunque aún falten comentarios de integrantes.
+- Las estimaciones en horas desglosan el trabajo técnico y no representan una medición de duración ni un compromiso individual. El issue #46 fija la versión base de historias y criterios técnicos para HU-01, HU-04 y HU-07; las reglas actuales de alcance quedan consolidadas en [la línea base de requisitos](../../requirements/baseline-decisions-2026-11-19.md).

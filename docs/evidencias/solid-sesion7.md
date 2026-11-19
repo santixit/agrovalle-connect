@@ -1,51 +1,64 @@
-# Refactor SOLID antes/después — Sesión 7
+# Refactorizaciones SOLID antes/después — Sesión 7
 
-## Cambio evaluado
+Este registro documenta dos cambios del código con su motivación, evidencia y límites. No afirma que el sistema completo cumpla SOLID.
 
-El commit [`89edf4f`](https://github.com/santixit/agrovalle-connect/commit/89edf4f) separó dos responsabilidades que estaban juntas en `ProductoService`: consultar el catálogo y gestionar operaciones de escritura sobre productos. La separación principal demuestra **SRP (Single Responsibility Principle)** en este límite concreto; no certifica que todo el sistema cumpla SOLID.
+## Caso 1 — separar catálogo y gestión de productos
 
-## Antes del cambio
+El commit [89edf4f](https://github.com/santixit/agrovalle-connect/commit/89edf4f) separó las consultas de catálogo de las operaciones de escritura que estaban juntas en ProductoService. La separación aplica SRP en este límite concreto.
 
-`ProductoService` concentraba responsabilidades y dependencias diferentes:
+### Antes del cambio
 
-| Responsabilidad | Métodos que estaban en `ProductoService` | Dependencias asociadas |
+| Responsabilidad | Métodos en ProductoService | Dependencias |
 |---|---|---|
-| Consultar catálogo | `buscar(municipio, categoria)` | `ProductoRepository` |
-| Consultar detalle | `consultarDetalle(id)` | `ProductoRepository` |
-| Publicar producto | `publicar(usuarioId, request)` | `ProductoRepository`, `AgricultorRepository`, `FincaRepository` |
-| Cambiar estado de oferta propia | `actualizarEstado(usuarioId, productoId, request)` | `ProductoRepository`, `AgricultorRepository` |
+| Consultar catálogo | buscar(municipio, categoria) | ProductoRepository |
+| Consultar detalle | consultarDetalle(id) | ProductoRepository |
+| Publicar producto | publicar(usuarioId, request) | ProductoRepository, AgricultorRepository, FincaRepository |
+| Cambiar estado de oferta propia | actualizarEstado(usuarioId, productoId, request) | ProductoRepository, AgricultorRepository |
 
-La clase tenía `@Transactional(readOnly = true)` a nivel de clase y sobrescribía esa configuración con `@Transactional` en los métodos de escritura. Un mismo servicio debía atender lecturas públicas y reglas de publicación/propiedad/estado, y mantenía juntas dependencias de consulta y de escritura.
+La misma clase servía lecturas públicas y reglas de escritura, y combinaba transacciones de solo lectura con transacciones de modificación.
 
-## Después del cambio
+### Después del cambio
 
-| Componente actual | Responsabilidad enfocada | Transacción / dependencia principal |
+| Componente | Responsabilidad | Transacción y dependencias |
 |---|---|---|
-| [`CatalogoProductoService`](../../src/main/java/co/edu/uniajc/agrovalle/service/CatalogoProductoService.java) | Filtrar productos, listar los del agricultor y consultar el detalle público. | `@Transactional(readOnly = true)`; depende de `ProductoRepository`. |
-| [`GestionProductoService`](../../src/main/java/co/edu/uniajc/agrovalle/service/GestionProductoService.java) | Publicar productos y cambiar el estado de una oferta del agricultor autenticado. | `@Transactional`; depende de los repositorios que necesita para resolver agricultor, finca/parcela y producto. |
-| [`ProductoController`](../../src/main/java/co/edu/uniajc/agrovalle/controller/ProductoController.java) | Recibir solicitudes HTTP, validar/extraer datos y delegar. | Recibe `CatalogoProductoService`, `GestionProductoService` y `TransferenciaProductoService` por constructor. |
+| [CatalogoProductoService](../../src/main/java/co/edu/uniajc/agrovalle/service/CatalogoProductoService.java) | Filtrar productos, listar los del agricultor y consultar detalle público. | Solo lectura; ProductoRepository. |
+| [GestionProductoService](../../src/main/java/co/edu/uniajc/agrovalle/service/GestionProductoService.java) | Publicar productos y cambiar el estado de una oferta del agricultor autenticado. | Escritura transaccional; repositorios de agricultor, finca/parcela y producto. |
+| ProductoController | Recibir solicitudes HTTP, validar/extraer datos y delegar. | Recibe servicios por constructor. |
 
-### Ejemplo de delegación posterior al refactor
+La lectura y escritura tienen puntos de entrada y límites transaccionales distintos. El controller conserva coordinación HTTP y las reglas de caso de uso permanecen en los servicios.
 
-```java
-// Lectura: el controller no consulta el repositorio directamente.
-return catalogoProductoService.buscar(municipio, categoria);
+## Caso 2 — extraer la política de descuento de la reserva
 
-// Escritura: la operación se delega al servicio de gestión.
-ProductoResponse response = gestionProductoService.publicar(usuarioId, request);
-```
+Los commits [f7d5097](https://github.com/santixit/agrovalle-connect/commit/f7d5097) y [bd02cb2](https://github.com/santixit/agrovalle-connect/commit/bd02cb2) introdujeron una regla mayorista y desacoplaron su cálculo de los flujos de reserva.
 
-La lectura y escritura tienen ahora puntos de entrada y límites transaccionales distintos. El controller conserva coordinación HTTP, mientras que las reglas del caso de uso permanecen en los servicios.
+### Antes del cambio
 
-## Por qué este cambio aporta a SOLID
+- DescuentoMayoristaService contenía la condición de más de 100 kg y los valores 100 y 0.95 como literales.
+- ReservaService no recibía una abstracción común para decidir el precio de reserva individual y carrito.
+- Cambiar la política requería conocer la implementación concreta y sus puntos de uso.
 
-- **SRP:** catálogo y gestión de cambios tienen motivos de cambio distintos y están en clases separadas.
-- **Responsabilidad transaccional más clara:** las consultas del catálogo son de solo lectura; las operaciones de gestión son transaccionales de escritura.
-- **Pruebas más focalizadas:** existen [`CatalogoProductoServiceTest`](../../src/test/java/co/edu/uniajc/agrovalle/service/CatalogoProductoServiceTest.java) y [`GestionProductoServiceTest`](../../src/test/java/co/edu/uniajc/agrovalle/service/GestionProductoServiceTest.java), separadas por comportamiento.
-- **Límite del resultado:** `ProductoController` sigue dependiendo de servicios concretos y `GestionProductoService` conserva más de un repositorio. Este cambio no demuestra DIP ni SRP globales por sí solo.
+### Después del cambio
 
-## Verificación y alcance de la evidencia
+| Componente | Responsabilidad después del cambio |
+|---|---|
+| CalculadorDescuentoAgricola | Contrato para calcular el precio unitario usando peso y precio base. |
+| DescuentoMayoristaService | Implementa la política vigente; nombra el límite y el porcentaje en constantes. |
+| ReservaService | Recibe el contrato por constructor y lo usa en reservar y reservarCarrito; persiste y devuelve el precio calculado. |
 
-El cambio y los tests aparecen en el commit `89edf4f`; el [workflow #103](https://github.com/santixit/agrovalle-connect/actions/runs/40894179070) ejecutado sobre `main` en `a7e2097` terminó en verde con pruebas, Checkstyle y JaCoCo. El resultado respalda que la suite del commit de `main` pasó; no demuestra una ceremonia de revisión ni que el refactor haya sido desarrollado mediante TDD.
+La política queda separada del caso de uso de reserva. Esto mejora DIP, porque el flujo depende de una abstracción, y permite agregar otra política sin duplicar la fórmula. Solo existe una implementación de descuento; no se afirma que haya varias estrategias activas.
 
-Los otros ejemplos SOLID/GoF implementados están resumidos en [`patrones.md`](../diseno/patrones.md): Strategy para tarifas y descuentos, e inversión de dependencia en el cálculo de descuentos. La evidencia específica antes/después de este documento se limita a los dos servicios de producto descritos arriba.
+La prueba de umbral, el caso de 100,01 kg y la integración con reservas están detallados en [TDD descuento mayorista](tdd-descuento-mayorista.md).
+
+## Relación con SOLID y límites
+
+- **SRP:** catálogo y gestión de productos quedan en servicios distintos.
+- **DIP:** ReservaService consume CalculadorDescuentoAgricola y no contiene la fórmula del descuento.
+- **OCP:** la regla puede ampliarse mediante otra implementación del contrato; no hay una segunda implementación actual.
+- **Responsabilidad transaccional:** las consultas del catálogo son de solo lectura; cambios y reservas son transaccionales.
+- **Límites:** ProductoController depende de servicios concretos; GestionProductoService mantiene varios repositorios; solo hay una política de descuento. Estos cambios no certifican DIP, OCP o SRP en todo el sistema.
+
+## Pruebas y trazabilidad
+
+El primer cambio y sus pruebas aparecen en 89edf4f; la estrategia de descuento se extrae en f7d5097 y se conecta a reserva en bd02cb2. El [workflow #103](https://github.com/santixit/agrovalle-connect/actions/runs/40894179070) para el commit a7e2097 terminó en verde con pruebas, Checkstyle y JaCoCo. Para el descuento, el desarrollo TDD sí está documentado; para la separación de ProductoService no se conserva una secuencia Red–Green.
+
+Strategy y Observer están explicados en [patrones.md](../diseno/patrones.md). Esta evidencia antes/después cubre las dos separaciones descritas arriba.

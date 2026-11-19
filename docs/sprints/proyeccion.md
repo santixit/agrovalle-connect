@@ -1,38 +1,31 @@
-# Proyección de Sprint 3 y Sprint 4
+# Proyección de sprints y validación del backlog
 
-**Estado:** propuesta para revisión del equipo y del Product Owner. No registra compromisos ni aprobaciones que aún no se hayan confirmado.
+**Actualizada:** 2026-11-19. Esta proyección distingue desarrollo implementado de aceptación funcional. No asigna fechas de sprints pasados que no estén registradas.
 
-## Contexto mínimo
+## Historia conocida y estado de trabajo
 
-- Sprint 0 y el Sprint de Diseño son actividades separadas; sus artefactos no se suman a los Story Points de producto.
-- Sprint 1 tiene documentadas HU-01 (5 SP), HU-07 (2 SP) y HU-04 (3 SP): **10 SP**.
-- Sprint 2 cuenta con planificación, revisión y retrospectiva documentales, pero no se encontró una selección verificable de historias. No se le atribuyen HUs ni SP retrospectivamente.
-- La capacidad de **12–14 SP por sprint** es la referencia indicada en clase; no es una velocidad medida del equipo.
+- Sprint 1 documenta HU-01 (5 SP), HU-07 (2 SP) y HU-04 (3 SP): 10 SP.
+- Sprint 2 tiene review y retrospectiva documentales sobre el trabajo visible, pero no se conserva selección inicial verificable de HUs o SP.
+- Para Sprint 3 el usuario eligió validar y obtener aceptación de HU-02 (5 SP), HU-06 (3 SP), HU-09 (3 SP) y HU-10 (3 SP). Sus 14 SP describen esfuerzo de implementación estimado en el Backlog, no el compromiso de validación.
+- El resultado JUnit de 37 pruebas aprobado el 2026-11-19 cubre parte de la validación técnica comunicada. Demo en staging y aceptación individual del PO siguen sin evidencia.
+- La capacidad histórica de 12–14 SP se conserva como referencia indicada en clase; no se presenta como velocidad medida del equipo.
 
-## Historias candidatas
+## Siguiente trabajo recomendado
 
-| Iteración | Historias candidatas | Total | Dependencia / foco |
+| Iteración | Alcance de validación sugerido | Esfuerzo de trabajo | Dependencia |
 |---|---|---:|---|
-| **Sprint 3** | **HU-02 (5 SP, Must), HU-06 (3 SP, Must), HU-09 (3 SP, Should), HU-10 (3 SP, Must)** | **14 SP** | Registrar finca, publicar la cosecha y comprobar el estado y el detalle de la oferta. La finca habilita asociar ubicación a la publicación; estado y detalle se verifican sobre una oferta existente. |
-| **Sprint 4** | **HU-05 (5 SP, Must), HU-08 (8 SP, Must)** | **13 SP** | Contactar y reservar ofertas publicadas. La reserva debe validar disponibilidad y evitar sobreventa. |
+| Sprint 3 (en validación) | Completar gate CI, demo sintética y aceptación de HU-02, HU-06, HU-09, HU-10. | 10 SP estimados para actividades de validación en el [plan Sprint 3](sprint-3/planning.md); no es compromiso histórico. | CI del commit final, staging disponible y decisión por HU del PO. |
+| Sprint 4 (proyección) | Revisar aceptación de HU-05 y HU-08; demostrar contacto y reserva/carrito con control de inventario. | 13 SP históricos de implementación; validar capacidad y estimación de las tareas de aceptación al planificar. | HU-02/HU-06/HU-10 y catálogo disponible; datos sintéticos. |
+| Sprints posteriores | Revisar criterios de HUs restantes conforme al orden del Product Backlog, comenzando por Must y dependencias técnicas. | Reestimar con velocity observada, no con capacidad supuesta. | Resultados de Sprint 3/4 y aceptación real del PO. |
 
-La propuesta ubica las historias **Must** en Sprint 1, Sprint 3 y Sprint 4. El conjunto Must suma **34 SP** y, si el equipo acepta esta distribución, quedaría cubierto al cierre propuesto de Sprint 4. La selección histórica de Sprint 2 no está documentada, por lo que no se atribuye parte de ese alcance a dicho sprint.
+## Capacidad matemática del backlog
 
-Las historias del backlog aparecen implementadas en el estado técnico descrito por el README. Por eso esta proyección sirve para decidir qué criterios faltan por validar o aceptar; no afirma que todo ese código aún deba desarrollarse.
+El Backlog contiene 79 SP para 15 historias. La tabla solo proyecta cuántas iteraciones cabrían bajo una capacidad hipotética; no constituye calendario ni compromiso:
 
-## Estimación general del backlog
-
-| Alcance | Story Points | Con capacidad de 14 SP | Con capacidad de 12 SP |
+| Alcance | SP | A 14 SP por sprint | A 12 SP por sprint |
 |---|---:|---:|---:|
-| Backlog completo, 15 historias | **79** | **6 sprints** (79 ÷ 14 = 5,64; redondeo hacia arriba) | **7 sprints** (79 ÷ 12 = 6,58; redondeo hacia arriba) |
-| Must + Should + Could, excluye HU-15 Won’t | **66** | **5 sprints** | **6 sprints** |
-| Solo Must | **34** | **3 sprints** | **3 sprints** |
+| Backlog completo | 79 | 6 | 7 |
+| Must + Should + Could (excluye HU-15 Won’t) | 66 | 5 | 6 |
+| Solo Must | 34 | 3 | 3 |
 
-El cálculo estima capacidad total, no fija el calendario de iteraciones posteriores. Sprint 3 y Sprint 4 son las dos candidatas proyectadas para el siguiente periodo de cuatro semanas, con duración máxima de dos semanas cada una.
-
-## Antes de registrar el compromiso
-
-- Confirmar en GitHub Projects el estado real de las historias y si ya fueron aceptadas.
-- Revisar la distribución, dependencias, capacidad y criterios BDD con el Product Owner y el equipo.
-- Registrar las fechas y el Sprint Goal definitivo solo cuando el equipo acuerde la planificación.
-- Ajustar esta proyección si una historia ya está aceptada o si cambia la capacidad observada.
+Las divisiones se redondean hacia arriba. La velocidad real solo puede calcularse con SP comprometidos al inicio y terminados conforme al DoD. Véase el [reporte de métricas](../metrics/sprint-metrics-corte3.md).

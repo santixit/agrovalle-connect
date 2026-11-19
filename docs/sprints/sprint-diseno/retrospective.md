@@ -1,26 +1,31 @@
-# Retrospectiva documental del Sprint de Diseño
+# Sprint de Diseño — análisis retrospectivo documental
 
-**Estado:** síntesis retrospectiva de los artefactos y comentarios disponibles. No representa una ceremonia ni atribuye acuerdos colectivos no registrados.
+**Fecha de registro:** 2026-11-19
+**Modalidad:** análisis de artefactos y comentarios disponibles; no acredita una ceremonia ni atribuye opiniones a integrantes.
 
-## Qué facilitó el trabajo
+## Observaciones
 
-- El repositorio conserva fuentes editables para el modelo de datos, DDL, arquitectura, UML y mockups, junto con exportaciones que permiten revisar la propuesta.
-- El issue #46 registra decisiones acotadas sobre la base del Backlog, el perfil público de HU-07, los filtros de HU-04 y el esquema que se conservaría para aquel alcance.
-- La documentación distingue el modelo ejecutable y las migraciones Flyway de los DER aportados como propuesta.
+### Prácticas útiles observables
 
-## Dificultades observables
+- Se conservan fuentes editables y exportaciones de modelos, UML y mockups.
+- La reconciliación compara DER propuestos con migraciones reales y evita tratar un dibujo como esquema ejecutable.
+- El issue #46 deja decisiones específicas de alcance y confirmaciones de integrantes, con fecha e historial verificables en GitHub.
 
-- No hay evidencia verificable de que Sprint Discovery, la revisión de mockups y el diseño completo se hicieran antes de iniciar la codificación.
-- Las fuentes de diseño se actualizaron para reflejar partes de la aplicación actual; por ello no siempre sirven como evidencia histórica del diseño previo.
-- El issue registra confirmación de algunos integrantes, pero no documenta la aprobación de todo el equipo ni de cada mockup.
-- Persisten diferencias entre DER propuestos y el esquema implementado, aunque la reconciliación las enumera para revisión.
+### Dificultades observables
 
-## Aprendizajes y acciones siguientes
+- Los documentos actuales reflejan en parte la implementación y no pueden demostrar que el diseño se completó antes de programar.
+- Issue #46 no identifica aprobación del PO para cada mockup ni confirmación de todos los integrantes.
+- El repositorio contiene DER propuestos y DER implementados; sin una indicación explícita, una persona lectora podría confundir cuál se ejecuta.
 
-| Aprendizaje observado | Acción propuesta | Responsable / estado |
+## Reglas operativas aplicadas a partir de esta revisión
+
+| Riesgo | Regla de trabajo | Comprobación |
 |---|---|---|
-| Un artefacto actualizado contra el código ayuda a explicar el sistema, pero no prueba cuándo se diseñó. | En próximos sprints, guardar versiones revisadas con fecha y enlazar historias, issues o decisiones antes de codificar. | Equipo por acordar. |
-| Una aprobación informal de mockups debe indicar quién revisó y qué versión aceptó. | Registrar en el issue o PR la versión aprobada y las confirmaciones pendientes. | Product Owner y equipo por confirmar. |
-| Las diferencias entre propuesta de DER y esquema vigente necesitan una decisión del dominio, además de una explicación técnica. | Revisar la reconciliación del DER y documentar las decisiones pendientes en una fuente verificable. | Equipo por acordar. |
+| Confundir diseño vigente con documento histórico | Cada diagrama indica si representa propuesta o implementación y la versión del esquema a la que corresponde. | Revisión de enlaces y versión en PR. |
+| Inferir aceptación desde comentarios informales | Las aprobaciones se registran con identidad, artefacto/versión, decisión y fecha; si falta algo se describe el alcance de la confirmación existente. | Comentario o review verificable enlazado. |
+| Divergencia entre DER y DDL | Actualizar DER y snapshot en el mismo PR que la nueva migración Flyway. | CI aplica migraciones; revisión compara esquema y diagrama. |
+| Afirmar temporalidad no probada | Mantener la cronología como “no demostrada” si no existe evidencia contemporánea. | No usar fecha de commit como sustituto de acta de diseño. |
 
-Esta retrospectiva no afirma que esas acciones ya se hayan acordado o ejecutado. El equipo puede actualizar el estado cuando exista confirmación verificable.
+## Resultado
+
+El análisis se cierra con una referencia de diseño utilizable para el trabajo futuro y un registro claro de límites históricos. No se afirma que las reglas nuevas fueran acuerdos de una retrospectiva celebrada; se aplican como convención documental de esta línea base.

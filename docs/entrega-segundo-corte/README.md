@@ -1,5 +1,7 @@
 # Cierre de entrega — Segundo corte
 
+> **Alcance temporal:** esta carpeta describe el paquete y las evidencias del segundo corte en la fecha de su preparación; sus snapshots de tablero, CI y pendientes no son el estado vivo del proyecto. La reorganización documental de PR #72 se fusionó en `main` el 2026-11-19. Para el estado vigente, consultar el [índice de documentación](../README.md), la [línea base actual](../requirements/baseline-decisions-2026-11-19.md) y el tablero enlazado en GitHub. El PDF se conserva como artefacto de la entrega y no se reescribe al cambiar el estado posterior del proyecto.
+
 Este checklist prepara la entrega descrita en `Entregable_segundo_corte_agrovalle_connect.pdf`. Es un registro del trabajo y la evidencia del Sprint 2; no afirma que el equipo haya realizado ceremonias que no están documentadas.
 
 ## Datos confirmados para la portada
