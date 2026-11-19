@@ -74,7 +74,9 @@ docker compose up -d db
 
 `docker-compose.yml` configura PostgreSQL para desarrollo local. La contraseña declarada en Compose se aplica cuando PostgreSQL inicializa por primera vez el volumen; cambiar ese valor después no cambia la contraseña de una base que ya existe. El script de Spring solicita la contraseña actual del usuario de la base. Si la aplicación falla con `28P01`, confirma que ambas coincidan antes de cambiar o borrar el volumen local.
 
-El script solicita la contraseña sin guardarla en el repositorio y genera un secreto JWT temporal para esa ejecución. Para usar otra instancia PostgreSQL local, pasa su URL y usuario. Ejemplo con una base cuyo nombre contiene un espacio:
+Si existe `.env.local` con `DATABASE_URL_UNPOOLED` o `DATABASE_URL` de Neon, el script usa esa conexión automáticamente y oculta las credenciales. Prefiere `DATABASE_URL_UNPOOLED` porque Flyway ejecuta migraciones al iniciar la aplicación. El script convierte la URL de PostgreSQL a JDBC y entrega usuario y contraseña a Spring Boot como variables de entorno. El archivo está excluido de Git; nunca lo agregues al repositorio. Sin esas variables, el script conserva el flujo local y solicita la contraseña sin guardarla en el repositorio. También genera un secreto JWT temporal para esa ejecución.
+
+Para obtener el archivo de entorno de una rama Neon ya vinculada, ejecuta `neon env pull --file .env.local` desde la raíz del proyecto. Si aún no está vinculada, usa `neon link` con el proyecto y la rama correctos primero. No uses `neon deploy` solo para descargar credenciales: ese comando aplica configuración declarada en `neon.ts` y puede cambiar servicios remotos. Para usar otra instancia PostgreSQL local, pasa su URL y usuario. Ejemplo con una base cuyo nombre contiene un espacio:
 
 ```powershell
 .\scripts\run-local.ps1 -DbUrl 'jdbc:postgresql://localhost:5432/agrovalle%20conect' -DbUsername 'postgres'
