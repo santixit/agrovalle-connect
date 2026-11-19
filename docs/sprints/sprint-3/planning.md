@@ -1,44 +1,52 @@
-# Sprint 3: validación y aceptación de historias implementadas
+# Planificación de Sprint 3 — validación y aceptación
 
-> **Estado:** propuesta de validación basada en el alcance que eligió el usuario. No es evidencia de aprobación formal del equipo ni del Product Owner (PO), y no indica que el sprint haya comenzado.
+**Fecha de actualización documental:** 2026-11-19
+**Estado:** trabajo de validación iniciado; no hay acta de planning formal ni fechas originales de inicio/cierre registradas.
+**Alcance elegido por el usuario:** revisar y obtener aceptación de HU-02, HU-06, HU-09 y HU-10.
 
-## Sprint Goal propuesto
+## Sprint Goal
 
-Validar con pruebas automatizadas y una demostración las historias HU-02, HU-06, HU-09 y HU-10; corregir los defectos que se encuentren y registrar para cada criterio BDD la decisión del Product Owner: aceptado, rechazado con observaciones o pendiente.
+Comprobar con JUnit 5 y una demostración segura en staging los criterios BDD de HU-02, HU-06, HU-09 y HU-10; registrar por historia la decisión explícita del Product Owner y corregir cualquier incumplimiento antes de cerrar.
 
-El tablero muestra las cuatro historias en `Done`, pero ese estado por sí solo no demuestra la aceptación del PO. Las estimaciones originales del backlog suman 14 SP de implementación; **no deben tratarse como capacidad ni como trabajo nuevo de validación**. El equipo debe estimar las tareas de validación y confirmar su capacidad antes de declarar Sprint 3 formalmente planificado.
+## Capacidad y estimación
 
-## Alcance y criterios de aceptación
+Las HUs suman **14 SP de implementación histórica**: HU-02 (5), HU-06 (3), HU-09 (3) y HU-10 (3). No se reutilizan como capacidad de validación. Para planificar el cierre de esta validación se usa una **estimación de trabajo de 10 SP** basada en las actividades de abajo; es una línea base de planificación documental, no un registro retroactivo de compromiso inicial del equipo.
 
-| Historia | Qué debe demostrarse | Evidencia técnica que se prepara |
-|---|---|---|
-| HU-06: registrar finca | Un agricultor autenticado crea una finca; se asocia a su perfil y aparece en su listado. | Prueba de API `fincaOfertaReservaDespachoTrazabilidadYFavoritos`; prueba de repositorio `FincaRepositoryTests`. |
-| HU-02: publicar cosecha | Un agricultor autenticado publica una cosecha con fecha de hoy o futura; recibe 201 y la oferta aparece en el catálogo. Sin autenticación se rechaza; una fecha pasada se rechaza. | Pruebas de API `fincaOfertaReservaDespachoTrazabilidadYFavoritos`, `cuentaAgricultorPuedeAutenticarseYPublicarOferta`, `publicacionDeOfertaExigeAutenticacion` y `explicaPorQueNoAceptaLaFechaPasadaDeUnaCosecha`. |
-| HU-09: cambiar estado | El propietario puede marcar el lote `AGOTADO` y deja de aparecer en ofertas disponibles; otro agricultor no puede cambiarlo. | Prueba de API `fincaOfertaReservaDespachoTrazabilidadYFavoritos`; pruebas de servicio `actualizarEstadoRechazaOfertaDeOtroAgricultor` y `actualizarEstadoNoPublicaOfertaSinInventario`. |
-| HU-10: consultar detalle | El público ve producto, agricultor, finca, precio y cantidad disponible; la respuesta no incluye cédula ni credenciales. | Prueba de API `fincaOfertaReservaDespachoTrazabilidadYFavoritos`; prueba de servicio `consultarDetalleRechazaOfertaInactiva`. |
+| Actividad | Estimación | Estado al 2026-11-19 | Hecho cuando |
+|---|---:|---|---|
+| T01 — relacionar criterios BDD con pruebas JUnit/MockMvc y revisar salida Surefire | 2 SP | Completada parcialmente: se compartió `BUILD SUCCESS`, 37 pruebas, 0 fallos, 0 errores y 0 omitidas | El reporte agregado y los métodos pertinentes están enlazados a cada historia. |
+| T02 — ejecutar el gate de calidad sobre el estado final del sprint | 2 SP | Sin evidencia específica de ejecución de Sprint 3 en este registro | CI verde para el commit que se quiere presentar; resultado de Checkstyle/JaCoCo anotado. |
+| T03 — demostrar en staging con datos sintéticos los flujos de las cuatro HUs | 3 SP | Sin evidencia de ejecución | Capturas o video breve muestran petición, respuesta, resultado y commit/entorno; no incluyen secretos ni datos reales. |
+| T04 — revisar por historia con el PO y actualizar tablero/documentos | 3 SP | Sin decisión de aceptación registrada | Cada HU tiene `Aceptada` o `Requiere cambios`, fecha, responsable y evidencia; el tablero y review coinciden. |
+| **Total plan de validación** | **10 SP** |  |  |
 
-### Traducción BDD a pruebas automatizadas
+La distribución permite ordenar el trabajo pendiente; no afirma que esas tareas fueran estimadas en una reunión previa. El resultado de Maven compartido se conserva en [resultado-maven-2026-11-19.md](../../evidencias/sprint-3/resultado-maven-2026-11-19.md). Si la ejecución demuestra que una historia no cumple, el arreglo y su regresión se agregan como trabajo nuevo con su propia estimación.
 
-Los escenarios BDD se verifican en `src/test/java/co/edu/uniajc/agrovalle/AgrovalleConnectApplicationTests.java` mediante MockMvc contra la API y la base H2 aislada de pruebas. En particular, la prueba integrada comprueba que la finca se lista, la cosecha se publica y filtra en el catálogo, el detalle entrega precio y cantidad sin cédula, y al marcarla `AGOTADO` deja de aparecer en el catálogo. Las pruebas unitarias y de repositorio complementan los escenarios de permisos y consultas.
+## Historias y evidencia de prueba
 
-## Pasos de validación
-
-1. Revisar que las cuatro historias y sus escenarios en [`product-backlog-bdd.md`](../../requirements/product-backlog-bdd.md) coincidan con lo que espera el PO.
-2. Ejecutar las pruebas automatizadas en la rama de trabajo con `./mvnw -Dtest=AgrovalleConnectApplicationTests,GestionProductoServiceTest,CatalogoProductoServiceTest,FincaRepositoryTests test` (en PowerShell de Windows: `.\mvnw.cmd '-Dtest=AgrovalleConnectApplicationTests,GestionProductoServiceTest,CatalogoProductoServiceTest,FincaRepositoryTests' test`).
-   **Resultado registrado (19 de noviembre de 2026):** Maven reportó `BUILD SUCCESS`, 37 pruebas, 0 fallos, 0 errores y 0 omitidas. Es resultado de JUnit; no demuestra por sí solo ejecución de Checkstyle/JaCoCo en CI ni aceptación del PO.
-3. Si el resultado es `BUILD FAILURE`, abrir los informes de `target/surefire-reports`, corregir la causa y repetir. No marcar una historia aceptada mientras un criterio falle.
-4. Si todas las pruebas pasan, demostrar el flujo en ambiente de pruebas con datos sintéticos: registrar finca, publicar cosecha, consultar detalle, marcar agotado y volver a consultar catálogo. No usar datos reales ni la base de producción.
-5. Completar `checklist-inicio.md` y guardar capturas o salida de CI en `docs/evidencias/sprint-3/`.
-6. El PO revisa cada criterio BDD y deja su decisión en GitHub Projects o en el acta de Sprint Review. Si solicita cambios, crear tareas de corrección; si acepta, registrar fecha y responsable de la aceptación.
-
-## Tareas técnicas propuestas
-
-| Tarea | Área | Relación de calidad (ISO/IEC 25010) | Hecho cuando |
+| Historia | Criterio que se valida | Pruebas automatizadas existentes | Calidad ISO/IEC 25010 |
 |---|---|---|---|
-| Automatizar el escenario de cada HU con JUnit 5 / MockMvc | API y pruebas | Adecuación funcional, fiabilidad | Se comprueban estado HTTP, respuesta y persistencia/comportamiento observable. |
-| Comprobar autorización y datos privados | Seguridad | Seguridad y confidencialidad | Un actor no autorizado es rechazado y las respuestas públicas no exponen cédula/credenciales. |
-| Comprobar actualización del estado y su efecto en catálogo | Servicio / repositorio | Fiabilidad, adecuación funcional | `AGOTADO` deja la oferta fuera de resultados disponibles. |
-| Ejecutar las pruebas pertinentes y atender fallos | CI | Mantenibilidad, fiabilidad | JUnit 5 pasa; Checkstyle y JaCoCo se revisan en CI sin afirmar resultados antes de tenerlos. |
-| Revisar criterios con el PO y registrar decisiones | Sprint Review | Adecuación funcional | Cada HU tiene estado de aceptación y comentario/evidencia verificable. |
+| HU-02 — publicar cosecha | Agricultor autenticado publica; fecha pasada se rechaza; oferta aparece en catálogo. | `cuentaAgricultorPuedeAutenticarseYPublicarOferta`, `publicacionDeOfertaExigeAutenticacion`, `explicaPorQueNoAceptaLaFechaPasadaDeUnaCosecha` y escenario integrado `fincaOfertaReservaDespachoTrazabilidadYFavoritos` en `AgrovalleConnectApplicationTests`. | Adecuación funcional, seguridad, fiabilidad. |
+| HU-06 — registrar finca | Agricultor autenticado crea finca propia y la consulta. | `fincaOfertaReservaDespachoTrazabilidadYFavoritos`; `FincaRepositoryTests`. | Adecuación funcional, seguridad, mantenibilidad. |
+| HU-09 — cambiar estado | Solo propietario cambia estado; oferta agotada no se ofrece en el catálogo. | `actualizarEstadoRechazaOfertaDeOtroAgricultor`, `actualizarEstadoNoPublicaOfertaSinInventario` y escenario integrado. | Seguridad, fiabilidad, adecuación funcional. |
+| HU-10 — consultar detalle | Público consulta producto, finca/agricultor, precio y disponibilidad sin cédula ni credenciales; inactiva no está disponible. | Escenario integrado `fincaOfertaReservaDespachoTrazabilidadYFavoritos`; `consultarDetalleRechazaOfertaInactiva`. | Adecuación funcional, seguridad, privacidad. |
 
-La fecha, capacidad, responsables, sustituciones de historias ya aceptadas y estimación de estas tareas deben acordarse con el equipo antes de convertir esta propuesta en compromiso de sprint. La proyección general permanece en [proyeccion.md](../proyeccion.md).
+Los métodos citados demuestran que hay casos automatizados en las clases nombradas; no se atribuye un resultado individual por método que el reporte agregado no presenta. La transcripción compartida y su alcance están en [resultado Maven](../../evidencias/sprint-3/resultado-maven-2026-11-19.md).
+
+## Orden de trabajo
+
+1. Revisar los criterios exactos de las cuatro HUs en el [Backlog BDD](../../requirements/product-backlog-bdd.md).
+2. Relacionar cada criterio con el método de prueba y revisar `target/surefire-reports` de la ejecución de 37 pruebas.
+3. Ejecutar el pipeline sobre el commit final. La ejecución local de JUnit no sustituye Checkstyle, JaCoCo ni E2E del workflow.
+4. Seguir el [guion de demo reproducible](demo-runbook.md) en staging usando solo datos sintéticos: crear finca, publicar cosecha con fecha válida, consultar detalle y marcar agotado; repetir lectura del catálogo.
+5. Guardar evidencia por historia bajo `docs/evidencias/sprint-3/` y añadir el commit, ambiente y fecha.
+6. El PO revisa cada criterio y registra su decisión real en la [review](review.md). Si pide cambios, abrir tareas y repetir las pruebas afectadas.
+7. Sincronizar el tablero, el informe y la Definition of Done antes de declarar el cierre.
+
+## Roles operativos por actividad
+
+No se asignan personas a tareas sin que el tablero lo registre. La regla de trabajo es: quien implementa/prepara evidencia se asigna la tarjeta; otra persona revisa el PR; el PO emite la decisión funcional. Cada asignación individual se conserva en GitHub Projects.
+
+## Estado de cierre
+
+El Sprint 3 tiene una comprobación automatizada reportada, pero no cumple aún los criterios de cierre documental: faltan el gate de calidad del incremento, la evidencia de staging y las decisiones de aceptación por historia. La lista operativa detallada está en [checklist-inicio.md](checklist-inicio.md).

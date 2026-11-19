@@ -27,7 +27,7 @@ El [workflow #103](https://github.com/santixit/agrovalle-connect/actions/runs/40
 
 El log del job confirma que JaCoCo pasó y el workflow muestra estado exitoso. JaCoCo mide cobertura de código Java; no mide la proporción unitaria/integración/E2E. Por eso una cobertura superior al umbral **no corrige** el incumplimiento de la distribución 70/20/10.
 
-El reporte HTML real se conserva como [artefacto `jacoco-coverage-report` del run #103](https://github.com/santixit/agrovalle-connect/actions/runs/40894179070/artifacts/12906676338); el PDF de entrega enlaza ese artefacto y transcribe el resultado del job. No se adjunta una captura del HTML de JaCoCo de ese mismo run, por lo que la captura solicitada por el taller sigue pendiente. La captura existente `jacoco-main-6c19aae.png` corresponde a otro commit y no se presenta como si fuera la captura de #103.
+El reporte HTML real se conserva como [artefacto `jacoco-coverage-report` del run #103](https://github.com/santixit/agrovalle-connect/actions/runs/40894179070/artifacts/12906676338). La captura [jacoco-main-a7e2097.png](jacoco-main-a7e2097.png) es un render local del HTML archivado para el commit `a7e2097`; muestra el mismo total de instrucciones y ramas y completa la evidencia visual solicitada. La captura [jacoco-main-6c19aae.png](jacoco-main-6c19aae.png) corresponde a otro commit y se mantiene como evidencia histórica separada.
 
 ## Ejecución Java y E2E
 

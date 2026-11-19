@@ -12,13 +12,13 @@
 ## Sprint 1 y calidad
 
 - [Revisión funcional del Sprint 1](../sprints/sprint-1/review.md).
-- [Pirámide de pruebas de Sesión 8](piramide-pruebas-sesion8.md): conteo 22/23/1, comparación con 70/20/10 y cobertura JaCoCo de Actions #103; se declara que la proporción objetivo sigue pendiente.
+- [Pirámide de pruebas de Sesión 8](piramide-pruebas-sesion8.md): conteo 22/23/1, comparación con 70/20/10, cobertura JaCoCo de Actions #103 y captura del HTML del mismo commit. La proporción 70/20/10 no se alcanza y queda reportada como brecha real.
 - [Evidencia de historias y BDD](comparacion-historias-backlog-sprint1.md).
 - [Colección de capturas Postman](sprint-1/).
 
 ## Prácticas y patrones
 
-- [Evidencia SOLID de Sesión 7 y Sprint 2](solid-sesion7.md): refactor antes/después de `ProductoService` y mapeo acotado de los cinco principios.
+- [Evidencia SOLID de Sesión 7 y Sprint 2](solid-sesion7.md): dos casos antes/después — separación catálogo/gestión de productos y extracción de política de descuento — con commits, pruebas y límites.
 - [Evidencia TDD del descuento mayorista](tdd-descuento-mayorista.md).
 
 ## CI y cobertura
@@ -33,3 +33,8 @@
 - [Reporte HTML completo](../entrega-segundo-corte/jacoco-main-6c19aae/index.html) y [artefacto original de GitHub Actions](https://github.com/santixit/agrovalle-connect/actions/runs/40816952882/artifacts/12873380141).
 
 Actions #103 acredita que `main` pasó Build, tests, Checkstyle, JaCoCo, E2E y despliegue en `a7e2097`. Las métricas actuales provienen del reporte JaCoCo del mismo run: 88% de instrucciones, 63% de ramas y 90% de líneas. El reporte #83 y la captura #97 se conservan como evidencia histórica, no como cifras del código actual.
+
+## Sprint 3
+
+- [Resultado Maven del 2026-11-19](sprint-3/resultado-maven-2026-11-19.md): transcripción de 37 pruebas aprobadas, con los límites de la evidencia. No equivale a un run de CI o a aceptación funcional.
+- La demostración en staging y la aceptación del PO por HU no tienen evidencia archivada; el procedimiento está en el [guion de demo](../sprints/sprint-3/demo-runbook.md) y el estado en la [review de Sprint 3](../sprints/sprint-3/review.md).

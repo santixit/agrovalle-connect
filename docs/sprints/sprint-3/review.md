@@ -1,28 +1,38 @@
-# Sprint 3 — registro de validación
+# Sprint 3 — revisión del incremento de validación
 
-**Estado:** revisión técnica parcial; la demo y aceptación funcional del Product Owner siguen pendientes.
+**Actualizado:** 2026-11-19
+**Estado:** revisión técnica parcial documentada; no hay evidencia de demo en staging ni de aceptación funcional del PO. No se presenta como acta de una ceremonia celebrada.
 
-## Pruebas automatizadas reportadas
+## Resultado automatizado disponible
 
-El 19 de noviembre de 2026, el usuario ejecutó las pruebas seleccionadas con Maven y compartió este resultado: **37 pruebas, 0 fallos, 0 errores y 0 omitidas; `BUILD SUCCESS`**. Esta evidencia acredita el resultado JUnit de esa ejecución, no una ejecución de Checkstyle/JaCoCo, demo en staging ni aceptación del PO.
+El usuario compartió la salida de Maven del 2026-11-19: **37 pruebas ejecutadas, 0 fallos, 0 errores, 0 omitidas; `BUILD SUCCESS`**. La transcripción y el alcance están en [resultado-maven-2026-11-19.md](../../evidencias/sprint-3/resultado-maven-2026-11-19.md). El resultado acredita la ejecución local de la suite seleccionada. No acredita por sí solo la ejecución de Checkstyle, JaCoCo, E2E, una demo de producto ni la aceptación del PO.
 
-## Pendiente para cerrar la revisión
+## Matriz de revisión por historia
 
-- [ ] Demostrar HU-02, HU-06, HU-09 y HU-10 en staging con datos sintéticos.
-- [ ] Guardar capturas o artefactos bajo `docs/evidencias/sprint-3/`, sin tokens ni datos reales.
-- [ ] Registrar para cada HU la decisión y comentario del PO.
-
-## Matriz de aceptación
-
-Completar esta tabla durante la demostración. No cambiar el estado a aceptado sin decisión explícita del PO y evidencia del escenario revisado.
-
-| Historia | Pruebas automatizadas | Demo en staging | Decisión del PO | Fecha y evidencia |
+| Historia | Pruebas en código / alcance | Resultado técnico disponible | Demo en staging | Decisión funcional del PO |
 |---|---|---|---|---|
-| HU-02 | 37 pruebas aprobadas en ejecución local reportada; vincular los casos concretos al escenario. | Pendiente | Pendiente | Pendiente |
-| HU-06 | 37 pruebas aprobadas en ejecución local reportada; vincular los casos concretos al escenario. | Pendiente | Pendiente | Pendiente |
-| HU-09 | 37 pruebas aprobadas en ejecución local reportada; vincular los casos concretos al escenario. | Pendiente | Pendiente | Pendiente |
-| HU-10 | 37 pruebas aprobadas en ejecución local reportada; vincular los casos concretos al escenario. | Pendiente | Pendiente | Pendiente |
+| HU-02 — publicar cosecha | Pruebas de autenticación, publicación, fecha pasada y escenario integrado; `AgrovalleConnectApplicationTests`. | Incluida en la suite comunicada de 37; el resultado es agregado, no individual por método. | No hay evidencia guardada. | No registrada; por ello no se declara aceptada. |
+| HU-06 — registrar finca | Escenario integrado y `FincaRepositoryTests`. | Incluida en la suite comunicada de 37; el resultado es agregado. | No hay evidencia guardada. | No registrada; por ello no se declara aceptada. |
+| HU-09 — cambiar estado | Pruebas de rechazo a otro propietario, inventario agotado y escenario integrado. | Incluida en la suite comunicada de 37; el resultado es agregado. | No hay evidencia guardada. | No registrada; por ello no se declara aceptada. |
+| HU-10 — consultar detalle | Prueba de detalle inactivo y escenario integrado de datos/privacidad. | Incluida en la suite comunicada de 37; el resultado es agregado. | No hay evidencia guardada. | No registrada; por ello no se declara aceptada. |
 
-El conteo de 37 corresponde a la suite seleccionada y no acredita por sí solo que cada criterio BDD esté cubierto ni que el PO haya aceptado la historia.
+## Comparación con el criterio de cierre
 
-La prueba automatizada ampliada está en `src/test/java/co/edu/uniajc/agrovalle/AgrovalleConnectApplicationTests.java`.
+| Criterio | Estado al 2026-11-19 | Evidencia que lo cierra |
+|---|---|---|
+| Pruebas JUnit 5 de la suite seleccionada | **Cumplido según salida compartida** | Maven: 37/37, sin fallos, errores ni omitidas. |
+| Checkstyle, JaCoCo y E2E del estado final | **No acreditado para este incremento** | Resultado verde del workflow asociado al commit que se presenta. |
+| Demostración funcional en staging | **No acreditada** | Evidencia sintética por flujo, vinculada a ambiente, fecha y commit. |
+| Decisión del PO por cada HU | **No registrada** | `Aceptada` o `Requiere cambios`, comentario y fecha por HU. |
+
+## Conclusión
+
+La evidencia actual permite decir que la suite seleccionada pasó en la ejecución local reportada. No permite declarar Sprint 3 aceptado ni cerrado. Las cuatro historias conservan el estado **“aceptación funcional no acreditada”** hasta que se realice la demostración y exista una decisión explícita por historia. `Done` en GitHub Projects se mantiene como estado técnico del trabajo y no se utiliza como sustituto de dicha decisión.
+
+## Referencias
+
+- [Planificación y matriz de pruebas](planning.md)
+- [Checklist operativo de cierre](checklist-inicio.md)
+- [Backlog BDD](../../requirements/product-backlog-bdd.md)
+- [Definition of Done](../../dod.md)
+- [`AgrovalleConnectApplicationTests`](../../../src/test/java/co/edu/uniajc/agrovalle/AgrovalleConnectApplicationTests.java)

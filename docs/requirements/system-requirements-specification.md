@@ -3,11 +3,11 @@
 | Campo | Valor |
 |---|---|
 | Producto | AgroValle Connect |
-| Versión documental | 1.0 |
-| Estado | Línea base consolidada para revisión del Product Owner y del equipo. |
-| Fuente | Repositorio, Product Backlog, contratos REST, migraciones y documentación de arquitectura disponibles en esta revisión. |
+| Versión documental | 1.1 |
+| Estado | Línea base de trabajo del prototipo; las decisiones documentales se registran en [Decisiones de línea base](baseline-decisions-2026-11-19.md). |
+| Fuente | Repositorio, Product Backlog, contratos REST, migraciones, documentación de arquitectura y resultado Maven compartido el 2026-11-19. |
 
-> Este documento reúne los requisitos conocidos y traza cada requisito a su historia y verificación. No inventa acuerdos de negocio ni objetivos de calidad que el equipo no haya aprobado. Las decisiones abiertas al final deben resolverse antes de declarar esta SRS aprobada o afirmar cumplimiento integral de IEEE 29148.
+> Esta SRS fija el comportamiento conocido y las decisiones de alcance que permiten continuar el prototipo. La autorización del solicitante para establecer esta línea base no representa por sí sola una ceremonia de aprobación colectiva ni la aceptación funcional de Sprint 3. El estado de cada decisión y la evidencia que la respalda se indican de forma explícita.
 
 ## 1. Introducción
 
@@ -28,7 +28,7 @@ La versión documentada implementa las historias HU-01 a HU-15. El alcance hist�
 - **PO:** Product Owner.
 - **BDD:** criterios de comportamiento en formato Given–When–Then.
 - **Debe:** requisito obligatorio para el comportamiento descrito.
-- **Pendiente de decisión:** el repositorio no contiene una decisión aprobada; no se presupone un valor.
+- **Línea base de trabajo:** decisión adoptada para este prototipo, con su alcance y límite de evidencia indicados en `baseline-decisions-2026-11-19.md`.
 
 ### 1.4 Fuentes de referencia
 
@@ -135,7 +135,7 @@ Las funciones siguientes están presentes en el contrato/código actual, pero no
 
 ## 6. Requisitos no funcionales
 
-Los requisitos siguientes expresan controles observables o umbrales configurados. No se establecen metas numéricas sin acuerdo del equipo.
+Los requisitos siguientes expresan controles observables o umbrales configurados. El prototipo no declara SLA ni metas de rendimiento que no se hayan medido; las decisiones correspondientes y su alcance se registran en la línea base.
 
 | ID | Calidad ISO/IEC 25010 | Requisito | Evidencia / verificación |
 |---|---|---|---|
@@ -149,7 +149,7 @@ Los requisitos siguientes expresan controles observables o umbrales configurados
 | NFR-TEST-01 | Fiabilidad / mantenibilidad | Los escenarios BDD acordados deben tener pruebas automatizadas JUnit 5 pertinentes; el workflow ejecuta además pruebas de navegador E2E para el flujo crítico. | `src/test/`, `npm run test:e2e` y GitHub Actions. |
 | NFR-OBS-01 | Fiabilidad | El servicio debe exponer readiness para verificar disponibilidad de la aplicación después de iniciar y aplicar migraciones. | `GET /api/v1/health`; verificación en CD. |
 
-No hay en las fuentes revisadas objetivos aprobados para tiempos de respuesta, concurrencia máxima, disponibilidad/SLA, RPO/RTO, accesibilidad, retención/eliminación de datos personales o compatibilidad con navegadores por versión. Se registran como decisiones abiertas; no se asignan valores arbitrarios.
+El alcance de esta versión tampoco declara conformidad normativa de privacidad o accesibilidad, soporte para todos los navegadores, ni SLA, carga máxima o metas de recuperación. Para la demostración se usa Chrome o Edge actualizado y datos sintéticos. Estas limitaciones son decisiones explícitas de alcance del prototipo, no compromisos de producción. Véase [D-02 a D-05](baseline-decisions-2026-11-19.md).
 
 ## 7. Verificación, trazabilidad y gestión de cambios
 
@@ -168,23 +168,18 @@ No hay en las fuentes revisadas objetivos aprobados para tiempos de respuesta, c
 | Pruebas y calidad | `src/test/`, `pom.xml`, [CI](../../.github/workflows/ci.yml) y [CD](../../.github/workflows/cd.yml) |
 | Aceptación de producto | PR, issue o Sprint Review con decisión explícita del PO |
 
-## 8. Decisiones abiertas para aprobación
+## 8. Decisiones y estado de validación
 
-Estas preguntas no bloquean la lectura de los requisitos implementados, pero deben responderse para convertir esta línea base en una SRS aprobada sin decisiones supuestas.
+Las decisiones de alcance que antes estaban abiertas se cerraron para esta versión en [Decisiones de línea base — 2026-11-19](baseline-decisions-2026-11-19.md). La tabla distingue una decisión documental de trabajo de una aprobación colectiva o una aceptación funcional:
 
-| ID | Decisión pendiente | Responsable propuesto | Evidencia de cierre |
-|---|---|---|---|
-| OQ-01 | Confirmar reglas de negocio de campos, límites, municipios, cancelación de reservas y transiciones válidas de pedidos/despachos. | PO y equipo | Comentario aprobado en issue/PR con escenarios actualizados. |
-| OQ-02 | Definir clasificación, retención, rectificación y eliminación de datos personales, incluidos cédula, teléfono y correo. | PO y equipo | Política escrita y requisito trazable. |
-| OQ-03 | Aprobar objetivos cuantitativos de rendimiento, concurrencia, disponibilidad y recuperación (SLA, RPO/RTO), o declarar que no aplican al prototipo académico. | PO / responsable de despliegue | Decisión versionada; no inventar umbrales. |
-| OQ-04 | Acordar navegadores soportados y criterios de accesibilidad de la interfaz. | PO y equipo | Matriz de compatibilidad/accesibilidad aprobada. |
-| OQ-05 | Confirmar si habrá pagos, almacenamiento remoto de imágenes o notificaciones externas; hoy no se declaran como funciones implementadas. | PO | Decisión de alcance y HU correspondiente si se aprueba. |
-| OQ-06 | Confirmar aceptación funcional de HU-02, HU-06, HU-09 y HU-10 después de demo y revisar el registro de Sprint 3. | PO | Decisión por historia con fecha, evidencia y observaciones. |
-| OQ-07 | Validar el diseño de dominio y los DER propuestos contra el esquema Flyway vigente. | Equipo / PO | Reconciliación revisada y decisión registrada. |
+| Tema | Decisión de esta versión | Estado de evidencia |
+|---|---|---|
+| Reglas de negocio y transiciones | El Backlog BDD y los contratos REST describen el comportamiento soportado; lo no especificado queda fuera de alcance. No se agrega cancelación de reservas ni auditoría completa de estados. | Línea base documental adoptada; una nueva regla requiere cambio trazable. |
+| Datos personales | Solo datos sintéticos en pruebas y evidencias; no se habilita el prototipo para tratar datos reales de producción. | Política de alcance fijada; no es dictamen legal ni certificación de cumplimiento. |
+| Calidad operativa | Sin SLA, carga máxima ni RPO/RTO declarados. CI y readiness son los controles de esta versión. | Gates configurados; no hay prueba de carga que respalde una cifra de rendimiento. |
+| Navegador e interfaz | Chrome/Edge actualizado y diseño adaptable para la demostración; compatibilidad amplia y conformidad WCAG no se declaran. | Alcance de prueba establecido; auditoría formal no realizada. |
+| Integraciones | Pagos, almacenamiento persistente de imágenes y notificaciones externas están fuera de alcance. | Coherente con contratos y capacidades observadas. |
+| HU-02, HU-06, HU-09 y HU-10 | Se registra el resultado JUnit comunicado el 2026-11-19, pero no se declara aceptación funcional sin demo y decisión del PO por historia. | Pruebas: 37 aprobadas; demo/decisión PO: no acreditadas. |
+| Modelo de datos | Flyway V1–V7 es canónico; los DER de propuesta son antecedentes, y el snapshot SQL es de referencia. | Reconciliación técnica documentada; las diferencias quedan descritas. |
 
-### Aprobación
-
-| Revisión | Responsable | Fecha | Estado |
-|---|---|---|---|
-| Revisión de contenido técnico | Pendiente de confirmación del equipo | — | Borrador consolidado |
-| Aprobación de requisitos de producto | Product Owner | — | Pendiente |
+La revisión técnica de esta línea base se registró con esta actualización documental. No se atribuye una aprobación formal a nombres o personas que no hayan dejado una decisión verificable. Para cambiar requisitos, utilizar issue/PR y actualizar en conjunto BDD, contrato, esquema, pruebas y trazabilidad.

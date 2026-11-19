@@ -1,12 +1,23 @@
-# Retrospectiva de Sprint 0 — registro por completar
+# Sprint 0 — análisis retrospectivo de artefactos
 
-**Estado:** no se encontró evidencia de una retrospectiva verificable. Esta plantilla se completará cuando el equipo confirme sus observaciones; los commits y entregables no se interpretan como acuerdos retrospectivos.
+**Fecha de registro:** 2026-11-19
+**Modalidad:** análisis posterior de la documentación y configuración actuales; no es una retrospectiva formal ni atribuye opiniones a integrantes.
 
-| Tema | Observación confirmada por el equipo | Acción acordada | Responsable y fecha objetivo |
+## Hechos observables
+
+- La configuración técnica se puede inspeccionar directamente en Maven, Checkstyle, Husky y GitHub Actions.
+- La definición de terminado y el flujo de ramas tienen documentos consultables junto al código.
+- La entrega original de Sprint 0 se conserva como PDF bajo `docs/entrega-sprint-0/`.
+- No se encontró en el repositorio un acta fechada con asistentes, acuerdos de Sprint 0 o compromisos de mejora de una retrospectiva formal.
+
+## Aprendizajes y acciones adoptadas para el flujo futuro
+
+| Aprendizaje derivado de la evidencia | Acción operativa desde esta versión | Cómo comprobarla | Responsable del paso |
 |---|---|---|---|
-| Qué ayudó a cumplir el objetivo | Pendiente | Pendiente | Pendiente |
-| Qué dificultó o retrasó el trabajo | Pendiente | Pendiente | Pendiente |
-| Qué se mejorará en el siguiente ciclo | Pendiente | Pendiente | Pendiente |
-| Acción de mejora anterior y resultado | No hay evidencia registrada | Pendiente | Pendiente |
+| La configuración queda más fácil de revisar cuando existe una sola fuente versionada. | Mantener `pom.xml`, workflows, Checkstyle, Husky y DoD bajo control de versiones; actualizar la documentación cuando cambie uno de ellos. | Pull Request enlaza la configuración afectada y el documento correspondiente. | Autor del PR; revisión independiente verifica. |
+| Un entregable no demuestra que se haya celebrado una ceremonia. | Los registros retrospectivos indican modalidad, fuente y límites; no se rellenan con asistentes o fechas inferidas. | Cada review/retro indica si es acta o análisis documental. | Autor del registro. |
+| Los cambios deben ser revisables antes de llegar a `main`. | Todo cambio de producto/documentación se integra por Pull Request con CI verde y revisión independiente conforme a las reglas activas del repositorio. | PR fusionado con revisión y checks visibles. | Autor y revisor del PR. |
 
-La redacción final debe ir en tercera persona y distinguir hechos de opiniones. Añadir fecha de sesión, participantes que confirman el contenido y enlace al acuerdo. No completar retroactivamente con interpretaciones de los cambios del repositorio.
+## Resultado
+
+Esta revisión convierte los artefactos existentes en una referencia de trabajo y deja definido cómo registrar evidencia en adelante. No reconstruye acuerdos pasados ni declara una mejora histórica como ya aplicada. La lista de acciones anteriores queda sustituida por las reglas operativas de esta tabla.

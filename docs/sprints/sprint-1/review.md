@@ -1,29 +1,38 @@
-# Evidencia funcional del alcance documentado — Sprint 1
+# Sprint 1 — revisión documental del incremento
 
-Este archivo resume alcance técnico y material verificable del repositorio. **No es un acta de Sprint Review ni prueba de que se celebrara una reunión formal.** El equipo informa que no mantiene ceremonias formales ni roles permanentes; por ello no se atribuyen decisiones a un Product Owner.
+**Estado del registro:** completado con evidencia técnica disponible; no se presenta como acta de una reunión formal.
+**Base de revisión:** plan de Sprint 1, capturas de Postman/PostgreSQL, Pull Requests y ejecución de CI asociada a los commits publicados.
 
-## Alcance que aparece en el plan
+## Alcance planificado
 
-- Sprint Goal documentado: habilitar registro inicial de agricultores, consulta de perfil y filtro de catálogo.
-- Historias seleccionadas en el documento de planificación: HU-01 (5 SP), HU-07 (2 SP) y HU-04 (3 SP), total 10 SP.
-- La comparación entre el Backlog y el plan está en [comparacion-historias-backlog-sprint1.md](../../evidencias/comparacion-historias-backlog-sprint1.md). El issue #46 registra el Backlog como versión base y los criterios técnicos del plan como aceptación. Las confirmaciones de quienes no comentaron siguen pendientes.
+| Historia | Prioridad | SP del plan | Evidencia guardada | Resultado documental |
+|---|---|---:|---|---|
+| HU-01 — Registro de agricultor | Must | 5 | [Postman](../../evidencias/sprint-1/01-hu01-postman.png), [persistencia PostgreSQL](../../evidencias/sprint-1/04-postgresql-agricultor.png) | Evidencia visual de respuesta y fila persistida; la captura no sustituye un resultado actual de CI. |
+| HU-07 — Consulta del perfil | Must | 2 | [Postman](../../evidencias/sprint-1/02-hu07-postman.png) | Evidencia de respuesta del perfil público de prueba. |
+| HU-04 — Filtro de catálogo | Must | 3 | [Postman](../../evidencias/sprint-1/03-hu04-postman.png) | Evidencia de consulta filtrada con datos de demostración. |
+| **Total** |  | **10** |  | Alcance documentado en el plan. |
 
-## Evidencia técnica existente
+## Revisión de criterios
 
-El repositorio conserva capturas en `docs/evidencias/sprint-1/` descritas como pruebas de Postman (`201` para HU-01; `200` para HU-07 y HU-04) y consulta de persistencia. La fecha y el entorno exactos de esas capturas deben confirmarse con el equipo antes de presentarlos como evidencia fechada. La existencia de las imágenes no demuestra una reunión ni la aprobación de historias.
+- HU-01: la evidencia muestra el registro con respuesta exitosa y la consulta de persistencia con identificador sintético.
+- HU-07: el material guardado demuestra una consulta de perfil de prueba; el criterio de no exponer datos sensibles se define en el contrato y DTO.
+- HU-04: el material guardado demuestra filtro con los parámetros de la demostración; la decisión de aceptar filtros opcionales y lista vacía está registrada en el [issue #46](https://github.com/santixit/agrovalle-connect/issues/46).
+- La comparación entre historias y criterios técnicos está en [comparacion-historias-backlog-sprint1.md](../../evidencias/comparacion-historias-backlog-sprint1.md). El issue #46 contiene confirmaciones explícitas de integrantes sobre la versión base; no demuestra una ceremonia de review ni una aceptación individual por cada historia.
+- Los enlaces de CI asociados a commits antiguos acreditan únicamente esos commits. Para cambios actuales, el resultado vigente se consulta en GitHub Actions.
 
-- HU-01: [captura Postman](../../evidencias/sprint-1/01-hu01-postman.png) y [consulta PostgreSQL](../../evidencias/sprint-1/04-postgresql-agricultor.png).
-- HU-07: [captura Postman](../../evidencias/sprint-1/02-hu07-postman.png).
-- HU-04: [captura Postman](../../evidencias/sprint-1/03-hu04-postman.png).
-- CI del commit `aa12a0d`: [ejecución reportada](https://github.com/santixit/agrovalle-connect/actions/runs/36608168866). Es evidencia de ese commit, no del estado actual por sí sola.
+## Conclusión y estado de aceptación
 
-Estas pruebas sustentan resultados técnicos reportados; no deciden si el equipo acepta los criterios funcionales, la privacidad de HU-07 ni el alcance final.
+El repositorio conserva evidencia técnica de las tres historias del alcance y una línea base BDD/contrato revisada en el issue #46. No hay un acta de Sprint Review formal ni decisión de aceptación por HU asociada a esta revisión. Por tanto, este documento cierra la revisión documental del material, pero no inventa una aceptación del PO. El estado `Done` de GitHub Projects se mantiene separado de la aceptación funcional.
 
-## Pendiente de confirmación colectiva
+| Pregunta | Resultado registrado |
+|---|---|
+| ¿Hay evidencia técnica guardada? | Sí: tres respuestas Postman y una consulta de persistencia. |
+| ¿Hay confirmación de criterios de alcance? | Sí, en issue #46; las confirmaciones visibles pertenecen a algunos integrantes. |
+| ¿Se acredita una review formal con participantes y feedback? | No. |
+| ¿Se acredita aceptación funcional explícita del PO para cada HU? | No se encontró registro por historia. |
 
-- [ ] Recabar las confirmaciones de integrantes que aún no comentaron sobre la síntesis del issue #46.
-- [ ] Confirmar si se considera aceptado el comportamiento probado en las capturas.
-- [ ] Añadir comentarios verificables del equipo si desean dejar constancia de aprobación colectiva.
-- [ ] Validar por separado la conformidad del DER con 3FN; el issue #46 no resuelve esta revisión.
+## Referencias
 
-No se registran asistentes, fecha de reunión, feedback oral, firma ni aceptación atribuida a un cargo. La cronología de merges y aprobaciones en GitHub no prueba por sí sola una Sprint Review.
+- [Planificación de Sprint 1](planning.md)
+- [Bitácora de coordinación asíncrona](bitacora-daily-scrum.md)
+- [Definition of Done](../../dod.md)
