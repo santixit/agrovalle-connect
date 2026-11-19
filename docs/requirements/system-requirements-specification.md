@@ -34,7 +34,7 @@ La versión documentada implementa las historias HU-01 a HU-15. El alcance hist�
 
 - [Product Backlog y escenarios BDD](product-backlog-bdd.md).
 - [Especificación formal REQ-01](ieee-29148-req01.md).
-- [Contratos REST y flujos](../api-sprint-1.md).
+- [Contratos REST y flujos](../api/contratos-rest.md).
 - [Arquitectura y UML](../architecture/diagramas-uml.md).
 - [Modelo y migraciones de datos](../diseno/README.md) y `src/main/resources/db/migration/`.
 - [Definition of Done](../dod.md), [estrategia de pruebas](../estrategia-pruebas.md) y workflow de [CI](../../.github/workflows/ci.yml) / [CD](../../.github/workflows/cd.yml).
@@ -163,7 +163,7 @@ El alcance de esta versión tampoco declara conformidad normativa de privacidad 
 |---|---|
 | Historias y escenarios | [Product Backlog BDD](product-backlog-bdd.md) |
 | Diseño y trazabilidad REQ-01 | [IEEE 29148 REQ-01](ieee-29148-req01.md) |
-| Contratos y ejemplos HTTP | [API](../api-sprint-1.md) y colección en `docs/postman/` |
+| Contratos y ejemplos HTTP | [API](../api/contratos-rest.md) y colección en `docs/postman/` |
 | Modelo y esquema | [Diseño de datos](../diseno/README.md) y migraciones Flyway |
 | Pruebas y calidad | `src/test/`, `pom.xml`, [CI](../../.github/workflows/ci.yml) y [CD](../../.github/workflows/cd.yml) |
 | Aceptación de producto | PR, issue o Sprint Review con decisión explícita del PO |

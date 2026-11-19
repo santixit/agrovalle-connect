@@ -1,39 +1,67 @@
 ## Resumen
 
-<!-- Describe el cambio y su motivo en pocas líneas. -->
+Explica qué problema resuelve este cambio y qué resultado aporta. Menciona la HU, requisito o issue relacionado.
 
-## Historia o requisito relacionado
+## Trazabilidad
 
-- HU / REQ / issue:
+- HU / REQ / issue: #
+- Sprint o iniciativa:
+- ¿Cierra una historia completa según el DoD?: sí / no / cambio transversal
 
 ## Tipo de cambio
 
-- [ ] Funcionalidad
-- [ ] Corrección
-- [ ] Pruebas
-- [ ] Documentación
-- [ ] Infraestructura / CI-CD
+- [ ] Funcionalidad (`feat`)
+- [ ] Corrección (`fix`)
+- [ ] Pruebas (`test`)
+- [ ] Refactorización (`refactor`)
+- [ ] Documentación (`docs`)
+- [ ] Configuración, mantenimiento o CI (`chore` / `ci`)
+
+## Cambios incluidos
+
+- Describe el comportamiento agregado o corregido.
+- Indica decisiones de diseño o límites relevantes.
+- Menciona componentes, rutas o documentos afectados.
 
 ## Verificación
 
-- [ ] Ejecuté las verificaciones aplicables y anoté el resultado.
-- [ ] Los escenarios BDD afectados tienen pruebas o evidencia asociada.
-- [ ] Revisé privacidad, permisos y datos sensibles en las respuestas/logs.
-- [ ] Actualicé el modelo, contratos y documentación cuando corresponde.
-- [ ] No incluí contraseñas, tokens, credenciales ni datos personales reales.
+| Comprobación aplicable | Resultado / evidencia |
+|---|---|
+| Comando ejecutado (por ejemplo, `./mvnw --batch-mode --no-transfer-progress clean verify`) | |
+| Pruebas unitarias e integración (JUnit 5) | |
+| Checkstyle y umbral JaCoCo | |
+| Flujo E2E o prueba manual (indicar entorno y resultado) | |
+| CI de GitHub Actions | |
+| Validación en staging, si aplica | |
 
-**Comandos y resultados:**
+Si una comprobación no aplica o no se pudo ejecutar, indícalo y explica el motivo. No marques como aprobado algo que siga pendiente.
 
-<!-- Pega el comando y su resultado resumido; no pegues secretos. -->
+## Datos, API e interfaz
 
-## Evidencia
+- [ ] No cambia la base de datos.
+- [ ] Agrega una nueva migración Flyway; no modifica migraciones ya aplicadas.
+- [ ] Cambia un endpoint o contrato REST; se documentan rutas, roles, validaciones y errores.
+- [ ] Cambia la interfaz; incluyo capturas sin datos personales.
+- [ ] Añade o cambia datos de prueba; son sintéticos y seguros.
+- [ ] No aplica.
 
-<!-- Enlaces a capturas, reporte CI o demo. Indica cuando un criterio sigue pendiente. -->
+Describe compatibilidad, impacto y pasos de despliegue o reversión cuando correspondan. Nunca incluyas credenciales, tokens ni datos personales reales.
 
-## Revisión
+## Evidencias
 
-- [ ] Solicité revisión de una persona distinta a quien implementó el cambio.
-- [ ] Respondí o resolví los comentarios bloqueantes.
-- [ ] CI requerido está verde.
+Enlaza resultados de CI, reportes, capturas, escenarios BDD o una demo. Para cada criterio de aceptación, indica dónde se ve la evidencia. Si falta una evidencia, deja el estado explícito como pendiente.
 
-**Revisor/a solicitado/a:**
+## Lista de revisión
+
+- [ ] El cambio corresponde al alcance descrito y no contiene archivos generados o temporales innecesarios.
+- [ ] Los criterios BDD afectados se relacionan con pruebas automatizadas o una justificación.
+- [ ] La documentación, contratos, diagramas y ejemplos afectados están actualizados.
+- [ ] Revisé autorización, validación de entradas, privacidad y mensajes de error.
+- [ ] No hay secretos, credenciales ni datos personales en cambios, pruebas, capturas o logs.
+- [ ] Los controles de CI aplicables están verdes.
+- [ ] Solicité revisión independiente; atendí los comentarios bloqueantes.
+- [ ] La historia solo se pasará a Done después de cumplir el Definition of Done y registrar la aceptación necesaria.
+
+## Revisor/a
+
+Persona distinta de quien implementó el cambio:

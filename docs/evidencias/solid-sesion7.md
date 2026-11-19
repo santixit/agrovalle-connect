@@ -47,7 +47,7 @@ Los commits [f7d5097](https://github.com/santixit/agrovalle-connect/commit/f7d50
 
 La política queda separada del caso de uso de reserva. Esto mejora DIP, porque el flujo depende de una abstracción, y permite agregar otra política sin duplicar la fórmula. Solo existe una implementación de descuento; no se afirma que haya varias estrategias activas.
 
-La prueba de umbral, el caso de 100,01 kg y la integración con reservas están detallados en [TDD descuento mayorista](tdd-descuento-mayorista.md).
+La prueba de umbral, el caso de 100,01 kg y la integración con reservas están detallados en la [evidencia TDD del Sprint 2](../sprints/sprint-2/evidencias/tdd-descuento-mayorista.md).
 
 ## Relación con SOLID y límites
 

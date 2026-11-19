@@ -7,7 +7,7 @@
 
 - La configuración técnica se puede inspeccionar directamente en Maven, Checkstyle, Husky y GitHub Actions.
 - La definición de terminado y el flujo de ramas tienen documentos consultables junto al código.
-- La entrega original de Sprint 0 se conserva como PDF bajo `docs/entrega-sprint-0/`.
+- La entrega original de Sprint 0 se conserva como PDF bajo `docs/entregables/sprint-0/`.
 - No se encontró en el repositorio un acta fechada con asistentes, acuerdos de Sprint 0 o compromisos de mejora de una retrospectiva formal.
 
 ## Aprendizajes y acciones adoptadas para el flujo futuro

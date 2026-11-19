@@ -61,7 +61,7 @@ El backend se organiza en `controller → service → repository → domain`, co
 
 Las prioridades MoSCoW del [Product Backlog](docs/requirements/product-backlog-bdd.md) reflejan el alcance del primer incremento; esta tabla resume el estado técnico que el repositorio declara actualmente. Por eso una historia que quedó fuera de aquel incremento puede aparecer implementada en el producto actual.
 
-La definición de HU-07 para el Primer Corte como consulta pública de datos no sensibles del agricultor aparece en el [Product Backlog](docs/requirements/product-backlog-bdd.md), según la decisión del [issue #46](https://github.com/santixit/agrovalle-connect/issues/46). La comparación entre Backlog y Sprint Planning está en [docs/evidencias/comparacion-historias-backlog-sprint1.md](docs/evidencias/comparacion-historias-backlog-sprint1.md). Siguen pendientes las confirmaciones de integrantes que no comentaron en el issue. El registro de compradores es una capacidad adicional del software y no sustituye esa historia.
+La definición de HU-07 para el Primer Corte como consulta pública de datos no sensibles del agricultor aparece en el [Product Backlog](docs/requirements/product-backlog-bdd.md), según la decisión del [issue #46](https://github.com/santixit/agrovalle-connect/issues/46). La comparación entre Backlog y Sprint Planning está en [docs/sprints/sprint-1/evidencias/comparacion-historias-backlog.md](docs/sprints/sprint-1/evidencias/comparacion-historias-backlog.md). Siguen pendientes las confirmaciones de integrantes que no comentaron en el issue. El registro de compradores es una capacidad adicional del software y no sustituye esa historia.
 
 ## Preparar el entorno
 
@@ -170,8 +170,9 @@ gitGraph
 ## Referencias
 
 - [Índice de documentación](docs/README.md)
+- [Contratos REST y ejemplos de API](docs/api/contratos-rest.md)
 - [Product Backlog y BDD](docs/requirements/product-backlog-bdd.md)
-- [SRS, Product Backlog y REQ-01](docs/requirements/README.md); el borrador de SRS contiene preguntas que deben revisar el equipo y el PO.
+- [SRS, Product Backlog y REQ-01](docs/requirements/README.md); la SRS es la línea base de trabajo y documenta su estado y límites de revisión.
 - [Definition of Done](docs/dod.md)
 - [Políticas Kanban, límites WIP y métricas de flujo](docs/kanban-policies.md)
 - [Procedimiento de captura de métricas](docs/metrics/captura-de-metricas.md); el reporte distingue métricas no calculables por falta de historial.
@@ -179,13 +180,13 @@ gitGraph
 - [Estrategia de pruebas, pirámide y TDD](docs/estrategia-pruebas.md)
 - [Índice de Sprints](docs/sprints/README.md)
 - [Planificación Sprint 1](docs/sprints/sprint-1/planning.md)
-- [Alcance reconstruido de Sprint 2](docs/sprints/sprint-2/planning.md): el equipo confirma que la iteración comenzó; la fecha, el objetivo y la selección formal de historias siguen pendientes de documentar.
+- [Registro de Sprint 2](docs/sprints/sprint-2/README.md): el periodo y objetivo están identificados como reconstruidos; no se afirma una selección formal de historias sin evidencia.
 - [Registro de coordinación asíncrona](docs/sprints/sprint-1/bitacora-daily-scrum.md)
 - [Review Sprint 1](docs/sprints/sprint-1/review.md), [retrospectiva](docs/sprints/sprint-1/retrospective.md)
-- [Checklist de cierre de la entrega del Segundo Corte](docs/entrega-segundo-corte/README.md), con estado de evidencia y pendientes de confirmación.
-- [Entrega de Sprint 0](docs/entrega-sprint-0/README.md)
+- [Paquete archivado del Segundo Corte](docs/entregables/segundo-corte/README.md), con el estado histórico de su evidencia.
+- [Entrega archivada de Sprint 0](docs/entregables/sprint-0/README.md)
 - [Proyección de sprints, estimación de capacidad y dependencias](docs/sprints/proyeccion.md)
-- [Validación y propuesta de aceptación del Sprint 3](docs/sprints/sprint-3/planning.md) y [checklist](docs/sprints/sprint-3/checklist-inicio.md); la review y retrospectiva siguen pendientes.
+- [Validación de Sprint 3](docs/sprints/sprint-3/README.md): planning, review, retrospectiva, checklist y guion están documentados; demo en staging y aceptación del PO siguen sin acreditarse.
 - [Índice de evidencias](docs/evidencias/README.md), incluida la [disponibilidad de métricas Kanban](docs/evidencias/kanban-metricas-sesion7.md)
 - [Colección Postman inicial](docs/postman/agrovalle-sprint-1.postman_collection.json)
 - [Diagramas UML](docs/architecture/diagramas-uml.md)

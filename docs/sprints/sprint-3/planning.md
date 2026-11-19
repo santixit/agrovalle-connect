@@ -20,7 +20,7 @@ Las HUs suman **14 SP de implementación histórica**: HU-02 (5), HU-06 (3), HU-
 | T04 — revisar por historia con el PO y actualizar tablero/documentos | 3 SP | Sin decisión de aceptación registrada | Cada HU tiene `Aceptada` o `Requiere cambios`, fecha, responsable y evidencia; el tablero y review coinciden. |
 | **Total plan de validación** | **10 SP** |  |  |
 
-La distribución permite ordenar el trabajo pendiente; no afirma que esas tareas fueran estimadas en una reunión previa. El resultado de Maven compartido se conserva en [resultado-maven-2026-11-19.md](../../evidencias/sprint-3/resultado-maven-2026-11-19.md). Si la ejecución demuestra que una historia no cumple, el arreglo y su regresión se agregan como trabajo nuevo con su propia estimación.
+La distribución permite ordenar el trabajo pendiente; no afirma que esas tareas fueran estimadas en una reunión previa. El resultado de Maven compartido se conserva en [resultado-maven-2026-11-19.md](evidencias/resultado-maven-2026-11-19.md). Si la ejecución demuestra que una historia no cumple, el arreglo y su regresión se agregan como trabajo nuevo con su propia estimación.
 
 ## Historias y evidencia de prueba
 
@@ -31,7 +31,7 @@ La distribución permite ordenar el trabajo pendiente; no afirma que esas tareas
 | HU-09 — cambiar estado | Solo propietario cambia estado; oferta agotada no se ofrece en el catálogo. | `actualizarEstadoRechazaOfertaDeOtroAgricultor`, `actualizarEstadoNoPublicaOfertaSinInventario` y escenario integrado. | Seguridad, fiabilidad, adecuación funcional. |
 | HU-10 — consultar detalle | Público consulta producto, finca/agricultor, precio y disponibilidad sin cédula ni credenciales; inactiva no está disponible. | Escenario integrado `fincaOfertaReservaDespachoTrazabilidadYFavoritos`; `consultarDetalleRechazaOfertaInactiva`. | Adecuación funcional, seguridad, privacidad. |
 
-Los métodos citados demuestran que hay casos automatizados en las clases nombradas; no se atribuye un resultado individual por método que el reporte agregado no presenta. La transcripción compartida y su alcance están en [resultado Maven](../../evidencias/sprint-3/resultado-maven-2026-11-19.md).
+Los métodos citados demuestran que hay casos automatizados en las clases nombradas; no se atribuye un resultado individual por método que el reporte agregado no presenta. La transcripción compartida y su alcance están en [resultado Maven](evidencias/resultado-maven-2026-11-19.md).
 
 ## Orden de trabajo
 
@@ -39,7 +39,7 @@ Los métodos citados demuestran que hay casos automatizados en las clases nombra
 2. Relacionar cada criterio con el método de prueba y revisar `target/surefire-reports` de la ejecución de 37 pruebas.
 3. Ejecutar el pipeline sobre el commit final. La ejecución local de JUnit no sustituye Checkstyle, JaCoCo ni E2E del workflow.
 4. Seguir el [guion de demo reproducible](demo-runbook.md) en staging usando solo datos sintéticos: crear finca, publicar cosecha con fecha válida, consultar detalle y marcar agotado; repetir lectura del catálogo.
-5. Guardar evidencia por historia bajo `docs/evidencias/sprint-3/` y añadir el commit, ambiente y fecha.
+5. Guardar evidencia por historia en `docs/sprints/sprint-3/evidencias/` y añadir el commit, ambiente y fecha.
 6. El PO revisa cada criterio y registra su decisión real en la [review](review.md). Si pide cambios, abrir tareas y repetir las pruebas afectadas.
 7. Sincronizar el tablero, el informe y la Definition of Done antes de declarar el cierre.
 

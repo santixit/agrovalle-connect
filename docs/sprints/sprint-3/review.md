@@ -5,7 +5,7 @@
 
 ## Resultado automatizado disponible
 
-El usuario compartió la salida de Maven del 2026-11-19: **37 pruebas ejecutadas, 0 fallos, 0 errores, 0 omitidas; `BUILD SUCCESS`**. La transcripción y el alcance están en [resultado-maven-2026-11-19.md](../../evidencias/sprint-3/resultado-maven-2026-11-19.md). El resultado acredita la ejecución local de la suite seleccionada. No acredita por sí solo la ejecución de Checkstyle, JaCoCo, E2E, una demo de producto ni la aceptación del PO.
+El usuario compartió la salida de Maven del 2026-11-19: **37 pruebas ejecutadas, 0 fallos, 0 errores, 0 omitidas; `BUILD SUCCESS`**. La transcripción y el alcance están en [resultado-maven-2026-11-19.md](evidencias/resultado-maven-2026-11-19.md). El resultado acredita la ejecución local de la suite seleccionada. No acredita por sí solo la ejecución de Checkstyle, JaCoCo, E2E, una demo de producto ni la aceptación del PO.
 
 ## Matriz de revisión por historia
 

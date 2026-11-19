@@ -82,7 +82,7 @@ Espera **200 OK**. Repite el filtro de catálogo del paso 4. La oferta agotada y
 
 ## 7. Capturas y registro de aceptación
 
-Guarda una captura por respuesta principal en docs/evidencias/sprint-3/:
+Guarda una captura por respuesta principal en `docs/sprints/sprint-3/evidencias/`:
 
 | Archivo sugerido | Historia | Qué debe verse |
 |---|---|---|

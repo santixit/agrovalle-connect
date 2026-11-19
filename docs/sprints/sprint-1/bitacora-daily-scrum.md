@@ -39,7 +39,7 @@ El equipo confirmó que el trabajo tratado en esta conversación pertenece al Sp
 |---|---|---|---|
 | 2026-10-19 | Se trabajó en el diseño, el plan técnico y la documentación de pruebas/CI que luego se integraron para revisión. | [PR #50](https://github.com/santixit/agrovalle-connect/pull/50), registros locales del proyecto. | El primer registro local fechado sirve como inicio de referencia; no es acta de planificación. |
 | 2026-10-22 | Se incorporó el cálculo demostrativo de fletes por municipio con Strategy y su documentación de patrones. | [PR #51](https://github.com/santixit/agrovalle-connect/pull/51). | Las tarifas son académicas y no están validadas comercialmente. |
-| 2026-10-28 | Se integraron los mockups corregidos y el ajuste E2E asociado; también se restauró la tabla de integrantes/roles y se actualizaron las tarjetas del tablero de Sprint 2. | [PR #52](https://github.com/santixit/agrovalle-connect/pull/52), [PR #53](https://github.com/santixit/agrovalle-connect/pull/53), captura local del [tablero](../../evidencias/tablero-sprint-2-2026-10-28.png). | La captura refleja el tablero al 28 de octubre; no prueba una reunión ni métricas históricas de flujo. |
+| 2026-10-28 | Se integraron los mockups corregidos y el ajuste E2E asociado; también se restauró la tabla de integrantes/roles y se actualizaron las tarjetas del tablero de Sprint 2. | [PR #52](https://github.com/santixit/agrovalle-connect/pull/52), [PR #53](https://github.com/santixit/agrovalle-connect/pull/53), captura local del [tablero](../sprint-2/evidencias/tablero-sprint-2-2026-10-28.png). | La captura refleja el tablero al 28 de octubre; no prueba una reunión ni métricas históricas de flujo. |
 
 ### Seguimiento al cierre
 

@@ -1,6 +1,15 @@
-# Contratos REST — Sprint 1
+# Contratos REST y ejemplos de API
 
-Base local: `http://localhost:8080`. Levantar PostgreSQL con `docker compose up -d db` y la API con `mvn spring-boot:run`.
+Este documento reúne contratos y ejemplos de los flujos del producto. Las primeras tres secciones conservan los casos de HU-01, HU-07 y HU-04 del Sprint 1; las siguientes amplían los flujos que se integraron después. Los controladores, DTOs y pruebas del código son la fuente final si un ejemplo se desactualiza. Las solicitudes usan datos sintéticos y no deben probarse con información personal real.
+
+Para probarlo localmente, inicia la base configurada en Compose y ejecuta Spring Boot con el Maven Wrapper desde la raíz del repositorio:
+
+```powershell
+docker compose up -d db
+.\mvnw.cmd spring-boot:run
+```
+
+Base local: `http://localhost:8080`. No pegues tokens, contraseñas ni cadenas de conexión en este documento.
 
 ## HU-01 — Registrar agricultor
 
@@ -11,7 +20,7 @@ Base local: `http://localhost:8080`. Levantar PostgreSQL con `docker compose up 
   "nombre": "Ana Ruiz",
   "tipoDocumento": "CC",
   "cedula": "ID-DE-PRUEBA-001",
-  "telefono": "3001234567",
+  "telefono": "3000000001",
   "ubicacion_valle": "Dagua"
 }
 ```
@@ -36,7 +45,7 @@ Devuelve `200 OK` con una coleccion JSON que contiene solo las ofertas activas c
 - `404 Not Found`: identificador de agricultor inexistente.
 - `409 Conflict`: cedula ya registrada.
 
-La coleccion de Postman en `docs/postman/agrovalle-sprint-1.postman_collection.json` cubre los contratos iniciales de Sprint 1.
+La colección de Postman en [`../postman/agrovalle-sprint-1.postman_collection.json`](../postman/agrovalle-sprint-1.postman_collection.json) cubre los contratos iniciales de Sprint 1.
 
 ## Flujos funcionales del integrador
 
@@ -76,4 +85,4 @@ La respuesta incluye `accessToken`, `tokenType: Bearer` y `expiresIn`. Enviar el
 
 `GET /api/v1/admin/reportes/actividad?desde=2026-09-01&hasta=2026-09-30` requiere rol `ADMIN` y devuelve cuentas, ofertas y contactos registrados en el rango. No existe registro público de administradores.
 
-Las pruebas automatizadas usan H2 local y el perfil `ci` utiliza PostgreSQL. Para probar la API local, configurar `JWT_SECRET` como Base64 de 32 bytes aleatorios; no incluir el valor en Git.
+Las pruebas automatizadas usan H2 local y el perfil `ci` utiliza PostgreSQL. Para probar las rutas privadas, configura `JWT_SECRET` como Base64 de 32 bytes aleatorios según las instrucciones del [README principal](../../README.md); no incluyas ese valor en Git.

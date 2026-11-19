@@ -13,7 +13,7 @@
 | Hooks pre-commit | `.husky/pre-commit`, `package.json` y lockfile | Hook y dependencias versionados; la verificación local depende de que el integrante instale las dependencias de Node. |
 | Definition of Done | [`docs/dod.md`](../../dod.md) | Lista de salida documentada para historias y Pull Requests. |
 | Visión y ramas | `README.md` y `docs/branch-protection.md` | Visión de producto y flujo de ramas descritos; la protección efectiva de GitHub se verifica en la configuración del repositorio, no solo en el texto. |
-| Entrega documental original | [`Entrega_Sprint_0_AgroValle_Connect.pdf`](../../entrega-sprint-0/Entrega_Sprint_0_AgroValle_Connect.pdf) | Se conserva el PDF original sin presentarlo como prueba de ceremonia o aceptación. |
+| Entrega documental original | [`Entrega_Sprint_0_AgroValle_Connect.pdf`](../../entregables/sprint-0/Entrega_Sprint_0_AgroValle_Connect.pdf) | Se conserva el PDF original sin presentarlo como prueba de ceremonia o aceptación. |
 
 ## Conclusión
 
