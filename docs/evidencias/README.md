@@ -11,7 +11,7 @@
 
 ## Sprint 1 y calidad
 
-- [Revisión funcional del Sprint 1](../sprint-1-review.md).
+- [Revisión funcional del Sprint 1](../sprints/sprint-1/review.md).
 - [Pirámide de pruebas de Sesión 8](piramide-pruebas-sesion8.md): conteo 22/23/1, comparación con 70/20/10 y cobertura JaCoCo de Actions #103; se declara que la proporción objetivo sigue pendiente.
 - [Evidencia de historias y BDD](comparacion-historias-backlog-sprint1.md).
 - [Colección de capturas Postman](sprint-1/).

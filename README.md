@@ -35,7 +35,7 @@ El rol `ADMIN` se asigna mediante aprovisionamiento controlado de la cuenta, nun
 - PostgreSQL y Flyway; H2 se usa en la suite local.
 - HTML, CSS y JavaScript sin dependencias externas para la interfaz de demostración.
 - JUnit 5, JaCoCo (mínimo de línea 60%) y Checkstyle.
-- GitHub Actions ejecuta compilación, migraciones, pruebas, Checkstyle y cobertura; la base del job de CI es PostgreSQL 16.
+- GitHub Actions ejecuta CI en `ci.yml` (compilación, migraciones, pruebas, Checkstyle, JaCoCo y E2E) y llama a `cd.yml` solo tras calidad exitosa en `main`; la base del job CI es PostgreSQL 16.
 
 El backend se organiza en `controller → service → repository → domain`, con DTOs validados y un manejador REST centralizado de errores. Flyway es la única fuente de evolución del esquema. Las migraciones ya aplicadas no se editan: cada cambio nuevo se agrega como `Vn__descripcion.sql`.
 
@@ -59,9 +59,9 @@ El backend se organiza en `controller → service → repository → domain`, co
 | HU-14 | Favoritos del comprador | Implementada |
 | HU-15 | Reporte de actividad por fechas | Implementada y restringida a `ADMIN` |
 
-Las prioridades MoSCoW de `BACKLOG.md` reflejan el alcance del primer incremento; esta tabla resume el estado técnico que el repositorio declara actualmente. Por eso una historia que quedó fuera de aquel incremento puede aparecer implementada en el producto actual.
+Las prioridades MoSCoW del [Product Backlog](docs/requirements/product-backlog-bdd.md) reflejan el alcance del primer incremento; esta tabla resume el estado técnico que el repositorio declara actualmente. Por eso una historia que quedó fuera de aquel incremento puede aparecer implementada en el producto actual.
 
-La definición de HU-07 para el Primer Corte como consulta pública de datos no sensibles del agricultor aparece en `BACKLOG.md`, según la decisión del [issue #46](https://github.com/santixit/agrovalle-connect/issues/46). La comparación entre Backlog y Sprint Planning está en [docs/evidencias/comparacion-historias-backlog-sprint1.md](docs/evidencias/comparacion-historias-backlog-sprint1.md). Siguen pendientes las confirmaciones de integrantes que no comentaron en el issue. El registro de compradores es una capacidad adicional del software y no sustituye esa historia.
+La definición de HU-07 para el Primer Corte como consulta pública de datos no sensibles del agricultor aparece en el [Product Backlog](docs/requirements/product-backlog-bdd.md), según la decisión del [issue #46](https://github.com/santixit/agrovalle-connect/issues/46). La comparación entre Backlog y Sprint Planning está en [docs/evidencias/comparacion-historias-backlog-sprint1.md](docs/evidencias/comparacion-historias-backlog-sprint1.md). Siguen pendientes las confirmaciones de integrantes que no comentaron en el issue. El registro de compradores es una capacidad adicional del software y no sustituye esa historia.
 
 ## Preparar el entorno
 
@@ -146,11 +146,11 @@ Errores usan códigos HTTP: validación 400, autenticación 401, autorización 4
 - **Observer:** eventos de contacto y cambio de pedido se publican tras completar la transacción; `NotificacionObserver` los convierte en notificaciones persistidas.
 - **Singleton:** `ReglasDisponibilidad` es un componente sin estado administrado como singleton por Spring; centraliza la regla de inventario usada por reservas.
 
-Los diagramas y decisiones deben mantenerse sincronizados con el código. Consulta [UML](docs/uml/README.md) y [ADR](docs/adr/).
+Los diagramas y decisiones deben mantenerse sincronizados con el código. Consulta [UML consolidado](docs/architecture/diagramas-uml.md) y el [índice de decisiones](docs/architecture-decisions/README.md).
 
 ## Estrategia de ramas y trabajo colaborativo
 
-Se mantiene Trunk-Based Development: `main` permanece estable y las historias se desarrollan en ramas cortas `feature/HU-XX-descripcion`. Todo cambio llega mediante Pull Request, Conventional Commits (`feat:`, `fix:`, `test:`, `docs:`) y CI en verde. La aprobación obligatoria y la protección real de `main` se comprueban en la configuración de GitHub; no se afirma que estén activas si GitHub no lo confirma.
+Se mantiene Trunk-Based Development: `main` permanece estable y las historias se desarrollan en ramas cortas `feature/HU-XX-descripcion`. Todo cambio llega mediante Pull Request, Conventional Commits (`feat:`, `fix:`, `test:`, `docs:`) y CI en verde. GitHub reporta `main` como protegida; la configuración de aprobaciones y checks requeridos debe verificarse en Settings según el [procedimiento de protección](docs/branch-protection.md). Los PR usan la [plantilla del repositorio](.github/pull_request_template.md).
 
 ```mermaid
 gitGraph
@@ -170,25 +170,30 @@ gitGraph
 ## Referencias
 
 - [Índice de documentación](docs/README.md)
-- [Product Backlog y BDD](BACKLOG.md)
+- [Product Backlog y BDD](docs/requirements/product-backlog-bdd.md)
+- [SRS, Product Backlog y REQ-01](docs/requirements/README.md); el borrador de SRS contiene preguntas que deben revisar el equipo y el PO.
 - [Definition of Done](docs/dod.md)
 - [Políticas Kanban, límites WIP y métricas de flujo](docs/kanban-policies.md)
+- [Procedimiento de captura de métricas](docs/metrics/captura-de-metricas.md); el reporte distingue métricas no calculables por falta de historial.
+- [Flujo de ramas y protección de main](docs/branch-protection.md)
 - [Estrategia de pruebas, pirámide y TDD](docs/estrategia-pruebas.md)
-- [Planificación Sprint 1](docs/sprint-1-planning.md)
-- [Alcance reconstruido de Sprint 2](docs/sprint-2-planning.md): el equipo confirma que la iteración comenzó; la fecha, el objetivo y la selección formal de historias siguen pendientes de documentar.
-- [Registro de coordinación asíncrona](docs/bitacora-daily-scrum.md)
-- [Evidencia funcional del Sprint 1](docs/sprint-1-review.md), [registro retrospectivo](docs/sprint-1-retrospective.md)
+- [Índice de Sprints](docs/sprints/README.md)
+- [Planificación Sprint 1](docs/sprints/sprint-1/planning.md)
+- [Alcance reconstruido de Sprint 2](docs/sprints/sprint-2/planning.md): el equipo confirma que la iteración comenzó; la fecha, el objetivo y la selección formal de historias siguen pendientes de documentar.
+- [Registro de coordinación asíncrona](docs/sprints/sprint-1/bitacora-daily-scrum.md)
+- [Review Sprint 1](docs/sprints/sprint-1/review.md), [retrospectiva](docs/sprints/sprint-1/retrospective.md)
 - [Checklist de cierre de la entrega del Segundo Corte](docs/entrega-segundo-corte/README.md), con estado de evidencia y pendientes de confirmación.
 - [Entrega de Sprint 0](docs/entrega-sprint-0/README.md)
-- [Proyección de sprints, estimación de capacidad y dependencias](docs/proyeccion-sprints.md)
-- [Propuesta de Sprint 3](docs/sprint-3/planificacion.md) y [checklist](docs/sprint-3/checklist-inicio.md); Sprint 4 está proyectado en el plan global.
+- [Proyección de sprints, estimación de capacidad y dependencias](docs/sprints/proyeccion.md)
+- [Validación y propuesta de aceptación del Sprint 3](docs/sprints/sprint-3/planning.md) y [checklist](docs/sprints/sprint-3/checklist-inicio.md); la review y retrospectiva siguen pendientes.
 - [Índice de evidencias](docs/evidencias/README.md), incluida la [disponibilidad de métricas Kanban](docs/evidencias/kanban-metricas-sesion7.md)
 - [Colección Postman inicial](docs/postman/agrovalle-sprint-1.postman_collection.json)
-- [Diagramas UML](docs/uml/README.md)
+- [Diagramas UML](docs/architecture/diagramas-uml.md)
 - [Sprint de diseno y artefactos de arquitectura](docs/diseno/README.md)
-- [Requisito formal IEEE 29148 y comparacion BDD](docs/ieee29148-req01.md)
-- [ADR 001 Arquitectura](docs/adr/001-arquitectura-inicial.md)
-- [ADR 002 Modelo relacional](docs/adr/002-modelo-relacional-integrador.md)
-- [ADR 003 Seguridad JWT](docs/adr/003-autenticacion-y-autorizacion.md)
-- [ADR 004 Patrones](docs/adr/004-patrones-de-diseno.md)
+- [Especificación de Requisitos del Sistema (SRS)](docs/requirements/system-requirements-specification.md) y [REQ-01 formal](docs/requirements/ieee-29148-req01.md); la SRS está consolidada en borrador y falta la revisión/aprobación del PO y equipo.
+- [Métricas de flujo del tercer corte](docs/metrics/sprint-metrics-corte3.md), con estado de disponibilidad de datos.
+- [ADR 001 Arquitectura](docs/architecture-decisions/ADR-001-arquitectura-inicial.md)
+- [ADR 002 Modelo relacional](docs/architecture-decisions/ADR-002-modelo-relacional-integrador.md)
+- [ADR 003 Seguridad JWT](docs/architecture-decisions/ADR-003-autenticacion-y-autorizacion.md)
+- [ADR 004 Patrones](docs/architecture-decisions/ADR-004-patrones-de-diseno.md)
 - [Despliegue a staging](docs/deploy-staging.md)

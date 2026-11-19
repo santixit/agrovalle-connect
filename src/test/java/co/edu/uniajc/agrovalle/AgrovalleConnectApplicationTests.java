@@ -511,6 +511,12 @@ class AgrovalleConnectApplicationTests {
                 {"nombre":"La Esperanza","municipio":"Dagua","direccion":"Vereda El Salado"}
                 """))
         .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString();
+    mockMvc.perform(get("/api/v1/fincas")
+            .header("Authorization", "Bearer " + tokenAgricultor))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$", hasSize(1)))
+        .andExpect(jsonPath("$[0].nombre").value("La Esperanza"))
+        .andExpect(jsonPath("$[0].municipio").value("Dagua"));
     Number fincaId = com.jayway.jsonpath.JsonPath.read(finca, "$.id");
     String oferta = mockMvc.perform(post("/api/v1/productos")
             .header("Authorization", "Bearer " + tokenAgricultor)
@@ -522,15 +528,27 @@ class AgrovalleConnectApplicationTests {
                 """.formatted(LocalDate.now().plusDays(1), fincaId.longValue())))
         .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString();
     Number productoId = com.jayway.jsonpath.JsonPath.read(oferta, "$.id");
+    mockMvc.perform(get("/api/v1/productos").param("municipio", "Dagua")
+            .param("categoria", "Frutas"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$", hasSize(1)))
+        .andExpect(jsonPath("$[0].nombre").value("Mango"))
+        .andExpect(jsonPath("$[0].municipio").value("Dagua"));
     mockMvc.perform(get("/api/v1/productos/{id}", productoId.longValue()))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.agricultor").value("Rosa Díaz"))
         .andExpect(jsonPath("$.finca").value("La Esperanza"))
+        .andExpect(jsonPath("$.cantidad_disponible_kg").value(35))
+        .andExpect(jsonPath("$.precio_por_kg").value(4200))
         .andExpect(jsonPath("$.cedula").doesNotExist());
     mockMvc.perform(patch("/api/v1/productos/{id}/estado", productoId.longValue())
             .header("Authorization", "Bearer " + tokenAgricultor)
-            .contentType(MediaType.APPLICATION_JSON).content("{\"estado\":\"PAUSADO\"}"))
+            .contentType(MediaType.APPLICATION_JSON).content("{\"estado\":\"AGOTADO\"}"))
         .andExpect(status().isOk());
+    mockMvc.perform(get("/api/v1/productos").param("municipio", "Dagua")
+            .param("categoria", "Frutas"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$", hasSize(0)));
     mockMvc.perform(patch("/api/v1/productos/{id}/estado", productoId.longValue())
             .header("Authorization", "Bearer " + tokenAgricultor)
             .contentType(MediaType.APPLICATION_JSON).content("{\"estado\":\"DISPONIBLE\"}"))
