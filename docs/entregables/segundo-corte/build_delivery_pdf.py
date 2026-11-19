@@ -10,10 +10,10 @@ from reportlab.pdfgen import canvas
 from pypdf import PdfReader, PdfWriter
 from xml.sax.saxutils import escape
 
-root = Path(__file__).resolve().parents[2]
+root = Path(__file__).resolve().parents[3]
 run_path(str(root / 'docs' / 'diseno' / 'exports' / 'build_diagramas_pdf.py'))
 out = root / 'output' / 'pdf' / 'Grupo01_Entrega_Segundo_Corte_AgroValle.pdf'
-delivery_copy = root / 'docs' / 'entrega-segundo-corte' / 'Grupo01_Entrega_Segundo_Corte_AgroValle.pdf'
+delivery_copy = root / 'docs' / 'entregables' / 'segundo-corte' / 'Grupo01_Entrega_Segundo_Corte_AgroValle.pdf'
 out.parent.mkdir(parents=True, exist_ok=True)
 temp_dir = root / 'tmp' / 'pdfs'
 temp_dir.mkdir(parents=True, exist_ok=True)
@@ -87,7 +87,7 @@ story += [PageBreak(), P('Sesión 6 - Diseño y modelo de datos', 'H1x'), P('Los
 design_rows = [[P('<b>Aspecto</b>', 'Tablex'), P('<b>Estado comprobable</b>', 'Tablex')], [P('Existencia de artefactos', 'Tablex'), P('Disponible en los anexos y fuentes enlazadas del repositorio.', 'Tablex')], [P('Aprobación de mockups', 'Tablex'), P('El issue #46 documenta visto bueno informal de algunas personas; falta evidencia de aprobación completa del Product Owner/equipo y versión de cada pantalla.', 'Tablex')], [P('Reconciliación DER', 'Tablex'), P('Diferencias técnicas V1-V7 explicadas; las decisiones de dominio siguen pendientes de confirmación.', 'Tablex')], [P('Discovery antes de código', 'Tablex'), P('No hay evidencia contemporánea que pruebe el orden temporal. No se deduce de los commits.', 'Tablex')]]
 t = Table(design_rows, colWidths=[1.55*inch, 4.75*inch], hAlign='LEFT', repeatRows=1)
 t.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),light),('BOX',(0,0),(-1,-1),0.6,colors.HexColor('#C7D2DC')),('INNERGRID',(0,0),(-1,-1),0.35,colors.HexColor('#D6DEE5')),('VALIGN',(0,0),(-1,-1),'TOP'),('LEFTPADDING',(0,0),(-1,-1),7),('RIGHTPADDING',(0,0),(-1,-1),7),('TOPPADDING',(0,0),(-1,-1),7),('BOTTOMPADDING',(0,0),(-1,-1),7)]))
-story += [t, Spacer(1, 0.13*inch), P('Referencias: docs/diseno/registro-retrospectivo-sesion-6.md y docs/diseno/reconciliacion-der.md. Separan lo que el repositorio demuestra de lo que debe confirmar el equipo.', 'Smallx')]
+story += [t, Spacer(1, 0.13*inch), P('Referencias: docs/sprints/sprint-diseno/registro-sesion-6.md y docs/diseno/reconciliacion-der.md. Separan lo que el repositorio demuestra de lo que debe confirmar el equipo.', 'Smallx')]
 
 story += [PageBreak(), P('Sesión 7 - Flujo Kanban', 'H1x'), P(f'La vista consultada el 5 de noviembre fue Insights / Burn up, no un Cumulative Flow Diagram. {link("Abrir Insights", "https://github.com/users/santixit/projects/3/insights")}', 'Bodyx')]
 flow_rows = [[P('<b>Tramo visto</b>', 'Tablex'),P('<b>Open aprox.</b>', 'Tablex'),P('<b>Completed aprox.</b>', 'Tablex')], [P('22-28 oct 2026', 'Tablex'),P('19', 'Tablex'),P('0', 'Tablex')], [P('29 oct-4 nov 2026', 'Tablex'),P('22', 'Tablex'),P('2', 'Tablex')], [P('5 nov 2026', 'Tablex'),P('1', 'Tablex'),P('23', 'Tablex')]]

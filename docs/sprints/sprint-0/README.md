@@ -1,6 +1,6 @@
 # Sprint 0
 
-La entrega original se conserva en [`../../entrega-sprint-0/README.md`](../../entrega-sprint-0/README.md). La configuración vigente puede verificarse en el `pom.xml`, `.gitignore`, `checkstyle.xml`, `.husky/`, [DoD](../../dod.md) y el workflow de CI.
+La entrega original se conserva en [`../../entregables/sprint-0/README.md`](../../entregables/sprint-0/README.md). La configuración vigente puede verificarse en el `pom.xml`, `.gitignore`, `checkstyle.xml`, `.husky/`, [DoD](../../dod.md) y el workflow de CI.
 
 - [Planning](planning.md): inventario de artefactos y límites históricos.
 - [Review](review.md): revisión documental de proyecto base, controles y definición de terminado.

@@ -10,7 +10,7 @@
     BUILD SUCCESS
     Total time: 24.788 s
 
-La transcripción acredita que la ejecución Maven reportó 37 pruebas aprobadas, sin fallos, errores ni pruebas omitidas. La selección de clases indicada para esta validación está en [planning.md](../../sprints/sprint-3/planning.md).
+La transcripción acredita que la ejecución Maven reportó 37 pruebas aprobadas, sin fallos, errores ni pruebas omitidas. La selección de clases indicada para esta validación está en [planning.md](../planning.md).
 
 ## Alcance y límites
 
@@ -22,6 +22,6 @@ La transcripción acredita que la ejecución Maven reportó 37 pruebas aprobadas
 
 ## Trazabilidad
 
-- [Plan de validación de Sprint 3](../../sprints/sprint-3/planning.md)
-- [Review de Sprint 3](../../sprints/sprint-3/review.md)
-- [Checklist de cierre](../../sprints/sprint-3/checklist-inicio.md)
+- [Plan de validación de Sprint 3](../planning.md)
+- [Review de Sprint 3](../review.md)
+- [Checklist de cierre](../checklist-inicio.md)

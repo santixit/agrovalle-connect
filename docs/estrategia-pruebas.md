@@ -44,4 +44,4 @@ La prueba E2E usa `playwright.config.js` para levantar la aplicación y abrir Ch
 
 ### Ejercicio TDD registrado
 
-El ciclo Red–Green–Refactor de la regla de descuento mayorista está documentado con resultados y cobertura en [Evidencia TDD: descuento mayorista](evidencias/tdd-descuento-mayorista.md).
+El ciclo Red–Green–Refactor de la regla de descuento mayorista está documentado con resultados y cobertura en la [evidencia TDD del Sprint 2](sprints/sprint-2/evidencias/tdd-descuento-mayorista.md).

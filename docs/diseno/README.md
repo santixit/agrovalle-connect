@@ -10,9 +10,11 @@ Este paquete reúne artefactos de diseño y su relación con el sistema actual. 
 - Reconciliación entre el modelo propuesto y el esquema: [reconciliacion-der.md](reconciliacion-der.md).
 - Análisis de normalización y parcelas/productos: [decisiones-normalizacion.md](decisiones-normalizacion.md) y [propuesta-modelo-3fn.md](propuesta-modelo-3fn.md).
 - Arquitectura por capas, MVC y GoF: [arquitectura-mvc-gof.md](arquitectura-mvc-gof.md) y [patrones.md](patrones.md).
+- Modelo conceptual inicial, conservado solo como antecedente: [modelo-inicial.md](modelo-inicial.md).
 - UML editable: [componentes](diagrama-componentes.puml), [despliegue](diagrama-despliegue.puml), [secuencia de registro](diagrama-secuencia.puml) y [secuencia de publicación](diagrama-secuencia-publicacion.puml); exportaciones en [exports](exports/README.md).
 - Wireframes y mockups: [PDF](mockups-ui.pdf) y 14 fuentes PNG en [mockups](mockups/).
 - Diagramas de secuencia de referencia: [secuencias](secuencias/README.md).
+- Registro documental de la sesión de Discovery/Diseño: [registro de la sesión 6](../sprints/sprint-diseno/registro-sesion-6.md).
 
 Los dos DER con sufijo “propuesta” se conservan como antecedentes. No sustituyen al DER implementado ni a las migraciones. El issue #46 registra un visto bueno informal y asíncrono de algunos integrantes sobre mockups, no una aprobación de todo el equipo ni de cada pantalla. La decisión de alcance para continuar está documentada en la [línea base](../requirements/baseline-decisions-2026-11-19.md).
 

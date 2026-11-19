@@ -10,7 +10,7 @@
 | Pruebas automatizadas seleccionadas | Cumplido según resultado comunicado | Maven: `BUILD SUCCESS`, 37 pruebas, 0 fallos, 0 errores, 0 omitidas. Revisar el reporte Surefire para detalle por método. |
 | Mapeo BDD ↔ JUnit por HU | Documentado en el plan; falta adjuntar el reporte individual | Usar los nombres de método indicados en `planning.md` y conservar `target/surefire-reports`. |
 | Checkstyle / JaCoCo / E2E para el commit que se presentará | No acreditado para este cierre | Consultar el workflow de la rama/PR final y enlazar el run. |
-| Demo en staging con datos sintéticos | No realizada o no registrada | Ejecutar los cuatro flujos con una cuenta y datos de prueba; guardar evidencias en `docs/evidencias/sprint-3/`. |
+| Demo en staging con datos sintéticos | No realizada o no registrada | Ejecutar los cuatro flujos con una cuenta y datos de prueba; guardar evidencias en `docs/sprints/sprint-3/evidencias/`. |
 | Aceptación del PO por HU | No registrada | Después de la demo, registrar decisión `Aceptada` o `Requiere cambios`, fecha, responsable y comentario en la matriz de review. |
 | Sincronización tablero / review / DoD | Por hacer después de la decisión PO | Actualizar tarjetas para que no contradigan la review. |
 
@@ -21,7 +21,7 @@ Tests run: 37, Failures: 0, Errors: 0, Skipped: 0
 BUILD SUCCESS
 ```
 
-El fragmento es la transcripción del resultado que compartió el usuario el 2026-11-19 y está conservado en [resultado-maven-2026-11-19.md](../../evidencias/sprint-3/resultado-maven-2026-11-19.md). El enlace a un log descargable no se conserva; no se debe presentar como artefacto de CI.
+El fragmento es la transcripción del resultado que compartió el usuario el 2026-11-19 y está conservado en [resultado-maven-2026-11-19.md](evidencias/resultado-maven-2026-11-19.md). El enlace a un log descargable no se conserva; no se debe presentar como artefacto de CI.
 
 ## Decisión actual por historia
 

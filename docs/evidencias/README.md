@@ -1,40 +1,31 @@
-# Índice de evidencias
+# Evidencias transversales
 
-## Kanban y flujo
+Esta carpeta contiene registros que abarcan varias iteraciones o documentan prácticas compartidas. Las evidencias propias de una sola iteración están junto al sprint correspondiente: [Sprint 1](../sprints/sprint-1/evidencias/), [Sprint 2](../sprints/sprint-2/evidencias/) y [Sprint 3](../sprints/sprint-3/evidencias/).
+
+## Kanban y métricas
 
 - [Evidencia Kanban de Sesión 7](kanban-metricas-sesion7.md): snapshots disponibles, interpretación del WIP, estado de cada métrica y límites de los datos.
-- [Lectura del Burn up y datos para la CFD](kanban-burnup-sesion7.md): consulta visual de Insights del 2026-11-05, diferencia entre Burn up y CFD, discrepancia de conteos y datos que todavía faltan.
-- [Snapshots por columna](kanban-snapshots-sesion7.csv): dos observaciones históricas, del 17 y 19 de octubre de 2026.
-- [Plantilla de periodos](kanban-periodos-sesion7.csv) y [plantilla de eventos por tarjeta](kanban-items-sesion7.csv): vacías hasta contar con evidencia verificable.
-- [Políticas Kanban y métricas](../kanban-policies.md): reglas operativas y definiciones; no confundirlas con evidencia de actividad ya ocurrida.
-- [Calculador reproducible](../../scripts/kanban_metrics.py): usa los periodos y eventos por tarjeta; no deduce métricas a partir de conteos.
+- [Lectura del Burn up y datos para la CFD](kanban-burnup-sesion7.md): consulta de Insights, diferencia entre Burn up y CFD, discrepancia de conteos y datos requeridos para un análisis reproducible.
+- [Snapshots por columna](kanban-snapshots-sesion7.csv): observaciones históricas del 17 y 19 de octubre de 2026.
+- [Plantilla de periodos](kanban-periodos-sesion7.csv) y [plantilla de eventos por tarjeta](kanban-items-sesion7.csv): se mantienen sin datos mientras no haya fuentes verificables.
+- [Políticas Kanban](../kanban-policies.md) y [procedimiento de captura](../metrics/captura-de-metricas.md).
+- [Calculador reproducible](../../scripts/kanban_metrics.py): procesa periodos y eventos; no deduce métricas a partir de conteos aislados.
 
-## Sprint 1 y calidad
+## Arquitectura, prácticas y pruebas
 
-- [Revisión funcional del Sprint 1](../sprints/sprint-1/review.md).
-- [Pirámide de pruebas de Sesión 8](piramide-pruebas-sesion8.md): conteo 22/23/1, comparación con 70/20/10, cobertura JaCoCo de Actions #103 y captura del HTML del mismo commit. La proporción 70/20/10 no se alcanza y queda reportada como brecha real.
-- [Evidencia de historias y BDD](comparacion-historias-backlog-sprint1.md).
-- [Colección de capturas Postman](sprint-1/).
+- [Refactorizaciones SOLID de Sesión 7](solid-sesion7.md): cambios antes/después en catálogo/gestión de productos y descuento, con límites de la evidencia.
+- [Pirámide de pruebas de Sesión 8](piramide-pruebas-sesion8.md): conteo observado, comparación con 70/20/10 y cobertura JaCoCo, con brechas explícitas.
+- [Integración continua de Sesión 10](integracion-continua-sesion10.md): workflow, quality gates y ejecuciones históricas.
+- [Evidencias del Sprint 3](../sprints/sprint-3/README.md): resultado Maven comunicado, recorrido de demo pendiente y estado de aceptación por historia.
 
-## Prácticas y patrones
+## CI y cobertura archivada
 
-- [Evidencia SOLID de Sesión 7 y Sprint 2](solid-sesion7.md): dos casos antes/después — separación catálogo/gestión de productos y extracción de política de descuento — con commits, pruebas y límites.
-- [Evidencia TDD del descuento mayorista](tdd-descuento-mayorista.md).
+- [GitHub Actions #103](https://github.com/santixit/agrovalle-connect/actions/runs/40894179070): ejecución histórica del commit `a7e2097`, con job de calidad, E2E y despliegue a staging.
+- [Captura visual de Actions #103](ci-run-main-a7e2097.png) y [artefacto JaCoCo del mismo run](https://github.com/santixit/agrovalle-connect/actions/runs/40894179070/artifacts/12906676338).
+- [Reporte JaCoCo #103](../entregables/segundo-corte/jacoco-main-a7e2097/index.html): 88% de instrucciones, 63% de ramas y 90% de líneas para el commit archivado.
+- [Captura del reporte JaCoCo #103](jacoco-main-a7e2097.png), renderizada desde ese HTML.
+- [Captura de Actions #86](ci-run-main-77b5141.png): evidencia histórica del commit `77b5141`.
+- [Captura del reporte JaCoCo #83](jacoco-main-6c19aae.png) y [reporte HTML completo](../entregables/segundo-corte/jacoco-main-6c19aae/index.html): evidencia histórica del commit `6c19aae`.
+- [Artefacto JaCoCo #83](https://github.com/santixit/agrovalle-connect/actions/runs/40816952882/artifacts/12873380141).
 
-## CI y cobertura
-
-- [Integración continua de Sesión 10](integracion-continua-sesion10.md): workflow y quality gates, simulación de fallo, corrección, aprobación y merge del PR #61; también enlaza la ejecución actual #103.
-- [Demostración técnica complementaria de staging (2026-10-29)](demo-staging-sprint2-2026-10-29.md): página, salud y catálogo verificados con solicitudes GET; incluye límites y guion reproducible.
-- [GitHub Actions #103 en `main`](https://github.com/santixit/agrovalle-connect/actions/runs/40894179070): Success para el commit `a7e2097`; incluye el job de calidad, despliegue a staging y [artefacto JaCoCo del mismo run](https://github.com/santixit/agrovalle-connect/actions/runs/40894179070/artifacts/12906676338). La [captura visual #103](ci-run-main-a7e2097.png) corresponde al mismo run y commit.
-- [Cobertura JaCoCo #103](../entrega-segundo-corte/jacoco-main-a7e2097/index.html): 88% instrucciones, 63% ramas y 90% líneas; el [log de verificación](https://github.com/santixit/agrovalle-connect/actions/runs/40894179070/job/123519248186#step:5:169) termina con `All coverage checks have been met` y `BUILD SUCCESS`.
-- [Captura del reporte HTML JaCoCo #103](jacoco-main-a7e2097.png): render local del HTML archivado para `a7e2097`; muestra 88% de instrucciones y 63% de ramas. La captura se agrega también al PDF de entrega.
-- [Captura de GitHub Actions #86](ci-run-main-77b5141.png): ejecución verde en `main`, commit `77b5141`, con el título neutral `AgroValle Connect - CI (push | main)`.
-- [Captura del reporte HTML JaCoCo #83](jacoco-main-6c19aae.png): 89% instrucciones, 63% ramas y 91% líneas para el mismo commit.
-- [Reporte HTML completo](../entrega-segundo-corte/jacoco-main-6c19aae/index.html) y [artefacto original de GitHub Actions](https://github.com/santixit/agrovalle-connect/actions/runs/40816952882/artifacts/12873380141).
-
-Actions #103 acredita que `main` pasó Build, tests, Checkstyle, JaCoCo, E2E y despliegue en `a7e2097`. Las métricas actuales provienen del reporte JaCoCo del mismo run: 88% de instrucciones, 63% de ramas y 90% de líneas. El reporte #83 y la captura #97 se conservan como evidencia histórica, no como cifras del código actual.
-
-## Sprint 3
-
-- [Resultado Maven del 2026-11-19](sprint-3/resultado-maven-2026-11-19.md): transcripción de 37 pruebas aprobadas, con los límites de la evidencia. No equivale a un run de CI o a aceptación funcional.
-- La demostración en staging y la aceptación del PO por HU no tienen evidencia archivada; el procedimiento está en el [guion de demo](../sprints/sprint-3/demo-runbook.md) y el estado en la [review de Sprint 3](../sprints/sprint-3/review.md).
+Las cifras de un reporte se atribuyen al commit y ejecución que lo produjeron; no se presentan como cobertura actual de una versión posterior. Las capturas y ejemplos deben ocultar secretos y datos personales.

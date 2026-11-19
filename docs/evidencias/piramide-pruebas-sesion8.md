@@ -35,7 +35,7 @@ El workflow #103 terminó correctamente y la configuración de CI ejecuta Maven 
 
 ## TDD
 
-El ciclo Red–Green–Refactor de la regla de descuento mayorista está documentado con commits y resultados en [Evidencia TDD: descuento mayorista](tdd-descuento-mayorista.md). Los casos de regresión agregados en otras sesiones no se describen como TDD si no quedó registrada la prueba fallida anterior a la implementación.
+El ciclo Red–Green–Refactor de la regla de descuento mayorista está documentado con commits y resultados en la [evidencia TDD del Sprint 2](../sprints/sprint-2/evidencias/tdd-descuento-mayorista.md). Los casos de regresión agregados en otras sesiones no se describen como TDD si no quedó registrada la prueba fallida anterior a la implementación.
 
 ## Acción para mejorar la pirámide
 

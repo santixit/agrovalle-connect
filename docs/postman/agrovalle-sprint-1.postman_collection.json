@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "AgroValle Connect - Sprint 1",
-    "description": "Requests para HU-01, HU-07 y HU-04. Usar solo datos de prueba.",
+    "name": "AgroValle Connect - API y Sprint 1",
+    "description": "HU-01, HU-07 y HU-04 más flujos del integrador. Usar identificadores y datos sintéticos; no guardar tokens reales en la colección.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -11,11 +11,15 @@
     },
     {
       "key": "farmerId",
-      "value": "1"
+      "value": ""
     },
     {
       "key": "testCedula",
-      "value": "ID-DE-PRUEBA-001"
+      "value": "DEMO-SPRINT1-CHANGE-ME"
+    },
+    {
+      "key": "accessToken",
+      "value": ""
     }
   ],
   "item": [
@@ -31,7 +35,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"nombre\": \"Ana Ruiz\",\n  \"tipoDocumento\": \"CC\",\n  \"cedula\": \"{{testCedula}}\",\n  \"telefono\": \"3001234567\",\n  \"ubicacion_valle\": \"Dagua\"\n}",
+          "raw": "{\n  \"nombre\": \"Ana Ruiz\",\n  \"tipoDocumento\": \"CC\",\n  \"cedula\": \"{{testCedula}}\",\n  \"telefono\": \"3000000001\",\n  \"ubicacion_valle\": \"Dagua\"\n}",
           "options": {
             "raw": {
               "language": "json"

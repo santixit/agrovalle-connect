@@ -1,6 +1,6 @@
 # Planificacion del Sprint 1
 
-> Documento de planificación técnica del Sprint 1: HU-01, HU-07 y HU-04 (10 SP). El equipo indica que trabajó informalmente y de forma asíncrona, sin una reunión formal de Sprint Planning ni roles permanentes. Este archivo describe el alcance y la descomposición técnica registrados; no es un acta ni prueba de una ceremonia. El issue #46 registra el Backlog como texto base y estos criterios técnicos como criterios de aceptación; allí constan confirmaciones explícitas de algunos integrantes. Véase la [comparación](../../evidencias/comparacion-historias-backlog-sprint1.md).
+> Documento de planificación técnica del Sprint 1: HU-01, HU-07 y HU-04 (10 SP). El equipo indica que trabajó informalmente y de forma asíncrona, sin una reunión formal de Sprint Planning ni roles permanentes. Este archivo describe el alcance y la descomposición técnica registrados; no es un acta ni prueba de una ceremonia. El issue #46 registra el Backlog como texto base y estos criterios técnicos como criterios de aceptación; allí constan confirmaciones explícitas de algunos integrantes. Véase la [comparación](evidencias/comparacion-historias-backlog.md).
 
 ## Sprint Goal
 

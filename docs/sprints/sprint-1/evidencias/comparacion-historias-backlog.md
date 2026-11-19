@@ -2,8 +2,8 @@
 
 ## Fuentes comparadas
 
-- Backlog de producto: [`Product Backlog BDD`](../requirements/product-backlog-bdd.md).
-- Plan técnico de Sprint 1: [`docs/sprints/sprint-1/planning.md`](../sprints/sprint-1/planning.md).
+- Backlog de producto: [`Product Backlog BDD`](../../../requirements/product-backlog-bdd.md).
+- Plan técnico de Sprint 1: [`Planning`](../planning.md).
 
 El backlog contiene 15 historias. La planificación selecciona HU-01, HU-07 y HU-04, con un total de 10 SP. Según la síntesis publicada en el [issue #46](https://github.com/santixit/agrovalle-connect/issues/46), se adopta el Backlog como texto base de esas historias y los criterios técnicos de Sprint Planning como criterios de aceptación. El issue contiene confirmaciones explícitas de DannyGomez02, michelleguerrero19 y Star-Light-co; no se atribuyen respuestas a quienes no comentaron ni se consideran los comentarios eliminados.
 

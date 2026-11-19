@@ -16,19 +16,19 @@ La síntesis del [issue #46](https://github.com/santixit/agrovalle-connect/issue
 | Metodología | El issue registra trabajo informal y asíncrono; no documenta una reunión formal ni roles fijos. | Hay tres comentarios explícitos de confirmación (DannyGomez02, michelleguerrero19 y Star-Light-co). No hay evidencia de unanimidad de todo el grupo. |
 | Mockups | El issue registra visto bueno informal, retrospectivo y asíncrono. No constan fecha de actividad ni identidad de quienes dieron el visto bueno. | Se usan los archivos versionados como referencia visual actual; el repositorio no acredita aprobación individual por pantalla o aprobación total del grupo. |
 | Sprint Discovery | El issue registra que se hizo informalmente y de manera asíncrona, con constancia retrospectiva. | La fecha exacta y la secuencia frente a la codificación no están demostradas. |
-| Historias y alcance | El issue adopta el Backlog como versión base de HU-01, HU-07 y HU-04, con criterios técnicos del Sprint Planning como aceptación. HU-04 y HU-07 están ajustadas en el Backlog. | Decisión documentada en el issue #46 y resumida en la [comparación](../evidencias/comparacion-historias-backlog-sprint1.md). |
-| Modelo de datos | El issue #46 acuerda mantener el esquema inicial y aplazar catálogos. V7 posterior añade parcela, ubicación e historial de transferencia. | La línea base del 2026-11-19 fija Flyway V1–V7 como esquema canónico para continuar el prototipo; la [reconciliación](reconciliacion-der.md) explica el alcance y sus diferencias. |
+| Historias y alcance | El issue adopta el Backlog como versión base de HU-01, HU-07 y HU-04, con criterios técnicos del Sprint Planning como aceptación. HU-04 y HU-07 están ajustadas en el Backlog. | Decisión documentada en el issue #46 y resumida en la [comparación](../sprint-1/evidencias/comparacion-historias-backlog.md). |
+| Modelo de datos | El issue #46 acuerda mantener el esquema inicial y aplazar catálogos. V7 posterior añade parcela, ubicación e historial de transferencia. | La línea base del 2026-11-19 fija Flyway V1–V7 como esquema canónico para continuar el prototipo; la [reconciliación](../../diseno/reconciliacion-der.md) explica el alcance y sus diferencias. |
 
 ## Artefactos revisados
 
-- [Mockups de interfaz](mockups-ui.pdf) y sus fuentes PNG en `mockups/`.
-- Modelos y DDL de referencia: `modelo-entidad-relacion.mmd`, `modelo-datos-der.mmd`, `schema.sql` y migraciones Flyway V1–V7. V7 normaliza la ubicación del producto mediante parcelas y `producto_ubicacion`; la [reconciliación](reconciliacion-der.md) documenta el cambio frente a los DER propuestos.
-- [Reconciliación entre DER propuesto e implementado](reconciliacion-der.md).
-- [Comparación Backlog/Sprint Planning](../evidencias/comparacion-historias-backlog-sprint1.md).
+- [Mockups de interfaz](../../diseno/mockups-ui.pdf) y sus fuentes PNG en `docs/diseno/mockups/`.
+- Modelos y DDL de referencia: `modelo-entidad-relacion.mmd`, `modelo-datos-der.mmd`, `schema.sql` y migraciones Flyway V1–V7 bajo `docs/diseno/`. V7 normaliza la ubicación del producto mediante parcelas y `producto_ubicacion`; la [reconciliación](../../diseno/reconciliacion-der.md) documenta el cambio frente a los DER propuestos.
+- [Reconciliación entre DER propuesto e implementado](../../diseno/reconciliacion-der.md).
+- [Comparación Backlog/Sprint Planning](../sprint-1/evidencias/comparacion-historias-backlog.md).
 
 ## Decisiones de línea base y acciones
 
-Para continuar el proyecto, la versión actual de requisitos fija como referencia los criterios del Backlog/BDD, el esquema Flyway V1–V7 y los mockups versionados. Los detalles de privacidad, funciones fuera de alcance y modelo canónico se registran en [decisiones de línea base](../requirements/baseline-decisions-2026-11-19.md). Esta decisión operativa no se atribuye retroactivamente a la sesión de Discovery ni sustituye confirmaciones faltantes.
+Para continuar el proyecto, la versión actual de requisitos fija como referencia los criterios del Backlog/BDD, el esquema Flyway V1–V7 y los mockups versionados. Los detalles de privacidad, funciones fuera de alcance y modelo canónico se registran en [decisiones de línea base](../../requirements/baseline-decisions-2026-11-19.md). Esta decisión operativa no se atribuye retroactivamente a la sesión de Discovery ni sustituye confirmaciones faltantes.
 
 El registro futuro de una aprobación debe incluir identidad, artefacto/versión, decisión y fecha. Las decisiones técnicas que modifiquen el esquema se registran en ADR/PR y nueva migración; no se modifican migraciones aplicadas.
 

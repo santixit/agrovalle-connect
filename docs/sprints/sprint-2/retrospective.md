@@ -29,7 +29,7 @@
 |---|---|
 | Alinear los cambios que se presentarán y validar CI en el commit final de `main`. | [Actions #103](https://github.com/santixit/agrovalle-connect/actions/runs/40894179070) para `a7e2097` y artefacto JaCoCo del mismo commit. |
 | Actualizar el tablero al cierre y conservar una captura fechada. | Tarjetas del Sprint actualizadas y límites WIP visibles. |
-| Explicar en la demostración qué funciones son visuales y cuáles tienen soporte de API. | [Recorrido técnico complementario en staging](../../evidencias/demo-staging-sprint2-2026-10-29.md), de solo lectura; repetir la comprobación en vivo durante la presentación. |
+| Explicar en la demostración qué funciones son visuales y cuáles tienen soporte de API. | [Recorrido técnico complementario en staging](evidencias/demo-staging-2026-10-29.md), de solo lectura; repetir la comprobación en vivo durante la presentación. |
 | Mantener explícitas las métricas no calculables y las decisiones de dominio pendientes. | Revisión del checklist y del análisis de normalización. |
 
 Estas acciones son el seguimiento que asume el Product Owner; el equipo no las ha confirmado como acuerdos de una retrospectiva colectiva.

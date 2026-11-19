@@ -21,6 +21,6 @@ La migración V7 crea una parcela `MIGRACION-{agricultorId}` por cada pareja de 
 - [`propuesta-modelo-3fn.md`](propuesta-modelo-3fn.md): modelo lógico, dependencias y decisión de parcela.
 - [`schema.sql`](schema.sql): snapshot de referencia V1–V7.
 - [`modelo-datos-der.mmd`](modelo-datos-der.mmd) y [`modelo-entidad-relacion.mmd`](modelo-entidad-relacion.mmd): DER físico y conceptual actualizado.
-- [`docs/api-sprint-1.md`](../api-sprint-1.md): contratos de parcelas, publicación y transferencias.
+- [Contratos REST](../api/contratos-rest.md): contratos de parcelas, publicación y transferencias.
 
 La decisión previa de posponer catálogos de municipios/categorías se mantiene; esta implementación normaliza la ubicación/titularidad conforme a las reglas de negocio confirmadas.

@@ -1,6 +1,6 @@
 # Decisiones de arquitectura
 
-Los identificadores ya asignados se conservan para no romper su trazabilidad. Los cuatro ADR existentes se trasladaron aquí con sus IDs originales.
+Los identificadores ya asignados se conservan para no romper su trazabilidad. Los cuatro ADR originales mantienen sus IDs; el ADR-006 registra el límite actual de no habilitar producción.
 
 | ADR | Decisión | Estado registrado |
 |---|---|---|
