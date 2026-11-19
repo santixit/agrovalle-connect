@@ -1,0 +1,83 @@
+name: Continuous Delivery to staging
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Trigger staging deployment
+    runs-on: ubuntu-latest
+    environment: staging
+    outputs:
+      triggered: ${{ steps.trigger.outputs.triggered }}
+    steps:
+      - name: Request Render deployment
+        id: trigger
+        env:
+          STAGING_DEPLOY_HOOK: ${{ secrets.STAGING_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$STAGING_DEPLOY_HOOK" ]; then
+            echo "triggered=false" >> "$GITHUB_OUTPUT"
+            echo "STAGING_DEPLOY_HOOK is not configured; staging deployment was skipped."
+            exit 0
+          fi
+          curl --fail --silent --show-error --output /dev/null --max-time 30 --request POST "$STAGING_DEPLOY_HOOK"
+          echo "triggered=true" >> "$GITHUB_OUTPUT"
+
+  verify:
+    name: Verify staging database and readiness
+    needs: deploy
+    if: needs.deploy.outputs.triggered == 'true'
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v7
+      - name: Configure Java 17
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+      - name: Check staging configuration without printing credentials
+        env:
+          STAGING_DB_URL: ${{ secrets.STAGING_DB_URL }}
+          STAGING_DB_USERNAME: ${{ secrets.STAGING_DB_USER }}
+          STAGING_DB_PASSWORD: ${{ secrets.STAGING_DB_PASSWORD }}
+        run: |
+          if [ -z "$STAGING_DB_URL" ] || [ -z "$STAGING_DB_USERNAME" ] || [ -z "$STAGING_DB_PASSWORD" ]; then
+            echo "Configure STAGING_DB_URL, STAGING_DB_USER, and STAGING_DB_PASSWORD in repository or staging environment secrets."
+            exit 1
+          fi
+      - name: Wait for the staging application to be ready
+        run: |
+          health_url="https://agrovalle-connect-staging.onrender.com/api/v1/health"
+          for attempt in $(seq 1 36); do
+            status=$(curl --silent --output /dev/null --write-out '%{http_code}' --max-time 5 "$health_url" || true)
+            if [ "$status" = "200" ]; then
+              echo "Staging is ready; Flyway completed during application startup."
+              exit 0
+            fi
+            echo "Waiting for staging readiness (attempt $attempt/36; HTTP $status)."
+            sleep 5
+          done
+          echo "Staging did not become ready within six minutes."
+          exit 1
+      - name: Verify database name, Flyway version, and core tables
+        env:
+          STAGING_DB_URL: ${{ secrets.STAGING_DB_URL }}
+          STAGING_DB_USERNAME: ${{ secrets.STAGING_DB_USER }}
+          STAGING_DB_PASSWORD: ${{ secrets.STAGING_DB_PASSWORD }}
+        run: |
+          for attempt in $(seq 1 30); do
+            if mvn --batch-mode --no-transfer-progress -Dtest=StagingDatabaseSmokeTest test; then
+              echo "Staging database passed the Flyway and table checks."
+              exit 0
+            fi
+            echo "Waiting for the deployment to apply Flyway migrations (attempt $attempt/30)."
+            sleep 10
+          done
+          echo "Staging database did not reach Flyway version 7 within five minutes."
+          exit 1

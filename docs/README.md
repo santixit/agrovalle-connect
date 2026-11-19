@@ -1,43 +1,40 @@
 # Índice de documentación
 
-Esta carpeta conserva planes, evidencia y entregables. El código de la aplicación permanece en `src/`; las utilidades de ejecución y generación permanecen en `scripts/` o junto al entregable que producen.
+La documentación se agrupa por tema para que el equipo y la docente puedan encontrar los artefactos desde GitHub.
 
-## Estructura del repositorio
-
-- `src/main/java/`: código Java organizado en `controller`, `service`, `repository`, `domain`, `api/dto` y `config`.
-- `src/main/resources/`: configuración de Spring, migraciones Flyway y archivos web estáticos.
-- `src/test/`: pruebas JUnit y configuraciones de base de datos para pruebas.
-- `e2e/`: flujos de navegador automatizados con Playwright.
-- `scripts/`: inicio local, carga de datos de demostración y cálculo de métricas Kanban.
-- `.github/workflows/`: integración continua y despliegue de staging.
-- `.husky/`: validaciones locales ejecutadas antes de crear un commit.
-- Raíz: `pom.xml` (Maven/Java), `package.json` (Husky/Playwright), `Dockerfile` y `docker-compose.yml` (contenedores), `BACKLOG.md` y `README.md`.
-
-El código Java ya tiene una separación por capas; por eso se conserva su ubicación. Los reportes JaCoCo que acompañan la entrega son artefactos de evidencia, no código fuente.
-
-## Por tema
+## Organización
 
 | Carpeta | Contenido |
 |---|---|
-| [`adr/`](adr/) | Decisiones de arquitectura y sus motivos. |
-| [`diseno/`](diseno/) | DER, schema, UML, mockups, arquitectura y reconciliación del diseño con el modelo vigente. |
-| [`evidencias/`](evidencias/) | Capturas, comprobaciones, métricas y guías de evidencia de calidad/Kanban. |
-| [`postman/`](postman/) | Colección de solicitudes para probar los endpoints. |
-| [`entrega-sprint-0/`](entrega-sprint-0/) | PDF de la entrega de Sprint 0. |
-| [`entrega-segundo-corte/`](entrega-segundo-corte/) | PDF, generador y artefactos de cobertura usados en la entrega del segundo corte. |
-| [`sprint-3/`](sprint-3/) | Propuesta de alcance y checklist de Sprint 3, pendientes de confirmación. |
-| [`uml/`](uml/) | Diagramas UML editables y sus exportaciones. |
+| [`architecture/`](architecture/README.md) | Diagramas UML Mermaid consolidados y fuentes de diseño relacionadas. |
+| [`architecture-decisions/`](architecture-decisions/README.md) | ADRs con IDs conservados y estado de las decisiones de despliegue. |
+| [`requirements/`](requirements/README.md) | Product Backlog BDD, REQ-01 formal y estado del SRS integral. |
+| [`metrics/`](metrics/sprint-metrics-corte3.md) | Reporte de métricas ágiles; distingue mediciones de datos no disponibles. |
+| [`sprints/`](sprints/README.md) | Planning, review, retrospective, bitácoras y proyección por sprint. |
+| [`diseno/`](diseno/README.md) | DER, schema de referencia, mockups y fuentes editables de diseño. |
+| [`evidencias/`](evidencias/README.md) | Capturas, CI, pruebas, métricas Kanban y demos. |
+| [`postman/`](postman/) | Colecciones para probar endpoints. |
+| [`entrega-sprint-0/`](entrega-sprint-0/README.md) | PDF original de Sprint 0. |
+| [`entrega-segundo-corte/`](entrega-segundo-corte/README.md) | Entregable del segundo corte, generador y artefactos asociados. |
 
-## Guías principales
+El código Java permanece en `src/`, las pruebas en `src/test/`, los scripts en `scripts/` y los workflows en `.github/workflows/`. `BACKLOG.md` en la raíz se conserva como acceso de compatibilidad; la fuente vigente está en `requirements/product-backlog-bdd.md`.
+
+## Guías de trabajo
 
 - [Definition of Done](dod.md)
+- [Flujo de ramas y protección de `main`](branch-protection.md)
 - [Estrategia de pruebas](estrategia-pruebas.md)
 - [Políticas Kanban](kanban-policies.md)
-- [Backlog](../BACKLOG.md)
-- [Planificación de Sprint 1](sprint-1-planning.md), [revisión](sprint-1-review.md) y [retrospectiva](sprint-1-retrospective.md)
-- [Planificación reconstruida de Sprint 2](sprint-2-planning.md), [revisión](sprint-2-review.md) y [retrospectiva](sprint-2-retrospective.md)
-- [Proyección global de sprints, Story Points y dependencias](proyeccion-sprints.md)
-- [Propuesta de Sprint 3](sprint-3/planificacion.md) y [checklist](sprint-3/checklist-inicio.md); Sprint 4 está proyectado en la tabla global
-- [Revisión](diseno/sprint-diseno-review.md) y [retrospectiva documental](diseno/sprint-diseno-retrospective.md) del Sprint de Diseño
+- [Procedimiento para capturar métricas](metrics/captura-de-metricas.md)
+- [Despliegue a staging](deploy-staging.md)
+- [Evidencias técnicas](evidencias/README.md)
 
-Los documentos que dicen *borrador*, *propuesta* o *reconstruido* no acreditan por sí solos una aprobación, reunión o ejecución. Las decisiones y resultados se actualizan cuando el equipo los confirma.
+## Pendientes que muestra la organización
+
+- La SRS consolidada y trazable está en borrador; quedan decisiones de producto y calidad por aprobar por el equipo/PO.
+- `ci.yml` ejecuta calidad y llama al reusable `cd.yml` únicamente en push exitoso a `main`.
+- El proyecto no tiene `application-staging.yml`; la configuración actual usa `application.properties` y variables de entorno.
+- Las métricas de velocity, burndown, CFD, Lead Time y Cycle Time se reportan solo cuando hay registros suficientes; las plantillas y el procedimiento están en `docs/metrics/`.
+- La aceptación del PO, la demo y la retrospectiva del Sprint 3 continúan pendientes.
+
+Los términos *propuesta*, *reconstruido* y *pendiente* indican el estado real de la evidencia; no acreditan una ceremonia, aprobación o resultado que no conste.
