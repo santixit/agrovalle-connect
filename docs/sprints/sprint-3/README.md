@@ -1,6 +1,6 @@
 # Sprint 3
 
-**Estado documentado: en validación.** El objetivo es validar y obtener aceptación de HU-02, HU-06, HU-09 y HU-10. La ejecución Maven comunicada informa 37 pruebas aprobadas, pero el sprint no se declara cerrado hasta que las historias tengan evidencia funcional y decisión explícita del Product Owner.
+**Estado documentado al 2026-11-25: en validación.** La suite Maven reportada pasó con 37 pruebas y el [workflow de main](https://github.com/santixit/agrovalle-connect/actions/runs/44596816750) aprobó CI y verificación técnica de staging. El sprint sigue abierto hasta guardar evidencia de la demo funcional de HU-02, HU-06, HU-09 y HU-10 y registrar la decisión del Product Owner para cada una.
 
 | Documento | Propósito |
 |---|---|
