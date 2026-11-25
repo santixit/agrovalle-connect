@@ -4,7 +4,7 @@
 
 - [Resultado Maven comunicado el 2026-11-19](resultado-maven-2026-11-19.md): transcripción de 37 pruebas ejecutadas, 0 fallos, 0 errores y 0 omitidas.
 
-Ese resultado corresponde a una ejecución local compartida por el usuario. No equivale a CI, despliegue en staging ni aceptación de historias.
+Ese resultado corresponde a una ejecución local compartida por el usuario. La CI de main y la readiness técnica de staging se acreditan por separado en el [workflow integrado](https://github.com/santixit/agrovalle-connect/actions/runs/44596816750), que pasó Build/tests/Checkstyle/JaCoCo/E2E y las comprobaciones de base de datos. Ninguno de esos resultados equivale a la demo funcional ni a la aceptación de las historias.
 
 ## Archivos por agregar al realizar la demo
 

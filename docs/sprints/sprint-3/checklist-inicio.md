@@ -1,6 +1,6 @@
 # Checklist de cierre — Sprint 3
 
-**Actualizado:** 2026-11-19. Los estados describen evidencia disponible y no reconstruyen una reunión.
+**Actualizado:** 2026-11-25. Los estados describen evidencia disponible y no reconstruyen una reunión.
 
 ## Estado por criterio
 
@@ -9,8 +9,9 @@
 | Alcance HU-02, HU-06, HU-09 y HU-10 | Definido | Selección explícita del usuario; ver [planificación](planning.md). |
 | Pruebas automatizadas seleccionadas | Cumplido según resultado comunicado | Maven: `BUILD SUCCESS`, 37 pruebas, 0 fallos, 0 errores, 0 omitidas. Revisar el reporte Surefire para detalle por método. |
 | Mapeo BDD ↔ JUnit por HU | Documentado en el plan; falta adjuntar el reporte individual | Usar los nombres de método indicados en `planning.md` y conservar `target/surefire-reports`. |
-| Checkstyle / JaCoCo / E2E para el commit que se presentará | No acreditado para este cierre | Consultar el workflow de la rama/PR final y enlazar el run. |
-| Demo en staging con datos sintéticos | No realizada o no registrada | Ejecutar los cuatro flujos con una cuenta y datos de prueba; guardar evidencias en `docs/sprints/sprint-3/evidencias/`. |
+| Checkstyle / JaCoCo / E2E para el commit que se presentará | **Cumplido** | [CI de main y verificación de staging](https://github.com/santixit/agrovalle-connect/actions/runs/44596816750): Build, tests, Checkstyle, JaCoCo y flujo crítico de navegador pasaron en el commit integrado a main. |
+| Verificación técnica de staging | **Cumplida** | El workflow de main desplegó a staging y aprobó readiness, nombre de BD, versión Flyway y tablas núcleo; ver el run enlazado arriba. Esto no reemplaza la demo funcional de las cuatro HU. |
+| Demo funcional en staging con datos sintéticos | No realizada o no registrada | Ejecutar los cuatro flujos con una cuenta y datos de prueba; guardar evidencias en `docs/sprints/sprint-3/evidencias/`. |
 | Aceptación del PO por HU | No registrada | Después de la demo, registrar decisión `Aceptada` o `Requiere cambios`, fecha, responsable y comentario en la matriz de review. |
 | Sincronización tablero / review / DoD | Por hacer después de la decisión PO | Actualizar tarjetas para que no contradigan la review. |
 
@@ -21,7 +22,7 @@ Tests run: 37, Failures: 0, Errors: 0, Skipped: 0
 BUILD SUCCESS
 ```
 
-El fragmento es la transcripción del resultado que compartió el usuario el 2026-11-19 y está conservado en [resultado-maven-2026-11-19.md](evidencias/resultado-maven-2026-11-19.md). El enlace a un log descargable no se conserva; no se debe presentar como artefacto de CI.
+El fragmento es la transcripción local compartida por el usuario y está conservada en [resultado-maven-2026-11-19.md](evidencias/resultado-maven-2026-11-19.md). El log completo de esa ejecución no se conserva; la evidencia de CI independiente está enlazada en la matriz superior.
 
 ## Decisión actual por historia
 
